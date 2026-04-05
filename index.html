@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sumant — Builder</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --border: #1e1e1e;
+      --text: #e8e8e8;
+      --muted: #666;
+      --accent: #ff6b2b;
+      --accent-dim: rgba(255,107,43,0.12);
+      --green: #22c55e;
+      --mono: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    a:hover { color: var(--accent); }
+
+    /* ── Layout ── */
+    .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── Nav ── */
+    nav {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav .wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-name {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+    .nav-links { display: flex; gap: 20px; }
+    .nav-links a {
+      font-size: 13px;
+      color: var(--muted);
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 80px 0 64px;
+    }
+    .hero-tag {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-size: clamp(36px, 6vw, 56px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero-sub {
+      font-size: 17px;
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+    .hero-links { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      transition: border-color 0.15s, background 0.15s;
+      cursor: pointer;
+    }
+    .btn:hover { border-color: #333; background: #181818; color: var(--text); }
+    .btn-primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .btn-primary:hover { background: #e55a1e; border-color: #e55a1e; color: #fff; }
+
+    /* ── Section ── */
+    section { padding: 56px 0; border-top: 1px solid var(--border); }
+    .section-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    /* ── Cards ── */
+    .cards { display: flex; flex-direction: column; gap: 2px; }
+
+    .card {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: start;
+      gap: 16px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .card:last-child { border-bottom: none; }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-title a:hover { color: var(--accent); }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 520px;
+    }
+
+    .card-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      padding-top: 2px;
+    }
+
+    .stars {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: #a78bfa;
+      white-space: nowrap;
+    }
+
+    .badge {
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    .badge-live { background: rgba(34,197,94,0.12); color: var(--green); }
+    .badge-wip { background: rgba(234,179,8,0.1); color: #eab308; }
+
+    /* ── Featured (game) ── */
+    .featured {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 28px;
+      background: var(--surface);
+      position: relative;
+      overflow: hidden;
+    }
+    .featured::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+    }
+    .featured-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .featured-title a:hover { color: var(--accent); }
+    .featured-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+    .featured-story {
+      font-size: 14px;
+      color: #aaa;
+      line-height: 1.75;
+      border-left: 2px solid #222;
+      padding-left: 16px;
+      margin-bottom: 20px;
+    }
+    .featured-story strong { color: var(--text); }
+    .details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .detail-tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 4px 10px;
+      background: #161616;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--muted);
+    }
+
+    /* ── Professional ── */
+    .pro-cards { display: flex; flex-direction: column; gap: 2px; }
+    .pro-card {
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      align-items: start;
+    }
+    .pro-card:last-child { border-bottom: none; }
+    .pro-icon {
+      width: 40px; height: 40px;
+      background: #161616;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .pro-name {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+    .pro-role {
+      font-size: 12px;
+      color: var(--muted);
+      font-family: var(--mono);
+      margin-bottom: 6px;
+    }
+    .pro-desc { font-size: 13px; color: var(--muted); }
+
+    /* ── Footer ── */
+    footer {
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+    }
+    footer .wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer-note {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .footer-links { display: flex; gap: 16px; }
+    .footer-links a {
+      font-size: 13px;
+      color: var(--muted);
+      transition: color 0.15s;
+    }
+    .footer-links a:hover { color: var(--text); }
+
+    /* ── Responsive ── */
+    @media (max-width: 540px) {
+      .card { grid-template-columns: 1fr; }
+      .card-right { flex-direction: row; align-items: center; }
+      footer .wrap { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <span class="nav-name">sumant_us</span>
+    <div class="nav-links">
+      <a href="https://x.com/sumant_us" target="_blank">Twitter</a>
+      <a href="https://www.linkedin.com/in/sumantus/" target="_blank">LinkedIn</a>
+      <a href="https://github.com/ussumant" target="_blank">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- Hero -->
+  <section class="hero" style="border-top: none; padding-top: 80px;">
+    <div class="hero-tag">Builder · Bengaluru</div>
+    <h1>Sumant<br><span>builds things.</span></h1>
+    <p class="hero-sub">
+      AI-native tools, consumer apps, and developer infrastructure.
+      6–10 years building across SDKs, mobile, and the Claude Code ecosystem.
+    </p>
+    <div class="hero-links">
+      <a href="https://github.com/ussumant" target="_blank" class="btn btn-primary">GitHub ↗</a>
+      <a href="https://x.com/sumant_us" target="_blank" class="btn">@sumant_us</a>
+      <a href="https://www.linkedin.com/in/sumantus/" target="_blank" class="btn">LinkedIn</a>
+    </div>
+  </section>
+
+  <!-- Claude Code Tools -->
+  <section>
+    <div class="section-label">Claude Code Tools</div>
+    <div class="cards">
+      <div class="card">
+        <div>
+          <div class="card-title">
+            <a href="https://github.com/ussumant/llm-wiki-compiler" target="_blank">llm-wiki-compiler</a>
+          </div>
+          <div class="card-desc">Compiles 100+ knowledge files into a topic-based wiki. 84% context reduction per session. Implements Karpathy's LLM knowledge base pattern — raw files → synthesized articles → Obsidian-compatible with coverage tags.</div>
+        </div>
+        <div class="card-right">
+          <span class="stars">★ 67</span>
+        </div>
+      </div>
+      <div class="card">
+        <div>
+          <div class="card-title">
+            <a href="https://github.com/ussumant/cache-audit" target="_blank">cache-audit</a>
+          </div>
+          <div class="card-desc">Audits your Claude Code prompt caching setup — surfaces what's burning tokens, why, and how to fix it.</div>
+        </div>
+        <div class="card-right">
+          <span class="stars">★ 46</span>
+        </div>
+      </div>
+      <div class="card">
+        <div>
+          <div class="card-title">
+            <a href="https://github.com/ussumant/design-theme-generation-skill" target="_blank">design-theme-generation-skill</a>
+          </div>
+          <div class="card-desc">Claude skill for generating professional, non-generic design themes from moodboard analysis. Outputs hex codes, font pairings, and spacing scales.</div>
+        </div>
+        <div class="card-right">
+          <span class="stars">★ 5</span>
+        </div>
+      </div>
+      <div class="card">
+        <div>
+          <div class="card-title">
+            <a href="https://github.com/ussumant/cc2codex" target="_blank">cc2codex</a>
+          </div>
+          <div class="card-desc">Migration assistant for moving a Claude Code setup to OpenAI Codex. Safe preview before any overwrite — imports skills, hooks, and MCP config.</div>
+        </div>
+        <div class="card-right">
+          <span class="stars">★ 4</span>
+        </div>
+      </div>
+      <div class="card">
+        <div>
+          <div class="card-title">
+            <a href="https://github.com/ussumant/claude-code-streak-tracker" target="_blank">claude-code-streak-tracker</a>
+          </div>
+          <div class="card-desc">Daily Claude Code streak tracker with inline status line display, quota progress, and smart nudges. Just show up every day.</div>
+        </div>
+        <div class="card-right">
+          <span class="stars">★ 1</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Apps -->
+  <section>
+    <div class="section-label">Consumer Apps</div>
+    <div class="cards">
+      <div class="card">
+        <div>
+          <div class="card-title">Stoicism Daily Practice</div>
+          <div class="card-desc">iOS app — daily Stoic practice in 30 seconds. Real-life scenarios across 6 life domains. Tap your instinct, see the middle path. AI coaching, behavioral pattern detection, lock screen widget, Dynamic Island live activity.</div>
+        </div>
+        <div class="card-right">
+          <span class="badge badge-live">Live · App Store</span>
+        </div>
+      </div>
+      <div class="card">
+        <div>
+          <div class="card-title">WorkflowRecorder</div>
+          <div class="card-desc">macOS screen recorder that turns your build sessions into AI-readable skill files. Captures OCR, runs Claude analysis, generates reusable skills automatically. "Strava for vibe-coding."</div>
+        </div>
+        <div class="card-right">
+          <span class="badge badge-wip">In progress</span>
+        </div>
+      </div>
+      <div class="card">
+        <div>
+          <div class="card-title">Daily Stoic Comic</div>
+          <div class="card-desc">n8n + AI pipeline that generates and publishes a daily Stoic comic strip. Fully automated content loop — no manual steps after setup.</div>
+        </div>
+        <div class="card-right">
+          <span class="badge badge-live">Live</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Vibe-Coded -->
+  <section>
+    <div class="section-label">Vibe-Coded</div>
+    <div class="featured">
+      <div class="featured-title">
+        <a href="https://github.com/ussumant/muay-thai" target="_blank">Muay Thai Boxing Ring 🥊</a>
+        <span class="badge badge-live">Live</span>
+      </div>
+      <div class="featured-sub">2-player browser fighting game — built in 6 sessions as a gift</div>
+      <div class="featured-story">
+        Met Sofia at a coffee shop in Thailand. We talked about games, Muay Thai, and pizza.
+        She mentioned wanting to play multiplayer. Later that evening while working, it clicked:
+        <strong>build an 8-bit game where we fight to win the last slice of pizza.</strong>
+        <br><br>
+        Every detail is a reference she'd recognize —
+        her <strong>decisiveness stat is 10%</strong> (famously indecisive),
+        <strong>spiders drop from the ceiling</strong> (she's terrified of them),
+        Sumant's character wears <strong>the shorts she helped pick out</strong>,
+        and the arena is <strong>Dragon Muay Thai</strong> — the gym we talked about.
+        <br><br>
+        She never saw it coming. The reaction was worth every session.
+      </div>
+      <div class="details">
+        <span class="detail-tag">Pure canvas</span>
+        <span class="detail-tag">Sprite animation system</span>
+        <span class="detail-tag">Physics engine</span>
+        <span class="detail-tag">Best-of-3 rounds</span>
+        <span class="detail-tag">Arcade character select</span>
+        <span class="detail-tag">CRT scanlines</span>
+        <span class="detail-tag">Spider hazards</span>
+        <span class="detail-tag">6 sessions</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Professional -->
+  <section>
+    <div class="section-label">Professional Work</div>
+    <div class="pro-cards">
+      <div class="pro-card">
+        <div class="pro-icon">🎮</div>
+        <div>
+          <div class="pro-name"><a href="https://www.customerglu.com" target="_blank">CustomerGlu</a></div>
+          <div class="pro-role">Co-founder</div>
+          <div class="pro-desc">Built the gamification SDK and platform from scratch. Used by consumer apps across India and Southeast Asia to drive engagement and retention through challenges, streaks, and rewards.</div>
+        </div>
+      </div>
+      <div class="pro-card">
+        <div class="pro-icon">🎵</div>
+        <div>
+          <div class="pro-name"><a href="https://lingotune.app" target="_blank">Lingotune</a></div>
+          <div class="pro-role">Growth & Product</div>
+          <div class="pro-desc">Rebuilt analytics pipeline from scratch. Identified and fixed phantom event inflation that was reporting 10x actual DAU. Shipped retention experiments and growth systems.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <span class="footer-note">Building in Bengaluru 🇮🇳</span>
+    <div class="footer-links">
+      <a href="https://github.com/ussumant" target="_blank">GitHub</a>
+      <a href="https://x.com/sumant_us" target="_blank">Twitter</a>
+      <a href="https://www.linkedin.com/in/sumantus/" target="_blank">LinkedIn</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

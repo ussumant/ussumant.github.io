@@ -117,73 +117,97 @@
       margin-bottom: 24px;
     }
 
-    /* ── Tool List ── */
-    .tool-list {
-      display: flex;
-      flex-direction: column;
-    }
-    .tool-row {
+    /* ── Shared row layout ── */
+    .proj-list { display: flex; flex-direction: column; }
+
+    .proj-row {
       display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 24px;
-      padding: 18px 0;
+      grid-template-columns: 112px 1fr auto;
+      gap: 20px;
+      padding: 20px 0;
       border-top: 1px solid var(--border);
       align-items: start;
     }
-    .tool-row:last-child {
-      border-bottom: 1px solid var(--border);
+    .proj-row:last-child { border-bottom: 1px solid var(--border); }
+
+    /* thumbnail */
+    .proj-thumb {
+      display: block;
+      width: 112px;
+      height: 64px;
+      border-radius: 5px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: #F0F0F0;
+      flex-shrink: 0;
+      transition: border-color 0.15s;
     }
-    .tool-name {
+    .proj-thumb:hover { border-color: #CCC; }
+    .proj-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    /* emoji placeholder for apps without screenshots */
+    .proj-thumb.placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+    }
+
+    .proj-name {
       font-weight: 600;
       font-size: 14px;
       margin-bottom: 3px;
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
     }
-    .tool-name a:hover { color: var(--accent); }
-    .tool-desc {
+    .proj-name a { transition: color 0.15s; }
+    .proj-name a:hover { color: var(--accent); }
+    .proj-name .arrow {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+    .proj-desc {
       font-size: 13px;
       color: var(--muted);
       line-height: 1.6;
     }
-    .tool-stars {
+
+    /* right-side badges */
+    .proj-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+      padding-top: 1px;
+      white-space: nowrap;
+    }
+    .proj-stars {
       font-family: var(--mono);
       font-size: 12px;
       color: var(--accent);
-      white-space: nowrap;
-      padding-top: 1px;
     }
-
-    /* ── App List ── */
-    .app-list {
-      display: flex;
-      flex-direction: column;
-    }
-    .app-row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 24px;
-      padding: 18px 0;
-      border-top: 1px solid var(--border);
-      align-items: start;
-    }
-    .app-row:last-child { border-bottom: 1px solid var(--border); }
-    .app-name {
-      font-weight: 600;
-      font-size: 14px;
-      margin-bottom: 3px;
-    }
-    .app-desc {
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-    .app-badge {
+    .proj-badge {
       font-family: var(--mono);
       font-size: 11px;
-      white-space: nowrap;
-      padding-top: 1px;
     }
-    .app-badge.live { color: #16a34a; }
-    .app-badge.wip { color: #ca8a04; }
+    .proj-badge.live { color: #16a34a; }
+    .proj-badge.wip  { color: #ca8a04; }
+    .proj-role {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* keep old aliases so story section stays untouched */
+    .tool-list  { display: flex; flex-direction: column; }
+    .app-list   { display: flex; flex-direction: column; }
+    .pro-list   { display: flex; flex-direction: column; }
 
     /* ── Story ── */
     .story {
@@ -294,7 +318,9 @@
       .page { padding: 0 20px; }
       nav { margin-bottom: 48px; }
       .hero p { font-size: 19px; }
-      .tool-row, .app-row, .pro-row { grid-template-columns: 1fr; gap: 4px; }
+      .proj-row { grid-template-columns: 80px 1fr; }
+      .proj-thumb { width: 80px; height: 48px; }
+      .proj-meta { display: none; }
       footer { flex-direction: column; align-items: flex-start; gap: 16px; }
     }
   </style>
@@ -325,70 +351,98 @@
   <!-- Tools -->
   <div class="section">
     <div class="section-label">Claude Code Tools</div>
-    <div class="tool-list">
-      <div class="tool-row">
+    <div class="proj-list">
+
+      <div class="proj-row">
+        <a class="proj-thumb" href="https://github.com/ussumant/llm-wiki-compiler" target="_blank">
+          <img src="https://opengraph.githubassets.com/1/ussumant/llm-wiki-compiler" alt="llm-wiki-compiler preview" loading="lazy">
+        </a>
         <div>
-          <div class="tool-name"><a href="https://github.com/ussumant/llm-wiki-compiler" target="_blank">llm-wiki-compiler</a></div>
-          <div class="tool-desc">Compiles 100+ knowledge files into a topic wiki. 84% context reduction per session. Implements Karpathy's LLM knowledge base pattern — 383 files → 13 articles.</div>
+          <div class="proj-name"><a href="https://github.com/ussumant/llm-wiki-compiler" target="_blank">llm-wiki-compiler</a><span class="arrow">↗</span></div>
+          <div class="proj-desc">Compiles 100+ knowledge files into a topic wiki. 84% context reduction per session. Implements Karpathy's LLM knowledge base pattern — 383 files → 13 articles.</div>
         </div>
-        <div class="tool-stars">★ 67</div>
+        <div class="proj-meta"><span class="proj-stars">★ 67</span></div>
       </div>
-      <div class="tool-row">
+
+      <div class="proj-row">
+        <a class="proj-thumb" href="https://github.com/ussumant/cache-audit" target="_blank">
+          <img src="https://opengraph.githubassets.com/1/ussumant/cache-audit" alt="cache-audit preview" loading="lazy">
+        </a>
         <div>
-          <div class="tool-name"><a href="https://github.com/ussumant/cache-audit" target="_blank">cache-audit</a></div>
-          <div class="tool-desc">Audits your Claude Code prompt caching setup. Surfaces what's burning tokens and why.</div>
+          <div class="proj-name"><a href="https://github.com/ussumant/cache-audit" target="_blank">cache-audit</a><span class="arrow">↗</span></div>
+          <div class="proj-desc">Audits your Claude Code prompt caching setup. Surfaces what's burning tokens and why.</div>
         </div>
-        <div class="tool-stars">★ 46</div>
+        <div class="proj-meta"><span class="proj-stars">★ 46</span></div>
       </div>
-      <div class="tool-row">
+
+      <div class="proj-row">
+        <a class="proj-thumb" href="https://github.com/ussumant/design-theme-generation-skill" target="_blank">
+          <img src="https://opengraph.githubassets.com/1/ussumant/design-theme-generation-skill" alt="design-theme-generation-skill preview" loading="lazy">
+        </a>
         <div>
-          <div class="tool-name"><a href="https://github.com/ussumant/design-theme-generation-skill" target="_blank">design-theme-generation-skill</a></div>
-          <div class="tool-desc">Claude skill for generating professional design themes from moodboard analysis. Hex codes, fonts, spacing — no purple gradients.</div>
+          <div class="proj-name"><a href="https://github.com/ussumant/design-theme-generation-skill" target="_blank">design-theme-generation-skill</a><span class="arrow">↗</span></div>
+          <div class="proj-desc">Claude skill for generating professional design themes from moodboard analysis. Hex codes, fonts, spacing — no purple gradients.</div>
         </div>
-        <div class="tool-stars">★ 5</div>
+        <div class="proj-meta"><span class="proj-stars">★ 5</span></div>
       </div>
-      <div class="tool-row">
+
+      <div class="proj-row">
+        <a class="proj-thumb" href="https://github.com/ussumant/cc2codex" target="_blank">
+          <img src="https://opengraph.githubassets.com/1/ussumant/cc2codex" alt="cc2codex preview" loading="lazy">
+        </a>
         <div>
-          <div class="tool-name"><a href="https://github.com/ussumant/cc2codex" target="_blank">cc2codex</a></div>
-          <div class="tool-desc">Migrate a Claude Code setup to OpenAI Codex CLI. Safe preview before any file is overwritten.</div>
+          <div class="proj-name"><a href="https://github.com/ussumant/cc2codex" target="_blank">cc2codex</a><span class="arrow">↗</span></div>
+          <div class="proj-desc">Migrate a Claude Code setup to OpenAI Codex CLI. Safe preview before any file is overwritten.</div>
         </div>
-        <div class="tool-stars">★ 4</div>
+        <div class="proj-meta"><span class="proj-stars">★ 4</span></div>
       </div>
-      <div class="tool-row">
+
+      <div class="proj-row">
+        <a class="proj-thumb" href="https://github.com/ussumant/claude-code-streak-tracker" target="_blank">
+          <img src="https://opengraph.githubassets.com/1/ussumant/claude-code-streak-tracker" alt="streak tracker preview" loading="lazy">
+        </a>
         <div>
-          <div class="tool-name"><a href="https://github.com/ussumant/claude-code-streak-tracker" target="_blank">claude-code-streak-tracker</a></div>
-          <div class="tool-desc">Daily Claude Code streak tracker with inline status line, quota progress, and nudges.</div>
+          <div class="proj-name"><a href="https://github.com/ussumant/claude-code-streak-tracker" target="_blank">claude-code-streak-tracker</a><span class="arrow">↗</span></div>
+          <div class="proj-desc">Daily Claude Code streak tracker with inline status line, quota progress, and nudges.</div>
         </div>
-        <div class="tool-stars">★ 1</div>
+        <div class="proj-meta"><span class="proj-stars">★ 1</span></div>
       </div>
+
     </div>
   </div>
 
   <!-- Apps -->
   <div class="section">
     <div class="section-label">Apps</div>
-    <div class="app-list">
-      <div class="app-row">
+    <div class="proj-list">
+
+      <div class="proj-row">
+        <div class="proj-thumb placeholder" style="background:#F5F0E8;">🧘</div>
         <div>
-          <div class="app-name">Stoicism Daily Practice</div>
-          <div class="app-desc">iOS app. 30-second daily Stoic practice — real-life scenarios, AI coaching, pattern detection across 6 life domains. Lock screen widget and Dynamic Island.</div>
+          <div class="proj-name">Stoicism Daily Practice</div>
+          <div class="proj-desc">iOS app. 30-second daily Stoic practice — real-life scenarios, AI coaching, pattern detection across 6 life domains. Lock screen widget and Dynamic Island.</div>
         </div>
-        <div class="app-badge live">Live</div>
+        <div class="proj-meta"><span class="proj-badge live">Live</span></div>
       </div>
-      <div class="app-row">
+
+      <div class="proj-row">
+        <div class="proj-thumb placeholder" style="background:#F0F4F8;">⏺</div>
         <div>
-          <div class="app-name">WorkflowRecorder</div>
-          <div class="app-desc">macOS screen recorder that turns build sessions into reusable AI skill files. "Strava for vibe-coding."</div>
+          <div class="proj-name">WorkflowRecorder</div>
+          <div class="proj-desc">macOS screen recorder that turns build sessions into reusable AI skill files. "Strava for vibe-coding."</div>
         </div>
-        <div class="app-badge wip">In progress</div>
+        <div class="proj-meta"><span class="proj-badge wip">In progress</span></div>
       </div>
-      <div class="app-row">
+
+      <div class="proj-row">
+        <div class="proj-thumb placeholder" style="background:#F0F0F0;">📰</div>
         <div>
-          <div class="app-name">Daily Stoic Comic</div>
-          <div class="app-desc">n8n + AI pipeline generating and publishing a daily Stoic comic. Zero manual steps after setup.</div>
+          <div class="proj-name">Daily Stoic Comic</div>
+          <div class="proj-desc">n8n + AI pipeline generating and publishing a daily Stoic comic. Zero manual steps after setup.</div>
         </div>
-        <div class="app-badge live">Live</div>
+        <div class="proj-meta"><span class="proj-badge live">Live</span></div>
       </div>
+
     </div>
   </div>
 
@@ -397,9 +451,12 @@
     <div class="section-label">Vibe-Coded</div>
     <div class="story">
       <div class="story-title">
-        <a href="https://github.com/ussumant/muay-thai" target="_blank">Muay Thai Boxing Ring 🥊</a>
+        <a href="https://github.com/ussumant/muay-thai" target="_blank">Muay Thai Boxing Ring 🥊 ↗</a>
         <span>6 sessions · pure canvas</span>
       </div>
+      <a href="https://github.com/ussumant/muay-thai" target="_blank" style="display:block;margin-bottom:16px;">
+        <img src="https://opengraph.githubassets.com/1/ussumant/muay-thai" alt="Muay Thai game preview" loading="lazy" style="width:100%;height:140px;object-fit:cover;border-radius:4px;border:1px solid var(--border);display:block;">
+      </a>
       <p class="story-text">Met Sofia at a coffee shop in Thailand. We talked about games, Muay Thai, pizza. She mentioned wanting to play multiplayer. That evening while working, it clicked: <em>build a fighting game where we compete for the last slice of pizza.</em> Every detail is a reference she'd recognise.</p>
       <div class="story-details">
         <div class="story-row">
@@ -425,21 +482,32 @@
   <!-- Professional -->
   <div class="section">
     <div class="section-label">Professional</div>
-    <div class="pro-list">
-      <div class="pro-row">
+    <div class="proj-list">
+
+      <div class="proj-row">
+        <a class="proj-thumb" href="https://www.customerglu.com" target="_blank">
+          <img src="https://www.customerglu.com/og-image.png" alt="CustomerGlu" loading="lazy"
+               onerror="this.parentElement.classList.add('placeholder');this.parentElement.style.background='#F0F8FF';this.parentElement.innerHTML='🎮';">
+        </a>
         <div>
-          <div class="pro-name"><a href="https://www.customerglu.com" target="_blank">CustomerGlu</a></div>
-          <div class="pro-desc">Built the gamification SDK and platform from scratch. Used by consumer apps across India and Southeast Asia.</div>
+          <div class="proj-name"><a href="https://www.customerglu.com" target="_blank">CustomerGlu</a><span class="arrow">↗</span></div>
+          <div class="proj-desc">Built the gamification SDK and platform from scratch. Used by consumer apps across India and Southeast Asia.</div>
         </div>
-        <div class="pro-role">Co-founder</div>
+        <div class="proj-meta"><span class="proj-role">Co-founder</span></div>
       </div>
-      <div class="pro-row">
+
+      <div class="proj-row">
+        <a class="proj-thumb" href="https://lingotune.app" target="_blank">
+          <img src="https://lingotune.app/og.png" alt="Lingotune" loading="lazy"
+               onerror="this.parentElement.classList.add('placeholder');this.parentElement.style.background='#F0F4FF';this.parentElement.innerHTML='🎵';">
+        </a>
         <div>
-          <div class="pro-name"><a href="https://lingotune.app" target="_blank">Lingotune</a></div>
-          <div class="pro-desc">Rebuilt analytics pipeline. Fixed phantom event inflation that was reporting 10× actual DAU. Shipped retention experiments.</div>
+          <div class="proj-name"><a href="https://lingotune.app" target="_blank">Lingotune</a><span class="arrow">↗</span></div>
+          <div class="proj-desc">Rebuilt analytics pipeline. Fixed phantom event inflation that was reporting 10× actual DAU. Shipped retention experiments.</div>
         </div>
-        <div class="pro-role">Growth & Product</div>
+        <div class="proj-meta"><span class="proj-role">Growth & Product</span></div>
       </div>
+
     </div>
   </div>
 

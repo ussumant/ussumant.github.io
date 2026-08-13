@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Sumant — recent work</title>
+  <id>https://ussumant.github.io/</id>
+  <link href="https://ussumant.github.io/feed.xml" rel="self"/>
+  <link href="https://ussumant.github.io/"/>
+  <updated>2026-08-12T00:00:00Z</updated>
+  <author><name>Sumant</name></author>
+  <entry>
+    <title>Fable Low Power Mode</title>
+    <id>https://ussumant.github.io/work/fable-low-power/#2026-08-12</id>
+    <link href="https://ussumant.github.io/work/fable-low-power/"/>
+    <updated>2026-08-12T00:00:00Z</updated>
+    <summary>Published the quota-aware skill I use to keep frontier-model time focused on judgment. For the same workflows, my allowance moved from roughly two days to at least five.</summary>
+  </entry>
+  <entry>
+    <title>Akar, a General Formation run</title>
+    <id>https://ussumant.github.io/work/general-formation/#2026-08-09</id>
+    <link href="https://ussumant.github.io/work/general-formation/"/>
+    <updated>2026-08-09T00:00:00Z</updated>
+    <summary>A one-line smoothie-business prompt became a grounded product wedge, identity, social assets, and a responsive site. It is a system output—not a claim that the physical business launched.</summary>
+  </entry>
+  <entry>
+    <title>Cache Audit</title>
+    <id>https://ussumant.github.io/work/cache-audit/#2026-07-22</id>
+    <link href="https://ussumant.github.io/work/cache-audit/"/>
+    <updated>2026-07-22T00:00:00Z</updated>
+    <summary>Made prompt-cache failures inspectable: a scored audit of what is burning Claude tokens and why.</summary>
+  </entry>
+</feed>

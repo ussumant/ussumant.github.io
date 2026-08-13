@@ -1,543 +1,61 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥊</text></svg>">
-<script>document.documentElement.classList.add('js-typing');</script>
-<title>sumant</title>
-<meta name="description" content="Sumant builds playful, useful software. Currently building an AI agent suite for one-person companies.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://ussumant.github.io/">
-<meta property="og:title" content="sumant">
-<meta property="og:description" content="Playful, useful software. Currently building an AI agent suite for one-person companies.">
-<meta property="og:image" content="https://ussumant.github.io/og.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="sumant">
-<meta name="twitter:description" content="Playful, useful software. Currently building an AI agent suite for one-person companies.">
-<meta name="twitter:image" content="https://ussumant.github.io/og.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
-<style>
-  html { -webkit-text-size-adjust: 100%; }
-  html.js-typing body { visibility: hidden; }
-  .caret {
-    display: inline-block;
-    width: 7px;
-    height: 1em;
-    background: #000;
-    margin-left: 2px;
-    vertical-align: -1px;
-  }
-  @keyframes caretHop {
-    0%   { transform: translateY(0); }
-    15%  { transform: translateY(-5.1px); }
-    30%  { transform: translateY(-8.4px); }
-    50%  { transform: translateY(-10px); }
-    70%  { transform: translateY(-8.4px); }
-    85%  { transform: translateY(-5.1px); }
-    100% { transform: translateY(0); }
-  }
-  body {
-    font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-    color: #666;
-    background: #fff;
-    max-width: 480px;
-    margin: 0;
-    padding: 24px;
-    font-size: 13px;
-    line-height: 1.6;
-    font-weight: normal;
-    text-align: left;
-    letter-spacing: -0.2px;
-  }
-  h1 {
-    margin: 0 0 20px;
-    font-family: "Pixelify Sans", sans-serif;
-    font-size: 22px;
-    font-weight: normal;
-    letter-spacing: normal;
-    color: #000;
-  }
-  h1 a { color: inherit; text-decoration: none; }
-  p { margin: 0 0 26px; max-width: 360px; text-wrap: pretty; }
-  ul {
-    list-style: none;
-    padding-left: 0;
-    margin: 0 0 26px;
-  }
-  li { margin-bottom: 7px; }
-  a { color: #1a52e0; text-decoration: none; }
-  a:hover { text-decoration: underline; }
-  .live { text-decoration: underline; }
-  .intro { max-width: 360px; }
-  .charm {
-    position: fixed;
-    bottom: 40px;
-    left: 24px;
-    width: auto;
-    margin: 0;
-    text-align: left;
-  }
-  .charm .gif-link { display: block; }
-  .charm .gifimg {
-    display: block;
-    width: 230px;
-    height: auto;
-    image-rendering: pixelated;
-    border-radius: 2.75px;
-    transform-origin: bottom left;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.10);
-    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
-    will-change: transform;
-  }
-  @media (hover: hover) and (pointer: fine) {
-    .charm:hover .gifimg {
-      transform: scale(1.035);
-      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.14);
-    }
-  }
-  body > * { transition: filter 0.45s ease, opacity 0.45s ease; }
-  /* focus-blur is a mouse interaction only — on touch, :hover sticks and traps the page */
-  @media (hover: hover) and (pointer: fine) {
-    body:has(.charm:hover) > *:not(.charm):not(.reel-lightbox) { filter: blur(3px); opacity: 0.45; }
-    body:not(:has(.reel-lightbox.active)):has(.reel-thumb:hover) > *:not(.reel-thumb):not(.reel-lightbox) { filter: blur(3px); opacity: 0.45; }
-  }
-  .charm figcaption {
-    margin-top: 8px;
-    font-size: 13px;
-    line-height: 1.6;
-    white-space: nowrap;
-  }
-  .charm figcaption a { text-decoration: underline; }
-  .copyright {
-    margin: 10px 0 0;
-    font-size: 12px;
-    line-height: 1.5;
-    color: #999;
-  }
-  /* one video element: lives in the corner, re-parents into the stage and FLIPs to center */
-  #reelVideo {
-    display: block;
-    width: 100%;
-    height: auto;
-    aspect-ratio: 1104 / 720;
-    border-radius: 4.5px;
-    vertical-align: bottom;
-    transform-origin: center center;
-    will-change: transform;
-  }
-  /* hide iOS Safari's native "tap to play" overlay */
-  video::-webkit-media-controls-start-playback-button,
-  video::-webkit-media-controls-overlay-play-button,
-  video::-webkit-media-controls-play-button,
-  video::-webkit-media-controls-panel,
-  video::-webkit-media-controls {
-    display: none !important;
-    -webkit-appearance: none;
-  }
-  .reel-thumb {
-    position: fixed;
-    top: 24px;
-    right: 24px;
-    width: 180px;
-    overflow: hidden;
-    cursor: pointer;
-    line-height: 0;
-    border-radius: 4.5px;
-    /* poster as a background so it's painted on the thumb itself (can't misalign like an absolute overlay) */
-    background: #fff url('poster.jpg?v=1') center center / cover no-repeat;
-    transform-origin: top right;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.10);
-    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease, opacity 0.45s ease, filter 0.45s ease;
-    z-index: 40;
-  }
-  @media (hover: hover) and (pointer: fine) {
-    .reel-thumb:hover { transform: scale(1.035); box-shadow: 0 8px 22px rgba(0, 0, 0, 0.14); }
-  }
-
-  .reel-lightbox {
-    position: fixed; inset: 0; z-index: 50;
-    display: none;
-    align-items: center; justify-content: center;
-  }
-  .reel-lightbox.active { display: flex; }
-  .reel-backdrop {
-    position: absolute; inset: 0;
-    background: rgba(255, 255, 255, 0.6);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
-    cursor: pointer;
-    opacity: 0;
-    transition: opacity 0.5s ease;
-  }
-  .reel-backdrop.show { opacity: 1; }
-  .reel-stage {
-    position: relative; z-index: 1;
-    /* 1104x720 is taller than 16:9 — the vh term stops it overflowing short windows */
-    width: min(1100px, 92vw, 138vh);
-  }
-  .reel-controls {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-top: 10px; font-size: 13px; color: #666;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-  .reel-lightbox.controls-on .reel-controls { opacity: 1; }
-  .reel-actions { display: flex; gap: 16px; align-items: center; }
-  .esc-hint { color: #999; }
-  @media (hover: none) { .esc-hint { display: none; } }  /* no esc key on touch */
-  .reel-btn {
-    background: none; border: none; padding: 0; margin: 0;
-    font: inherit; color: #666; cursor: pointer; text-decoration: underline;
-  }
-  .reel-btn:hover { color: #1a52e0; }
-
-  @media (max-width: 1024px) {
-    .intro, p { max-width: 330px; }  /* slightly tighter wrap on phones; desktop stays 360px */
-    .charm {
-      position: static;
-      margin-top: 64px;
-    }
-    .reel-thumb {
-      position: static;
-      top: auto;
-      right: auto;
-      width: 230px;
-      max-width: 100%;
-      margin: 56px 0;
-    }
-  }
-</style>
-</head>
-<body>
-
-  <h1><a href="index.html">sumant</a></h1>
-
-  <p class="intro">I'm Sumant. I make software that feels like play — currently an AI agent suite for one-person companies.</p>
-
-  <p class="intro">Before this I co-founded CustomerGlu and built its gamification SDK from scratch — it reached 150M+ devices.</p>
-
-  <ul>
-    <li>🥊 <a class="live" href="https://github.com/ussumant/muay-thai" target="_blank" rel="noopener">muay thai</a> — a fighting game for the last slice of pizza</li>
-    <li>📚 <a class="live" href="https://github.com/ussumant/llm-wiki-compiler" target="_blank" rel="noopener">llm-wiki-compiler</a> — 383 notes into 13 wiki articles</li>
-    <li>⚡ <a class="live" href="https://github.com/ussumant/cache-audit" target="_blank" rel="noopener">cache-audit</a> — finds what's burning your claude tokens</li>
-    <li>🧘 <a class="live" href="https://stoicismdaily.com" target="_blank" rel="noopener">stoicism daily</a> — a 30-second daily stoic practice</li>
-    <li>🎮 <a class="live" href="https://www.customerglu.com" target="_blank" rel="noopener">customerglu</a> — gamification for consumer apps, co-founded</li>
-  </ul>
-
-  <p class="intro">Bengaluru, usually somewhere in Southeast Asia.</p>
-
-  <div class="reel-thumb" id="reelThumb" role="button" tabindex="0" aria-label="Play reel">
-    <video id="reelVideo" src="muay-thai-demo.mp4?v=2" poster="poster.jpg?v=1" muted loop autoplay playsinline preload="metadata"></video>
-  </div>
-
-  <p>Contact:<br>
-  <a class="live" href="https://github.com/ussumant" target="_blank" rel="noopener">github</a> ·
-  <a class="live" href="https://x.com/sumant_us" target="_blank" rel="noopener">x</a> ·
-  <a class="live" href="https://www.linkedin.com/in/sumantus/" target="_blank" rel="noopener">linkedin</a></p>
-
-  <figure class="charm">
-    <a class="gif-link" href="https://github.com/ussumant/muay-thai" target="_blank" rel="noopener"><img class="gifimg" src="charm.gif?v=1" alt="Sofia vs Sumant — pixel-art fighters trading jabs in a muay thai gym" /></a>
-    <figcaption>🥊 <a href="https://github.com/ussumant/muay-thai" target="_blank" rel="noopener">sofia vs sumant</a> — best of 3</figcaption>
-    <p class="copyright">© 2026 Sumant</p>
-  </figure>
-
-  <div class="reel-lightbox" id="reelLightbox" aria-hidden="true">
-    <div class="reel-backdrop" id="reelBackdrop"></div>
-    <div class="reel-stage" id="reelStage">
-      <div class="reel-controls">
-        <span class="reel-time" id="reelTime">0:00 / 0:00</span>
-        <span class="reel-actions">
-          <span class="esc-hint">esc to close</span>
-          <button class="reel-btn" id="reelRestart" type="button">Restart</button>
-        </span>
-      </div>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>document.documentElement.classList.add('js-typing');</script>
+  <title>Sumant — products, behavior, and AI</title>
+  <meta name="description" content="Sumant builds products end to end, usually where software, motivation, and AI meet.">
+  <link rel="canonical" href="https://ussumant.github.io/">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A5%8A%3C/text%3E%3C/svg%3E">
+  <link rel="alternate" type="application/atom+xml" title="Sumant — recent work" href="/feed.xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ussumant.github.io/">
+  <meta property="og:title" content="Sumant — products, behavior, and AI">
+  <meta property="og:description" content="Sumant builds products end to end, usually where software, motivation, and AI meet.">
+  <meta property="og:image" content="https://ussumant.github.io/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sumant — products, behavior, and AI">
+  <meta name="twitter:description" content="Sumant builds products end to end, usually where software, motivation, and AI meet.">
+  <meta name="twitter:image" content="https://ussumant.github.io/og.png">
+</head><body class="home-page"><a class="skip-link" href="#main">Skip to content</a><main id="main" tabindex="-1"><section class="home-scene" aria-label="Introduction"><h1 class="wordmark" data-typing-logo><a href="/">sumant</a></h1><p class="intro">I&#x27;m Sumant. I build products end to end where software, motivation, and AI meet.</p><p class="intro">Before this I co-founded CustomerGlu and built its gamification SDK from scratch — it reached 150M+ devices.</p><p class="now-line" id="now"><span class="live-dot" aria-hidden="true"></span><a class="live" href="/work/general-formation/">now · august 2026</a> — Building General Formation. An AI agent suite for one-person companies.</p><ul class="project-list" id="work"><li><span aria-hidden="true">🎮</span> <a class="live" href="/work/customerglu/">customerglu</a> — gamification for consumer apps, co-founded</li><li><span aria-hidden="true">🔋</span> <a class="live" href="/work/fable-low-power/">fable low power</a> — saves frontier-model time for judgment</li><li><span aria-hidden="true">📚</span> <a class="live" href="/work/llm-wiki-compiler/">llm-wiki-compiler</a> — 383 notes into 13 wiki articles</li></ul><p class="small-link"><a class="live" href="/work/">all work →</a></p><p class="intro">Bengaluru · often elsewhere in Southeast Asia.</p><p>Contact:<br><a class="live" href="https://github.com/ussumant" rel="me noopener">github</a> · <a class="live" href="https://x.com/sumant_us" rel="me noopener">x</a> · <a class="live" href="https://www.linkedin.com/in/sumantus/" rel="me noopener">linkedin</a></p><div class="reel-thumb" id="reelThumb" role="button" tabindex="0" aria-label="Play Muay Thai reel">
+  <video id="reelVideo" src="/muay-thai-demo.mp4?v=2" poster="/poster.jpg?v=1" muted loop autoplay playsinline preload="metadata"></video>
+</div>
+<div class="reel-lightbox" id="reelLightbox" aria-hidden="true">
+  <div class="reel-backdrop" id="reelBackdrop"></div>
+  <div class="reel-stage" id="reelStage">
+    <div class="reel-controls">
+      <span class="reel-time" id="reelTime">0:00 / 0:00</span>
+      <span class="reel-actions"><span class="esc-hint">esc to close</span><button class="reel-btn" id="reelRestart" type="button">Restart</button></span>
     </div>
   </div>
-
-  <script>
-  (function () {
-    var thumb = document.getElementById('reelThumb');
-    var lb = document.getElementById('reelLightbox');
-    var backdrop = document.getElementById('reelBackdrop');
-    var stage = document.getElementById('reelStage');
-    var video = document.getElementById('reelVideo');
-    var controls = stage ? stage.querySelector('.reel-controls') : null;
-    var timeEl = document.getElementById('reelTime');
-    var restartBtn = document.getElementById('reelRestart');
-    if (!thumb || !lb || !stage || !video) return;
-
-    var EASE = 'transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease, box-shadow 0.55s cubic-bezier(0.22, 1, 0.36, 1)';
-    var SH_FULL = '0 20px 60px rgba(0, 0, 0, 0.25)';
-    // a shadow that RENDERS as the corner shadow (0 4px 14px / .10) once the transform scales it by `scale`
-    function shadowAtCornerScale(scale) {
-      var s = scale > 0.01 ? scale : 1;
-      return '0 ' + (4 / s).toFixed(2) + 'px ' + (14 / s).toFixed(2) + 'px rgba(0, 0, 0, 0.1)';
-    }
-    var endHandler = null;
-    var safety = null;
-
-    function fmt(t) {
-      if (!isFinite(t)) t = 0;
-      var m = Math.floor(t / 60);
-      var s = Math.floor(t % 60);
-      return m + ':' + (s < 10 ? '0' : '') + s;
-    }
-    function updateTime() {
-      timeEl.textContent = fmt(video.currentTime) + ' / ' + fmt(video.duration);
-    }
-    function clearHandlers() {
-      if (endHandler) { video.removeEventListener('transitionend', endHandler); endHandler = null; }
-      if (safety) { clearTimeout(safety); safety = null; }
-    }
-    // transform that makes an element naturally at toRect appear at fromRect
-    function deltaTransform(fromRect, toRect) {
-      var scale = fromRect.width / toRect.width;
-      var dx = (fromRect.left + fromRect.width / 2) - (toRect.left + toRect.width / 2);
-      var dy = (fromRect.top + fromRect.height / 2) - (toRect.top + toRect.height / 2);
-      return 'translate(' + dx + 'px, ' + dy + 'px) scale(' + scale + ')';
-    }
-    function resume() {
-      var p = video.play();
-      if (p && p.catch) p.catch(function () {});
-    }
-
-    function open() {
-      if (lb.classList.contains('active')) return;
-      clearHandlers();
-
-      var first = video.getBoundingClientRect();           // corner (small)
-      lb.classList.add('active');
-      video.style.opacity = '1';                           // ensure visible when expanding (corner may be at 0 in Low Power)
-      thumb.style.height = thumb.offsetHeight + 'px';      // reserve the corner's space so flow doesn't shift (mobile)
-      thumb.style.visibility = 'hidden';                   // hide the now-empty corner so its shadow doesn't ghost
-      stage.insertBefore(video, controls);                 // re-parent into centered stage (keeps playing)
-      video.style.transition = 'none';
-      video.style.transform = 'none';
-      var last = video.getBoundingClientRect();             // full, centered
-      var s = first.width / last.width;                     // collapsed scale (corner / full)
-      video.style.transform = deltaTransform(first, last);  // collapsed over the corner
-      video.style.boxShadow = shadowAtCornerScale(s);       // starts rendering as the corner shadow
-      void video.offsetWidth;
-      // grow from the current frame — no seek, so nothing stutters during the animation
-      requestAnimationFrame(function () {
-        video.style.transition = EASE;
-        video.style.transform = 'none';
-        video.style.boxShadow = SH_FULL;                    // grows into the full player shadow
-        backdrop.classList.add('show');
-      });
-
-      resume();
-      lb.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-
-      endHandler = function (e) {
-        if (e.target === video && e.propertyName === 'transform') {
-          lb.classList.add('controls-on');
-          clearHandlers();
-        }
-      };
-      video.addEventListener('transitionend', endHandler);
-      safety = setTimeout(function () { lb.classList.add('controls-on'); clearHandlers(); }, 800);
-    }
-
-    function close() {
-      if (!lb.classList.contains('active')) return;
-      clearHandlers();
-      lb.classList.remove('controls-on');
-      var first = video.getBoundingClientRect();           // full, centered
-      var t = thumb.getBoundingClientRect();                // corner home (empty -> zero height)
-      var ratio = first.height / first.width;
-      var target = { left: t.left, top: t.top, width: t.width, height: t.width * ratio };
-      var s = target.width / first.width;                    // collapsed scale (corner / full)
-      video.style.transition = 'none';
-      video.style.transform = 'none';
-      video.style.opacity = '1';                             // ensure visible (in case closed mid fade-in)
-      void video.offsetWidth;
-      requestAnimationFrame(function () {
-        video.style.transition = EASE;
-        video.style.transform = deltaTransform(target, first); // shrink toward the corner
-        video.style.boxShadow = shadowAtCornerScale(s);        // shrinks to render as the corner shadow
-        backdrop.classList.remove('show');
-      });
-
-      var done = function () {
-        if (!lb.classList.contains('active')) return;
-        lb.classList.remove('active');
-        lb.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
-        video.style.transition = 'none';
-        video.style.transform = 'none';
-        video.style.opacity = '';                            // clear inline opacity from the fade-in
-        video.style.boxShadow = '';                          // hand the corner shadow back to .reel-thumb (seamless)
-        thumb.appendChild(video);                            // re-home into the corner (no visual jump)
-        thumb.style.height = '';                             // release the reserved space
-        thumb.style.visibility = '';                         // show the corner again
-        resume();
-        clearHandlers();
-      };
-      endHandler = function (e) { if (e.target === video && e.propertyName === 'transform') done(); };
-      video.addEventListener('transitionend', endHandler);
-      safety = setTimeout(done, 750);
-    }
-
-    thumb.addEventListener('click', open);
-    thumb.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
-    });
-    backdrop.addEventListener('click', close);
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && lb.classList.contains('active')) close();
-    });
-    restartBtn.addEventListener('click', function () {
-      video.currentTime = 0;
-      resume();
-    });
-    video.addEventListener('timeupdate', updateTime);
-    video.addEventListener('loadedmetadata', updateTime);
-
-    // poster overlay: visible whenever the video isn't actually playing (covers iOS's play button in Low Power Mode)
-    // The iOS play button is part of the <video> element and is drawn above the page, so it can't be
-    // covered. But opacity:0 hides the WHOLE element (button included), and a muted video still plays
-    // via explicit play(). So keep the corner video at opacity 0 (the thumb's poster background shows
-    // through), and only fade it in once it's actually playing. In Low Power Mode it never plays -> no
-    // button, just the poster background.
-    function reelLive() { video.style.opacity = '1'; }
-    function reelStill() {
-      if (lb.classList.contains('active')) return; // expanded: keep the video visible
-      video.style.opacity = '0';                   // reveal the thumb's poster background (no play button)
-    }
-    video.style.opacity = '0';                     // start hidden over the poster background
-    video.addEventListener('playing', reelLive);
-    video.addEventListener('pause', reelStill);
-    video.addEventListener('ended', reelStill);
-    var pq = video.play();                          // muted play() works regardless of opacity
-    if (pq && pq.catch) pq.catch(reelStill);
-
-    // iOS pauses the video when the tab is backgrounded — resume it when we come back
-    function resumeIfVisible() {
-      if (document.visibilityState === 'visible' && video.paused) {
-        var p = video.play();
-        if (p && p.catch) p.catch(function () {});
-      }
-    }
-    document.addEventListener('visibilitychange', resumeIfVisible);
-    window.addEventListener('pageshow', resumeIfVisible);
-    window.addEventListener('focus', resumeIfVisible);
-  })();
-  </script>
-
-  <script>
-  (function () {
-    var html = document.documentElement;
-    function reveal() { html.classList.remove('js-typing'); }
-    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduce) { reveal(); return; }
-
-    function run() {
-      try {
-        var sleep = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
-        var caret = document.createElement('span');
-        caret.className = 'caret';
-        var LOGO_SPEED = 220;
-
-        var logo = document.querySelector('h1');
-        var reelVideo = document.getElementById('reelVideo');
-
-        // only the logo types out; everything else fades in together once it lands
-        var fadeEls = Array.prototype.filter.call(document.body.children, function (el) {
-          return el !== logo && el.tagName !== 'SCRIPT';
-        });
-
-        // snapshot the logo's content, then empty just the logo
-        var logoOriginal = Array.prototype.map.call(logo.childNodes, function (n) { return n.cloneNode(true); });
-        logo.innerHTML = '';
-
-        // hide everything else instantly (transition off) so nothing flashes at reveal
-        fadeEls.forEach(function (el) { el.style.transition = 'none'; el.style.opacity = '0'; });
-        reveal(); // logo is empty, rest is hidden — safe to show
-
-        function typeInto(srcNodes, target, speed) {
-          return srcNodes.reduce(function (p, child) {
-            return p.then(function () {
-              if (child.nodeType === 3) {
-                var chars = Array.from(child.textContent);
-                var tn = document.createTextNode('');
-                target.appendChild(tn);
-                target.appendChild(caret);
-                return chars.reduce(function (q, ch) {
-                  return q.then(function () {
-                    tn.textContent += ch;
-                    return sleep(ch === ' ' ? speed * 0.5 : speed);
-                  });
-                }, Promise.resolve());
-              } else if (child.nodeType === 1) {
-                var clone = child.cloneNode(false);
-                target.appendChild(clone);
-                target.appendChild(caret);
-                return typeInto(Array.prototype.slice.call(child.childNodes), clone, speed);
-              }
-              return Promise.resolve();
-            });
-          }, Promise.resolve());
-        }
-
-        // one cute hop of the caret after the logo lands — a single beat before the fade
-        function hopCaretOnce() {
-          return sleep(180).then(function () {
-            return new Promise(function (res) {
-              var done = false;
-              function finish() { if (done) return; done = true; caret.removeEventListener('animationend', finish); res(); }
-              caret.addEventListener('animationend', finish);
-              caret.style.animation = 'caretHop 0.34s linear 1';
-              setTimeout(finish, 500); // safety
-            });
-          });
-        }
-
-        // hold on a blank page before the logo types; also wait for the pixel font so
-        // the logo never types in the fallback font and swaps mid-word (FOUT)
-        var fontReady = (document.fonts && document.fonts.load)
-          ? Promise.race([document.fonts.load('22px "Pixelify Sans"'), sleep(2500)])
-          : Promise.resolve();
-
-        Promise.all([sleep(1300), fontReady])
-          .then(function () { return typeInto(logoOriginal, logo, LOGO_SPEED); })
-          .then(hopCaretOnce)
-          .then(function () { return sleep(500); })   // let it rest a beat after the hop before fading in
-          .then(function () {
-            if (caret.parentNode) { caret.parentNode.removeChild(caret); }
-            // fade the rest of the screen in together
-            fadeEls.forEach(function (el) {
-              el.style.transition = 'opacity 1.3s ease';
-              el.style.opacity = '1';
-            });
-            // drop inline styles afterward so CSS (hover-dimming, etc.) can take over
-            setTimeout(function () {
-              fadeEls.forEach(function (el) { el.style.transition = ''; el.style.opacity = ''; });
-            }, 1350);
-            // make sure the reel is actually playing once it appears
-            if (reelVideo) {
-              var pp = reelVideo.play && reelVideo.play();
-              if (pp && pp.catch) pp.catch(function () {});
-            }
-          });
-      } catch (e) {
-        reveal();
-      }
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', run);
-    } else {
-      run();
-    }
-  })();
-  </script>
-
-</body>
-</html>
+</div><figure class="charm">
+  <a class="gif-link" href="https://github.com/ussumant/muay-thai" rel="noopener"><img class="gifimg" src="/charm.gif?v=1" alt="Sofia vs Sumant — pixel-art fighters trading jabs in a Muay Thai gym" width="460" height="252"></a>
+  <figcaption>🥊 <a href="https://github.com/ussumant/muay-thai" rel="noopener">sofia vs sumant</a> — best of 3</figcaption>
+  <p class="copyright">© 2026 Sumant</p>
+</figure></section><section class="home-section" id="updates" aria-labelledby="updates-title">
+  <h2 id="updates-title">recently</h2>
+  <p class="section-note">A small reverse-chronological shipping log. Updated 12 August 2026. <a href="/feed.xml">rss ↗</a></p>
+  <ol class="update-list"><li>
+  <time datetime="2026-08-12">12 Aug 2026</time><br>
+  <a class="live" href="/work/fable-low-power/">Fable Low Power Mode</a> — Published the quota-aware skill I use to keep frontier-model time focused on judgment. For the same workflows, my allowance moved from roughly two days to at least five.
+  <span class="update-links"> · <a href="https://github.com/ussumant/useful-agent-skills/tree/main/skills/fable-low-power" rel="noopener">artifact ↗</a></span>
+</li><li>
+  <time datetime="2026-08-09">09 Aug 2026</time><br>
+  <a class="live" href="/work/general-formation/">Akar, a General Formation run</a> — A one-line smoothie-business prompt became a grounded product wedge, identity, social assets, and a responsive site. It is a system output—not a claim that the physical business launched.
+  <span class="update-links"></span>
+</li><li>
+  <time datetime="2026-07-22">22 Jul 2026</time><br>
+  <a class="live" href="/work/cache-audit/">Cache Audit</a> — Made prompt-cache failures inspectable: a scored audit of what is burning Claude tokens and why.
+  <span class="update-links"> · <a href="https://github.com/ussumant/cache-audit" rel="noopener">artifact ↗</a></span>
+</li></ol>
+</section><section class="home-section" id="about" aria-labelledby="about-title">
+  <h2 id="about-title">about</h2>
+  <div class="about-copy"><p>I have spent years studying motivation, behavioral design, and engagement, then applying those ideas to real products. I co-founded CustomerGlu and built its gamification SDK from scratch; it eventually reached more than 150 million devices.</p><p>After CustomerGlu, I took one deliberate exploratory chapter: product and growth work at Lingotune, the One Person Growth Team, Distill, and a series of AI-assisted product experiments. The common thread was learning how a small, high-agency team could research, build, grow, and learn faster.</p><p>Today I prefer hands-on building to managing large teams. I work across product judgment, research, design, engineering, and the operating systems that let those disciplines compound.</p></div>
+</section></main><script src="/scripts/site.js"></script></body></html>

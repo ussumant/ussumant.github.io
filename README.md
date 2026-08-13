@@ -1,47 +1,39 @@
-# Sumant
+# Sumant's living site
 
-Building AI-native tools and consumer apps.
+The source for [ussumant.github.io](https://ussumant.github.io): a living record of what Sumant is building, what has shipped, and what he has learned.
 
----
+## Content model
 
-## 🤖 Claude Code Tools
+`content/site.json` is the publishing source of truth. It contains:
 
-| Project | What It Does | Stars |
-|---------|-------------|-------|
-| [llm-wiki-compiler](https://github.com/ussumant/llm-wiki-compiler) | Compiles 100+ knowledge files into a topic wiki — 84% context reduction per session. Implements Karpathy's LLM knowledge base pattern | ⭐ 67 |
-| [cache-audit](https://github.com/ussumant/cache-audit) | Audits your Claude Code prompt caching setup — finds what's costing you tokens and why | ⭐ 46 |
-| [design-theme-generation-skill](https://github.com/ussumant/design-theme-generation-skill) | Claude skill for generating professional design themes from moodboard analysis — hex codes, fonts, spacing | ⭐ 5 |
-| [cc2codex](https://github.com/ussumant/cc2codex) | Migrate a Claude Code setup to OpenAI Codex — safe preview before overwriting anything | ⭐ 4 |
-| [premium-ui-skill](https://github.com/ussumant/premium-ui-skill) | Claude skill for generating polished, non-generic UI | ⭐ 2 |
-| [claude-code-streak-tracker](https://github.com/ussumant/claude-code-streak-tracker) | Daily Claude Code streak tracker with status line inline display and quota progress | ⭐ 1 |
+- stable positioning and About copy;
+- the dated Now block;
+- selected and archived work records;
+- recent shipping-log entries;
+- links and truthful stage labels.
 
----
+Stages such as `Built`, `Shipped`, `Launched`, `Shared`, and `Measured` should remain distinct. A prototype or generated business concept must not be presented as an operating company.
 
-## 📱 Consumer Apps
+## Build
 
-| Project | What It Does | Status |
-|---------|-------------|--------|
-| Stoicism Daily Practice | iOS app — daily Stoic practice in 30 seconds. Real-life scenarios, AI coaching, pattern detection across 6 life domains, lock screen widget | Live on App Store |
-| Daily Stoic Comic | n8n + AI workflow that generates and publishes a daily Stoic comic strip | Live |
-| WorkflowRecorder | macOS screen recorder + AI-powered analysis + automatic skill generation. "Strava for vibe-coding" | In progress |
+```bash
+python3 scripts/build_site.py
+```
 
----
+The build writes the static homepage, work archive, individual work notes, and Atom feed. Generated HTML is intentionally checked in so GitHub Pages can serve the repository without a framework or build action.
 
-## 🏗️ Professional Work
+## Preview
 
-| Company | Role | What I Did |
-|---------|------|-----------|
-| [CustomerGlu](https://www.customerglu.com) | Co-founder | Built the gamification SDK and platform from scratch — used by consumer apps across India and SEA |
-| [Lingotune](https://lingotune.app) | Growth & Product | Rebuilt analytics pipeline, fixed phantom event inflation (DAU was 10x inflated), shipped retention experiments |
+```bash
+python3 -m http.server 8765
+```
 
----
+Then open `http://127.0.0.1:8765`.
 
-## 🎮 Vibe-Coded
+## Publishing loop
 
-| Project | What It Is |
-|---------|-----------|
-| [Muay Thai Boxing Ring](https://github.com/ussumant/muay-thai) | 2-player browser fighting game, built in 6 vibe-coded sessions. Sprite system, 3-round matches, random spider hazards |
-
----
-
-**Twitter / X:** [@sumant_us](https://x.com/sumant_us) · **LinkedIn:** [sumantus](https://www.linkedin.com/in/sumantus/)
+1. Recover a direct artifact, public link, screenshot, or measured result.
+2. Add or update the evidence in the private public-work ledger.
+3. Draft the corresponding `content/site.json` record with an honest stage and claim boundary.
+4. Rebuild and inspect desktop and mobile renders.
+5. Publish only after Sumant approves the public wording and receipts.

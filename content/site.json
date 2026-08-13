@@ -1,0 +1,197 @@
+{
+  "site": {
+    "name": "Sumant",
+    "title": "Sumant — products, behavior, and AI",
+    "description": "Sumant builds products end to end, usually where software, motivation, and AI meet.",
+    "url": "https://ussumant.github.io",
+    "updated": "2026-08-12",
+    "updated_label": "12 August 2026",
+    "location": "Bengaluru · often elsewhere in Southeast Asia",
+    "social": [
+      {"label": "GitHub", "url": "https://github.com/ussumant"},
+      {"label": "X", "url": "https://x.com/sumant_us"},
+      {"label": "LinkedIn", "url": "https://www.linkedin.com/in/sumantus/"}
+    ]
+  },
+  "hero": {
+    "eyebrow": "Product builder · behavioral design · AI systems",
+    "title": "I'm Sumant. I build products end to end where software, motivation, and AI meet.",
+    "body": "This is a living record of what I am building, what has shipped, and what I am learning along the way."
+  },
+  "now": {
+    "label": "Now · August 2026",
+    "title": "Building General Formation",
+    "body": "I am a founding engineer on an AI agent suite for one-person companies. We are exploring how far a coherent agent team can take a business—from a thin idea to grounded strategy, identity, software, and launch material.",
+    "question": "Current question: how much of a small company can an agent team operate without hiding the consequential decisions from its founder?",
+    "work_slug": "general-formation"
+  },
+  "about": [
+    "I have spent years studying motivation, behavioral design, and engagement, then applying those ideas to real products. I co-founded CustomerGlu and built its gamification SDK from scratch; it eventually reached more than 150 million devices.",
+    "After CustomerGlu, I took one deliberate exploratory chapter: product and growth work at Lingotune, the One Person Growth Team, Distill, and a series of AI-assisted product experiments. The common thread was learning how a small, high-agency team could research, build, grow, and learn faster.",
+    "Today I prefer hands-on building to managing large teams. I work across product judgment, research, design, engineering, and the operating systems that let those disciplines compound."
+  ],
+  "work": [
+    {
+      "slug": "general-formation",
+      "title": "General Formation",
+      "display": "general formation",
+      "emoji": "🧩",
+      "order": "01",
+      "period": "2026—",
+      "stage": "Building",
+      "featured": true,
+      "summary": "An AI agent suite for one-person companies.",
+      "role": "Founding engineer",
+      "tags": ["agent systems", "product", "engineering"],
+      "lead": "General Formation takes a founder's intent and coordinates specialist agents to turn it into inspectable business work—not just an answer in a chat window.",
+      "cover": {
+        "src": "/assets/general-formation-akar.png",
+        "alt": "Generated Akar concept statement: Akar is a mobile smoothie cart in Bali that puts island-native superfoods.",
+        "caption": "A statement card produced during a completed General Formation run. Akar is a generated business concept, not an operating company."
+      },
+      "sections": [
+        {"title": "The question", "body": "Can a small company gain real operating leverage from agents without giving up founder judgment, taste, or visibility into what happened?"},
+        {"title": "What I am building", "body": "I work across the product experience and the underlying constellation: planning, specialist handoffs, evaluation gates, resumable runs, and a terminal cockpit where a founder can steer the work."},
+        {"title": "A working receipt", "body": "One completed run turned the thin prompt “Build a business which creates green, healthy smoothies in Bali” into Akar: a grounded product wedge, brand system, social assets, and a rendered responsive site."},
+        {"title": "Truth boundary", "body": "Akar is evidence of the system producing a coherent business concept and launch-ready collateral. It is not an operating smoothie company, and I do not present it as one."}
+      ],
+      "links": []
+    },
+    {
+      "slug": "customerglu",
+      "title": "CustomerGlu",
+      "display": "customerglu",
+      "emoji": "🎮",
+      "order": "02",
+      "period": "Earlier",
+      "stage": "Shipped",
+      "featured": true,
+      "summary": "Gamification infrastructure for consumer apps, co-founded and built from scratch.",
+      "home_summary": "gamification for consumer apps, co-founded",
+      "role": "Co-founder",
+      "tags": ["behavioral design", "consumer products", "company building"],
+      "lead": "CustomerGlu made it possible for consumer product teams to run native gamified journeys—streaks, challenges, rewards, and campaigns—without rebuilding the machinery each time.",
+      "sections": [
+        {"title": "What I owned", "body": "I co-founded the company and built its gamification SDK and platform from scratch, working across product, engineering, behavioral design, customers, and the company itself."},
+        {"title": "The deeper thread", "body": "The work was an applied study of motivation: not gamification as decoration, but how feedback, goals, progress, rewards, and timing change what people do inside products."},
+        {"title": "Scale", "body": "The SDK eventually reached more than 150 million devices through consumer apps in India and Southeast Asia."}
+      ],
+      "links": [{"label": "Visit CustomerGlu", "url": "https://www.customerglu.com"}]
+    },
+    {
+      "slug": "fable-low-power",
+      "title": "Fable Low Power Mode",
+      "display": "fable low power",
+      "emoji": "🔋",
+      "order": "03",
+      "period": "2026",
+      "stage": "Measured",
+      "featured": true,
+      "summary": "A quota-aware way to save frontier-model time for judgment rather than shell work.",
+      "home_summary": "saves frontier-model time for judgment",
+      "role": "Independent build",
+      "tags": ["AI tools", "workflow design", "open source"],
+      "lead": "A Claude Code skill that watches live usage windows and shifts repetitive execution to cheaper workers when frontier-model quota gets tight.",
+      "sections": [
+        {"title": "The problem", "body": "My best model was spending limited quota on file reads, searches, builds, tests, and repetitive edits—the work around the decisions rather than the decisions themselves."},
+        {"title": "The mechanism", "body": "Low Power Mode reads the 5-hour and 7-day usage percentages already present in Claude Code's statusline payload. At a threshold, it keeps the frontier model focused on planning, judgment, review, and final decisions while subagents handle execution."},
+        {"title": "Observed result", "body": "For the same working pattern, my Fable allowance moved from roughly two days to at least five. That is a personal workflow measurement, not a universal benchmark."}
+      ],
+      "links": [{"label": "View the skill", "url": "https://github.com/ussumant/useful-agent-skills/tree/main/skills/fable-low-power"}]
+    },
+    {
+      "slug": "llm-wiki-compiler",
+      "title": "LLM Wiki Compiler",
+      "display": "llm-wiki-compiler",
+      "emoji": "📚",
+      "order": "04",
+      "period": "2026",
+      "stage": "Open source",
+      "featured": true,
+      "summary": "Turns a folder of notes into a compact, topic-based wiki for coding agents.",
+      "home_summary": "383 notes into 13 wiki articles",
+      "role": "Independent build",
+      "tags": ["knowledge systems", "Claude Code", "open source"],
+      "lead": "A Claude Code plugin that compiles large Markdown knowledge folders into smaller topic articles, following the LLM knowledge-base pattern described by Andrej Karpathy.",
+      "sections": [
+        {"title": "The problem", "body": "Agent sessions were repeatedly loading large, overlapping context files. The useful knowledge was there, but the shape was expensive and difficult to navigate."},
+        {"title": "What it does", "body": "The compiler groups source notes by topic, synthesizes them into linked wiki articles, and gives agents a smaller map from which to pull only the context they need."},
+        {"title": "A concrete run", "body": "One corpus of 383 notes compiled into 13 topic articles. The repository had 311 GitHub stars when this entry was updated on 12 August 2026."}
+      ],
+      "links": [{"label": "View the repository", "url": "https://github.com/ussumant/llm-wiki-compiler"}]
+    },
+    {
+      "slug": "cache-audit",
+      "title": "Cache Audit",
+      "display": "cache-audit",
+      "emoji": "⚡",
+      "order": "05",
+      "period": "2026",
+      "stage": "Open source",
+      "featured": false,
+      "summary": "Finds the parts of a Claude Code setup that are quietly breaking prompt caching.",
+      "role": "Independent build",
+      "tags": ["developer tools", "Claude Code", "open source"],
+      "lead": "A focused audit skill that checks a Claude Code setup against prompt-caching rules and returns a scored report with specific fixes.",
+      "sections": [
+        {"title": "Why", "body": "Prompt caching failures are expensive but mostly invisible. A setup can look normal while volatile context, ordering, or configuration choices keep invalidating the reusable prefix."},
+        {"title": "What it does", "body": "Cache Audit inspects the setup, explains which rule each issue violates, and turns the diagnosis into concrete changes rather than generic token-saving advice."}
+      ],
+      "links": [{"label": "View the repository", "url": "https://github.com/ussumant/cache-audit"}]
+    },
+    {
+      "slug": "stoicism-daily",
+      "title": "Stoicism Daily",
+      "display": "stoicism daily",
+      "emoji": "🧘",
+      "order": "06",
+      "period": "2026",
+      "stage": "Live",
+      "featured": false,
+      "summary": "A small daily experiment in making Stoic ideas easier to encounter.",
+      "role": "Independent build",
+      "tags": ["consumer product", "ritual", "AI media"],
+      "lead": "A lightweight daily Stoic experience that packages an old idea into a contemporary visual prompt and a repeatable ritual.",
+      "sections": [
+        {"title": "The experiment", "body": "I wanted to see whether philosophical practice could feel immediate rather than instructional: one small encounter, delivered regularly, with almost no setup."},
+        {"title": "Current form", "body": "The live site publishes a daily visual Stoic prompt and lets people subscribe for the next one."}
+      ],
+      "links": [{"label": "Visit Stoicism Daily", "url": "https://stoicismdaily.com"}]
+    }
+  ],
+  "updates": [
+    {
+      "date": "2026-08-12",
+      "date_label": "12 Aug 2026",
+      "stage": "Shared · Measured",
+      "title": "Fable Low Power Mode",
+      "body": "Published the quota-aware skill I use to keep frontier-model time focused on judgment. For the same workflows, my allowance moved from roughly two days to at least five.",
+      "work_slug": "fable-low-power",
+      "external_url": "https://github.com/ussumant/useful-agent-skills/tree/main/skills/fable-low-power"
+    },
+    {
+      "date": "2026-08-09",
+      "date_label": "09 Aug 2026",
+      "stage": "Built",
+      "title": "Akar, a General Formation run",
+      "body": "A one-line smoothie-business prompt became a grounded product wedge, identity, social assets, and a responsive site. It is a system output—not a claim that the physical business launched.",
+      "work_slug": "general-formation",
+      "external_url": ""
+    },
+    {
+      "date": "2026-07-22",
+      "date_label": "22 Jul 2026",
+      "stage": "Open source",
+      "title": "Cache Audit",
+      "body": "Made prompt-cache failures inspectable: a scored audit of what is burning Claude tokens and why.",
+      "work_slug": "cache-audit",
+      "external_url": "https://github.com/ussumant/cache-audit"
+    }
+  ],
+  "side_quest": {
+    "title": "Muay Thai",
+    "body": "A two-player browser fighting game I made for the last slice of pizza.",
+    "image": "/charm.gif?v=1",
+    "alt": "Sofia vs Sumant — pixel-art fighters trading jabs in a Muay Thai gym"
+  }
+}

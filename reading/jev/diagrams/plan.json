@@ -1,5 +1,6 @@
 {
-  "url": "file:///Users/sumant/dev/ussumant.github.io/reading/jev/diagrams/index.html",
+  "_run": "from the repo root: node ~/.claude/skills/explainer-diagrams/shoot.mjs reading/jev/diagrams/plan.json",
+  "path": "reading/jev/diagrams/index.html",
   "viewport": { "width": 1300, "height": 1000, "deviceScaleFactor": 2 },
   "steps": [
     { "type": "waitFor", "expr": "document.fonts.status === 'loaded'", "timeoutMs": 20000 },
@@ -8,22 +9,22 @@
 
     { "type": "eval", "expr": "(function(){var el=document.querySelector('#shot1'); el.scrollIntoView({block:'start'}); return el.getBoundingClientRect().height;})()", "label": "shot1-height" },
     { "type": "wait", "ms": 150 },
-    { "type": "shot", "selector": "#shot1", "path": "/Users/sumant/dev/ussumant.github.io/reading/jev/img/01-one-question.png" },
+    { "type": "shot", "selector": "#shot1", "path": "reading/jev/img/01-classifier-not-generator.png" },
 
     { "type": "eval", "expr": "(function(){var el=document.querySelector('#shot2'); el.scrollIntoView({block:'start'}); return el.getBoundingClientRect().height;})()", "label": "shot2-height" },
     { "type": "wait", "ms": 150 },
-    { "type": "shot", "selector": "#shot2", "path": "/Users/sumant/dev/ussumant.github.io/reading/jev/img/02-two-minds.png" },
+    { "type": "shot", "selector": "#shot2", "path": "reading/jev/img/02-pattern-underneath.png" },
 
     { "type": "eval", "expr": "(function(){var el=document.querySelector('#shot3'); el.scrollIntoView({block:'start'}); return el.getBoundingClientRect().height;})()", "label": "shot3-height" },
     { "type": "wait", "ms": 150 },
-    { "type": "shot", "selector": "#shot3", "path": "/Users/sumant/dev/ussumant.github.io/reading/jev/img/03-where-numbers-sit.png" },
+    { "type": "shot", "selector": "#shot3", "path": "reading/jev/img/03-where-i-would-put-it.png" },
 
     { "type": "eval", "expr": "(function(){var el=document.querySelector('#shot4'); el.scrollIntoView({block:'start'}); return el.getBoundingClientRect().height;})()", "label": "shot4-height" },
     { "type": "wait", "ms": 150 },
-    { "type": "shot", "selector": "#shot4", "path": "/Users/sumant/dev/ussumant.github.io/reading/jev/img/04-semantics-vs-policy.png" },
+    { "type": "shot", "selector": "#shot4", "path": "reading/jev/img/04-one-gate-i-would-replace.png" },
 
     { "type": "eval", "expr": "(function(){var el=document.querySelector('#shot5'); el.scrollIntoView({block:'start'}); return el.getBoundingClientRect().height;})()", "label": "shot5-height" },
     { "type": "wait", "ms": 150 },
-    { "type": "shot", "selector": "#shot5", "path": "/Users/sumant/dev/ussumant.github.io/reading/jev/img/05-five-places.png" }
+    { "type": "shot", "selector": "#shot5", "path": "reading/jev/img/05-six-picks.png" }
   ]
 }

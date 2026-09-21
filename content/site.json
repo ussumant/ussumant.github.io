@@ -430,16 +430,16 @@
       "slug": "jev",
       "order": "04",
       "handwritten": true,
-      "title": "A list can never finish",
-      "display": "a list can never finish",
+      "title": "Jev replaces the decision, never the eyes or the pen",
+      "display": "jev replaces the decision, never the eyes or the pen",
       "period": "Sep 2026",
       "venue": "general formation",
       "status": "Notes",
-      "summary": "A closed list of nouns let a real claim through. One calibrated yes/no question caught it, for $0.012 over 421 labelled rows. What it replaced, what it cannot do, and where I would use one next.",
+      "summary": "A classifier that never writes, only picks from a menu code already built. The same loop across a browser agent, a voice command, a day of my own screen text, and the one gate in Garage I would hand it next.",
       "tags": [
         "AI systems",
-        "evaluation",
-        "engineering workflow"
+        "computer use",
+        "evaluation"
       ]
     }
   ],
@@ -448,8 +448,8 @@
       "date": "2026-09-21",
       "date_label": "21 Sep 2026",
       "stage": "Written · Measured",
-      "title": "A list can never finish",
-      "body": "Wrote up replacing a closed-list regex gate with one calibrated yes/no question. Over 421 hand-labelled rows the question scored precision 1.00 and recall 0.96 where the list managed 0.85 and 0.61, and the whole run cost $0.012. Five diagrams.",
+      "title": "Jev replaces the decision, never the eyes or the pen",
+      "body": "Wrote up the classifier I keep putting in front of actions: it never generates text, it only picks from a menu the code already built. Includes a live Calculator run that took six picks at 98 to 100 percent for $0.00021, and the one Garage gate I would hand it next. Five diagrams.",
       "work_slug": "general-formation",
       "external_url": "https://ussumant.github.io/reading/jev/"
     },

@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>A list can never finish — Sumant</title>
-  <meta name="description" content="A closed list of nouns let a real claim through. One yes/no question caught it. What a calibrated probability model replaced, what it measured, and where I would use one next.">
+  <title>Jev replaces the decision, never the eyes or the pen — Sumant</title>
+  <meta name="description" content="A classifier that never writes, only picks. Where I would put one across every project I run, the one gate in Garage I would hand it next, and a live Calculator run that cost $0.00021.">
   <link rel="canonical" href="https://ussumant.github.io/reading/jev/">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A5%8A%3C/text%3E%3C/svg%3E">
   <link rel="alternate" type="application/atom+xml" title="Sumant — recent work" href="/feed.xml">
@@ -36,6 +36,10 @@
     .round-table tbody td:last-child { color: var(--ink); }
     .table-note { max-width: 660px; margin: 10px 0 0 !important; color: var(--muted); font-family: var(--mono); font-size: 11px; line-height: 1.65; }
 
+    /* status tags in the use-case section, same vocabulary as diagram 03 */
+    .stat-tag { display: inline-block; margin-right: 8px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); vertical-align: 1px; }
+    .stat-tag.live { color: var(--blue); }
+
     /* Pixelify Sans ships no fi/fl/ff ligature glyphs; the browser substitutes
        another face for the pair and "finish" renders as "Anish". Scoped to
        this page's Pixelify elements only, never to styles.css. */
@@ -49,134 +53,116 @@
   </style>
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://ussumant.github.io/reading/jev/">
-  <meta property="og:title" content="A list can never finish — Sumant">
-  <meta property="og:description" content="A closed list of nouns let a real claim through. One yes/no question caught it. What a calibrated probability model replaced, what it measured, and where I would use one next.">
+  <meta property="og:title" content="Jev replaces the decision, never the eyes or the pen — Sumant">
+  <meta property="og:description" content="A classifier that never writes, only picks. Where I would put one across every project I run, the one gate in Garage I would hand it next, and a live Calculator run that cost $0.00021.">
   <meta property="og:image" content="https://ussumant.github.io/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="A list can never finish — Sumant">
-  <meta name="twitter:description" content="A closed list of nouns let a real claim through. One yes/no question caught it. What a calibrated probability model replaced, what it measured, and where I would use one next.">
+  <meta name="twitter:title" content="Jev replaces the decision, never the eyes or the pen — Sumant">
+  <meta name="twitter:description" content="A classifier that never writes, only picks. Where I would put one across every project I run, the one gate in Garage I would hand it next, and a live Calculator run that cost $0.00021.">
   <meta name="twitter:image" content="https://ussumant.github.io/og.png">
 </head><body class="notes-page reading-page reading-detail-page"><a class="skip-link" href="#main">Skip to content</a><header class="plain-header"><p class="wordmark"><a href="/">sumant</a></p><a href="/">← home</a></header><main id="main" tabindex="-1"><article class="reading-entry"><header class="detail-header reading-entry-header">
   <a class="breadcrumb" href="/reading/">← reading / 04</a>
   <p class="detail-meta">notes · sep 2026 · general formation</p>
-  <h1>A list can never finish</h1>
-  <p class="reading-paper-title">How a calibrated yes/no model replaced our regex gates, and where I would use one next</p>
-  <p class="reading-story-hook">One noun got past the gate. One question caught it.</p>
-  <p class="detail-lead">A closed list of nouns let a real claim through, because the business sold to bakers and bakers was not on the list. Eleven fix rounds had already widened that list. It can never finish. A question can.</p>
+  <h1>Jev replaces the decision, never the eyes or the pen</h1>
+  <p class="reading-paper-title">A classifier you can put in front of any action, across every project I run</p>
+  <p class="reading-story-hook">It never writes. It only picks.</p>
+  <p class="detail-lead">Something else produces the options. A cheap model says which one, and how sure it is. Once you see that shape, it turns up in a browser agent, a voice command, a day of your own screen text, and a gate in a product you already shipped.</p>
 </header>
 <dl class="meta-list reading-meta-list">
   <div><dt>written</dt><dd>21 September 2026</dd></div>
-  <div><dt>about</dt><dd>AI systems · evaluation · engineering workflow</dd></div>
-  <div><dt>measured</dt><dd>one spike over four hand-labelled sets, 421 rows</dd></div>
+  <div><dt>about</dt><dd>AI systems · computer use · evaluation</dd></div>
+  <div><dt>measured</dt><dd>one live Calculator run, six picks, $0.00021</dd></div>
 </dl>
 <div class="reading-body">
 
 <section class="reading-text-section">
-<p>A line of landing copy read: “2,000 bakers already bake with us.” It passed one of our gates.</p>
-<p>The gate was looking for customers, users, subscribers. Bakers was not on the list.</p>
-<p>Eleven fix rounds widened the list. Every trade has its own word for the people who buy from it. Bakers. Riders. Patients. Students. Each round of fixes added a few more and missed the next few, because the next business was in a trade nobody on the team had thought of yet.</p>
-<p>That is the shape of the problem. A closed list of nouns has no finished version. There is no last noun.</p>
-<p>So we replaced the list with one question, and the question did not need a list.</p>
+<p>“A hotdog in a bun with mustard.” I asked a model whether that is a sandwich. It did not argue with me. It returned 0.66.</p>
+<p>Then I pointed the same model at the macOS Calculator. It cannot see a screen. It read the window’s buttons as a list of text labels, picked one label at a time, and solved 12 + 7 in six picks. Every pick came back at 98 to 100 percent. The whole run cost $0.00021, about two hundredths of a cent.</p>
+<p>The model is Jev, from a company called TypeSafe. It is a classifier, not a writer. Everything below is that same trick wearing different clothes.</p>
 </section>
 
 <section class="reading-text-section">
-<h2>What the thing actually is</h2>
-<p>Jev is a model from a company called TypeSafe. You send it text in a field called state, plus one or more yes/no questions. It sends back a probability per question, between 0 and 1.</p>
-<p>It does not write anything. There is no sentence to parse, no refusal to handle, no JSON to validate. Their own line for it: “The number is the answer and the certainty in one.”</p>
-<p>It is cheap. Input costs $0.042 per million tokens, and output is free, because there is no output. The questions run in parallel, so asking five costs about what asking one costs in time.</p>
-<p>One rule from their docs we follow everywhere: pin the version. An older version id returned <code>400 Unknown model</code> when we tried it.</p>
+<h2>What it actually does</h2>
+<p>TypeSafe trained it against a different output contract than a chatbot has. Their primer is blunt about it: “The model does not generate text.” It returns decisions and probabilities, and the probabilities are meant to be calibrated, so that answers given 0.8 “should occur about 80% of the time.”</p>
+<p>You send two things. A <em>state</em>, which is any text at all: a web page, a table of page elements, a Mac window’s accessibility tree, OCR of your own screen, a journal entry. And typed questions. Two kinds matter here. A yes/no question, which TypeSafe calls a Noul, comes back as one probability. A pick comes back as a distribution over options you named, plus a winner. Many questions ride in one request.</p>
+<p>Because it never generates, it cannot fill in free text. The menu has to exist before Jev sees it. Pin the version, because thresholds are tuned to one. Input costs $0.042 per million tokens and output is free, since there is no output.</p>
 </section>
 
 <figure class="detail-media diagram">
-  <a href="img/01-one-question.png"><img src="img/01-one-question.png" alt="Diagram: a state card holding a customer message feeds two yes-no question cards into a solid blue circle labelled Jev, which returns two horizontal bars on a zero to one scale reading 0.99 and 0.93, with a dashed line at 0.5." loading="eager"></a>
-  <figcaption>TypeSafe’s own worked example. Two questions, one request, one number each.</figcaption>
+  <a href="img/01-classifier-not-generator.png"><img src="img/01-classifier-not-generator.png" alt="Diagram: an orange dashed card reading A hotdog in a bun with mustard and a question card reading Is this a sandwich feed two paths. The left path runs to a hollow gray circle labelled an LLM and a gray card holding a struck-through sentence beginning Well, it depends on how you define, footed with the word a sentence. The right path runs to a solid blue circle labelled Jev and a solid blue card reading 0.66, footed with the words a number." loading="eager"></a>
+  <figcaption>Same input, two output contracts. One of them is something code can act on without parsing.</figcaption>
 </figure>
 
 <section class="reading-text-section">
-<h2>Two minds on one sentence</h2>
-<p>Put the bakers line through both paths and watch them disagree.</p>
-<p>The old gate holds a closed list of nouns. It scans the sentence, finds no customers and no users, matches nothing, and lets the copy ship. It was not broken. It was asked the wrong thing.</p>
-<p>The new gate holds one sentence of English: does this say that some number of people already use the product? Bakers who already bake with us is exactly that, and the noun does not matter. The probability comes back above the bar, and the copy is held.</p>
-<p>Same input. One path looks for words. The other reads the claim.</p>
-</section>
-
-<figure class="detail-media diagram">
-  <a href="img/02-two-minds.png"><img src="img/02-two-minds.png" alt="Diagram: the sentence 2,000 bakers already bake with us feeds two chains. The left chain runs through a hollow gray regex circle, a closed noun list, a struck-through no match card, and ends at shipped. The right chain runs through a solid blue Jev circle, one question, a probability above the 0.5 bar, and ends at held." loading="lazy"></a>
-  <figcaption>The list has to be widened for every trade. The question is already asked.</figcaption>
-</figure>
-
-<section class="reading-text-section">
-<h2>What we measured before trusting it</h2>
-<p>We ran a spike first. Four sets of rows we had already labelled by hand, the old gate scored against the new question, the same rows both ways.</p>
-<table class="round-table">
-  <thead><tr><th scope="col"></th><th scope="col">old gate, P / R</th><th scope="col">one question, P / R</th></tr></thead>
-  <tbody>
-    <tr><td>traction claims</td><td>0.85 / 0.61</td><td>1.00 / 0.96 at 0.5</td></tr>
-    <tr><td>dangling pull-quotes</td><td>0.80 / 0.31</td><td>1.00 / 1.00 at 0.5</td></tr>
-    <tr><td>agent chatter</td><td>1.00 / 0.97</td><td>1.00 / 0.78 at 0.5</td></tr>
-    <tr><td>storage questions</td><td>1.00 / 1.00</td><td>1.00 / 0.67 at 0.85</td></tr>
-  </tbody>
-</table>
-<p class="table-note">P is precision, R is recall. The bottom two sets are the ones the old gate was fitted on, so its perfect scores there are a home fixture. The 0.85 in the first row is a precision score; the 0.85 in the next diagram is a probability, a different quantity that happens to share a value.</p>
-<p>The whole run cost $0.012: 421 rows, two questions each, 26 requests, 0.3 to 0.6 seconds per batch of forty. Asked the same rows a second time, the probabilities moved 0.01 to 0.02 on average.</p>
-<p>Three lessons came out of it.</p>
+<h2>The pattern underneath</h2>
+<p>Three of the things I built this week turned out to be the same idea in different clothes. A text view of state. A closed menu. One cheap calibrated pick per step. A gate that stops the irreversible thing.</p>
+<p>Where the menu comes from is the whole design question. There are three answers I have actually used.</p>
 <ul>
-  <li><strong>0.5 is the honest bar, because the probabilities are calibrated.</strong> A sweep proposed 0.85 for the traction set. The classes were already separated at 0.5, so the higher bar only threw away real catches.</li>
-  <li><strong>The model answers semantics. Code has to encode policy.</strong> On the storage set, every false positive at 0.5 was a policy row. The model read each sentence correctly. It cannot know a rule nobody wrote down for it.</li>
-  <li><strong>Never use one question as a bare veto on prose.</strong> On the chatter set, one question on its own ate legitimate sentences about the product, exactly as an earlier round of the regex did.</li>
+  <li><strong>Screen.</strong> The page’s element table, or a Mac window’s accessibility tree, read out as text. The menu is whatever is on screen right now.</li>
+  <li><strong>Recording.</strong> The steps a person already performed, captured once, replayed later as the options for a new run.</li>
+  <li><strong>Planner.</strong> A cheap language model splits a compound goal into sub-goals, and each sub-goal builds its own small menu.</li>
 </ul>
 </section>
 
 <figure class="detail-media diagram">
-  <a href="img/03-where-numbers-sit.png"><img src="img/03-where-numbers-sit.png" alt="Diagram: a zero to one strip with a dashed line at 0.5. Hollow gray dots at 0.12, 0.39 and 0.45 sit left of the line, solid blue dots at 0.73, 0.85, 0.90 and 0.91 sit right of it, and one orange dot at 0.35 marks the single missed positive. Five stat tiles below read 421 rows, 26 requests, $0.012, 0.3 to 0.6 seconds, and 0.01 to 0.02." loading="lazy"></a>
-  <figcaption>Negatives left of the bar, positives right of it, across three sets. The one orange dot is the only row that landed on the wrong side.</figcaption>
+  <a href="img/02-pattern-underneath.png"><img src="img/02-pattern-underneath.png" alt="Diagram: a dashed container holding four cards in a loop, reading text view of state, closed menu, one calibrated pick, and gate colon irreversible, with an orange dashed return edge from the gate back to the state card. Below the closed menu card, three small source cards labelled screen, recording and planner point arrows up into it." loading="lazy"></a>
+  <figcaption>The loop is the same everywhere. Only the box that fills the menu changes.</figcaption>
 </figure>
 
 <section class="reading-text-section">
-<h2>The pattern that made it safe</h2>
-<p>The shape that makes this safe has almost nothing to do with the model.</p>
-<p>Code enumerates the candidates. The model scores each one. Code picks by its own rule. Code owns the fallback, so any failure — no key, a timeout, a malformed reply — ships exactly what code would have shipped before the model existed.</p>
-<p>Untrusted text goes in the state, never in the question. Every question and every criterion is a string constant in our source. Nothing a founder or a customer writes is ever concatenated into the thing being asked. TypeSafe’s own docs say content written to steer the model can move the answer, so we never let that content write the question.</p>
-<p>And it only ever adds a rejection or picks among options code already built. It never grants permission.</p>
+<h2>Where I would put it, across everything I run</h2>
+<p><strong>Computer and browser control.</strong> Browser Use’s <a href="https://github.com/browser-use/jev-ultrafast" rel="noopener">jev-ultrafast</a> is the proof that this runs at speed: the page becomes a numbered element table, Jev picks an operation and a target in one request per step, and a small language model writes text only when the operation is a typing one. Their recorded Google Flights run finishes in 7.1 seconds. <span class="stat-tag">theirs · live</span> My own voice REPL is the same loop from dictation: one request maps a sentence to open-app, click, or nothing, with a destructive gate in front. It costs about $0.0002 a command and Jev answers in 1.2 to 1.6 seconds. One intent per utterance, so compound sentences still need a planner in front. <span class="stat-tag">built</span> The native-app lane, driving Mac apps through the accessibility tree, works where there is no web page to read, which makes it narrow. <span class="stat-tag">parked</span></p>
+<p><strong>Watching you, rather than acting.</strong> Familiar OCRs my screen every few seconds. The classifier asks three questions of every capture: which project is this, is it deep work, is it a distraction. A day is 163 captures and the dry run prices it at about $0.004. What comes out is a calibrated timeline of my own day, for less than half a cent. <span class="stat-tag">built</span></p>
+<p><strong>Gates inside things I already shipped.</strong> In Distill, the judgment rules and stop conditions a recording already carries become yes/no gates before an agent acts, and the acceptance criteria become a validation score. <span class="stat-tag">idea</span> In General Formation it is already running: a commercial-claims gate, learned-skill selection, verified citations. <span class="stat-tag live">live</span> In my own computer-use agent it can pick which tool to call but cannot fill a free-text argument, which makes it half a replacement. <span class="stat-tag">parked</span> And in the screenshot agent, it can take the “am I done” question and the consequence gate, but never the part that looks. <span class="stat-tag">idea</span></p>
 </section>
 
 <figure class="detail-media diagram">
-  <a href="img/04-semantics-vs-policy.png"><img src="img/04-semantics-vs-policy.png" alt="Diagram: a dashed container holding a chain of code builds the candidates, Jev scores, code picks by its own rule, ships what code built, with an orange dashed side path labelled API failure, timeout, bad reply bypassing the model straight to ships. Below, two quoted questions about where a file lives, one marked policy yes with a check and one marked policy no with a cross." loading="lazy"></a>
-  <figcaption>The model reads both sentences the same way. Only one of them is what the rule is for.</figcaption>
+  <a href="img/03-where-i-would-put-it.png"><img src="img/03-where-i-would-put-it.png" alt="Diagram: three columns headed control, watching and gates inside products. The control column holds cards for a browser agent, voice commands and native apps via the accessibility tree. The watching column holds one card for a day classifier over screen text. The gates column holds cards for Distill, General Formation, a tool-calling agent and a screenshot agent. Each card carries one line of what Jev decides and a status tag reading live, built, parked or idea." loading="lazy"></a>
+  <figcaption>Eight places, one job. Jev judges; something else has to produce the menu.</figcaption>
 </figure>
 
 <section class="reading-text-section">
-<h2>Jagged edges, in the vendor’s own words</h2>
-<p>TypeSafe publishes a page of what the model is bad at, which is more than most vendors do. Four entries changed how we use it.</p>
-<p>Complementary questions do not sum to 1. Their own example puts a refund question at 0.72 and a not-refund question at 0.47 on the same text, which is 1.19 between them. Nothing holds the pair together, so never derive one answer from the other.</p>
-<p>It reads literally. “Jev answers the question you wrote, not the one you meant.” Scope words and negations are taken at face value, so the wording is the work.</p>
-<p>It is not a calculator, and the counting error grows with the size of the thing counted. Numbers belong in code.</p>
-<p>And in our own replay of one run three times over, the labels held but the confidence moved enough to change what survived a threshold. Stable answers, unstable margins.</p>
+<h2>One gate in Garage I would replace</h2>
+<p>Garage has a narration filter. It drops the sentences where an agent narrates the harness instead of the company it is working for. Today it is a regex, and on its own fit set it scores precision 1.00 and recall 0.97. That is a home fixture. The set was built from the regex.</p>
+<p>The spike asked Jev harness-only questions instead, over the same rows. Precision 1.00, recall 0.78 at the 0.5 bar. Adding a second condition, “is this about the company,” keeping the existing exemption for the run’s own action labels, lifts recall to 0.91. The seven misses left are deliberation openers like “Let me plan the research approach,” which need a literal question of their own. Both of the known leaks the regex cannot safely catch score 0.90 and 0.91.</p>
+<p>The same run carries the warning. Never use the company question as a bare veto on its own. It eats legitimate prose from a founder whose product <em>is</em> developer tooling, which is exactly how an earlier round of the regex failed.</p>
+<p>So I would ship it in advisory mode first, on the same three-position switch the traction judge already shipped with: reject, advisory, off. The regex stays where it is. Jev can only add a drop, never clear one. Any API failure ships the regex’s answer unchanged.</p>
 </section>
 
+<figure class="detail-media diagram">
+  <a href="img/04-one-gate-i-would-replace.png"><img src="img/04-one-gate-i-would-replace.png" alt="Diagram: a before and after of the narration filter. The gray chain on the left runs from a beat through the regex fitted on its own set, and two leak cards slip past it each marked with a gray cross. The blue chain on the right runs from a beat through the same regex, then through a harness-only question, where the same two leaks are caught at 0.90 and 0.91, ending in an advisory tag reading advisory first, regex stays, Jev can only add a drop. A gray side box warns that the company question used as a bare veto eats developer-tooling prose. Four stat tiles below read 1.00 slash 0.97, 1.00 slash 0.78, 0.91 and 7." loading="lazy"></a>
+  <figcaption>The regex keeps its job. The question is only allowed to add a drop, and only after a spell in advisory.</figcaption>
+</figure>
+
 <section class="reading-text-section">
-<h2>Five places I would put one next</h2>
-<p>None of these exist yet. Each is a rule I currently keep in my head or in a keyword match.</p>
+<h2>What it cannot do</h2>
 <ul>
-  <li><strong>Agent evals.</strong> One question per rubric criterion, over a deck of rated cards. State: the card and the criterion. Code shows the number beside my own rating and flags the disagreements, so I calibrate against something.</li>
-  <li><strong>The Stoic quotes app I am building.</strong> Does this passage support the quote attributed to it? State: the quote and the passage. Code holds the citation back below the bar rather than rewriting it.</li>
-  <li><strong>My pull request loop.</strong> Is this reviewer comment a verdict or an acknowledgement? State: the comment text alone. Code starts the fold on a verdict and stays quiet otherwise.</li>
-  <li><strong>Dogfood notes.</strong> Is this a defect or a taste call? State: the note as I typed it. Code routes one to the bug list, the other to the backlog.</li>
-  <li><strong>The morning journal review.</strong> Does this entry name a decision? State: one entry. Code pulls the ones that do into a decision ledger for the week.</li>
+  <li><strong>No free text out.</strong> TypeSafe’s own page says it “is not trained to generate text.” Typing stays rule-based, or goes to a small language model that does nothing else.</li>
+  <li><strong>It needs a text view of the thing.</strong> Spotify’s desktop app exposes almost nothing to the accessibility tree, two menu items. The web player exposes 668 labelled controls. That decided which one I drive.</li>
+  <li><strong>It is weak on adversarial content in the state.</strong> Their words: content written to steer the model “can move the answer.” So the text being judged never gets to write the question.</li>
+  <li><strong>It is jagged.</strong> Their own example puts a refund question at 0.72 and a not-refund question at 0.47 on the same ticket, which is 1.19 between them. Never derive one answer from another.</li>
+  <li><strong>It answers semantics, not product policy.</strong> On our storage-location set it produced eight false positives at the 0.5 bar, and every one was a policy row. It read each sentence correctly. It cannot know a rule nobody wrote down for it.</li>
 </ul>
 </section>
 
+<section class="reading-text-section">
+<h2>A real trace: six picks to nineteen</h2>
+<p>Goal: 12 + 7. Each step sends the goal, the display, the buttons pressed so far, and the 22 labelled buttons read off Calculator’s accessibility tree. Two questions come back: which button next, and is the goal already reached.</p>
+<p>It pressed 1 at 0.98, then 2 at 0.99, then Add at 0.99, then 7 at 1.00, then Equals at 1.00. The done question sat at 0.02 or 0.03 the entire way. Then the display read 19, and the sixth answer was not a button at all: it picked DONE at 1.00, with the done question finally at 0.99.</p>
+<p>Five thousand and ninety-seven input tokens for the whole run, which is $0.00021. Every button it picked was on the script’s safe allowlist, so the destructive gate never fired once.</p>
+</section>
+
 <figure class="detail-media diagram">
-  <a href="img/05-five-places.png"><img src="img/05-five-places.png" alt="Diagram: five white cards in a column, each with a blue index badge and a mono tag reading evals, citations, PR loop, dogfood and journal, a question in quotes, and a line describing what goes in the state and what the code does with the number." loading="lazy"></a>
-  <figcaption>One question per rule. The number comes back to code, and code still decides.</figcaption>
+  <a href="img/05-six-picks.png"><img src="img/05-six-picks.png" alt="Diagram: a six-node timeline of one Calculator run. The nodes read 1, 2, Add, 7, Equals and DONE, each with its pick probability in blue below it reading 0.98, 0.99, 0.99, 1.00, 1.00 and 1.00, and the done-question value below that reading 0.02, 0.02, 0.02, 0.02, 0.03 and 0.99. A small orange card to the side reads irreversible, never fired. Four stat tiles below read 6 picks, 5,097 input tokens, $0.00021 and about 1.1 seconds per step." loading="lazy"></a>
+  <figcaption>The run log, node by node. The only step that changed its mind about being finished is the last one.</figcaption>
 </figure>
 
 <section class="reading-text-section">
-<h2>What I want to know next</h2>
-<p>Two things before I trust any of this further. Self-consistency over days rather than minutes, because so far we have only asked the same rows twice in a row. And drift across versions, which nobody can measure yet, because only one version exists.</p>
-<p>If you have a regex that keeps growing, take the rows it already got wrong and ask them one question. That is an afternoon, and the answer comes back as a number you can argue with.</p>
+<h2>What I am running next</h2>
+<p>The Familiar classifier. There is nothing to set up, the data is already on my own disk, and the result is a picture of my own week rather than a benchmark.</p>
+<p>If you have a button in your own product that scares you, put one yes/no question in front of it and look at the number that comes back.</p>
 </section>
 
 </div>

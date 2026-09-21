@@ -72,20 +72,24 @@ body { background: #d9d9d9; font-family: var(--mono); color: var(--text); paddin
 /* ===== page-local additions, inside the grammar ===== */
 .stage { position: relative; width: 960px; }
 .pin { position: absolute; font-family: var(--mono); }
-.qcard { padding: 8px 12px; }
-.qcard .sub { font-size: 13px; color: #3f3f3f; }
-.axis-num { font-family: var(--mono); font-size: 13px; color: #8a8a8a; }
-.val { font-family: var(--mono); font-size: 15px; color: var(--blue); }
-.val.g { color: #7a7a7a; }
-.val.o { color: var(--orange); }
-.dotlab { font-family: var(--mono); font-size: 12.5px; color: #555; }
-.chain-lab { font-family: var(--sans); font-size: 14px; font-weight: 700; color: var(--ink); }
-.place-row { display: flex; align-items: stretch; gap: 0; margin-bottom: 10px; }
-.place-idx { flex: 0 0 34px; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 13px; color: var(--blue); border-left: 2px solid var(--blue); }
-.place-body { flex: 1 1 auto; background: #fff; border: 1px solid var(--border); border-left: none; border-radius: 0 3px 3px 0; padding: 11px 16px; }
-.place-body .tag { display: inline-block; margin: 0 10px 0 0; font-family: var(--mono); font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
-.place-body .q { font-family: var(--sans); font-size: 14.5px; font-weight: 700; color: var(--ink); }
-.place-body .sub2 { display: block; margin-top: 5px; font-family: var(--mono); font-size: 13px; color: #555; line-height: 1.5; }
+.big-num { display: block; font-family: var(--mono); font-size: 30px; color: #fff; line-height: 1.2; }
+
+/* status pills, diagram 03 */
+.stat { display: inline-block; margin-top: 8px; padding: 2px 8px; border-radius: 2px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .09em; text-transform: uppercase; }
+.stat.live   { background: var(--blue); color: #fff; border: 1px solid var(--blue); }
+.stat.built  { background: #fff; color: var(--blue); border: 1px solid var(--blue); }
+.stat.parked { background: #f2f2f2; color: #6a6a6a; border: 1px solid #bbb; }
+.stat.idea   { background: #fff; color: #8a8a8a; border: 1px dashed #bbb; }
+.usecard { background: #fff; border: 1px solid var(--border); border-radius: 3px; border-left: 2px solid var(--blue); padding: 11px 13px; }
+.usecard.soft { border-left-color: #bbb; }
+.usecard .nm { display: block; font-family: var(--sans); font-size: 14.5px; font-weight: 700; color: var(--ink); line-height: 1.3; }
+.usecard .dz { display: block; margin-top: 4px; font-family: var(--mono); font-size: 12.5px; color: #555; line-height: 1.5; }
+
+/* timeline, diagram 05 */
+.tl6 { display: grid; grid-template-columns: repeat(6, 1fr); text-align: center; width: 960px; }
+.tl6 .btn { font-family: var(--sans); font-size: 17px; font-weight: 700; color: var(--ink); }
+.tl6 .p { display: block; margin-top: 12px; font-family: var(--mono); font-size: 17px; color: var(--blue); }
+.tl6 .d { display: block; margin-top: 5px; font-family: var(--mono); font-size: 12px; color: #8a8a8a; }
 </style>
 </head>
 <body>
@@ -96,65 +100,65 @@ body { background: #d9d9d9; font-family: var(--mono); color: var(--text); paddin
   <div class="shot-head">
     <span class="shot-index">01</span>
     <div>
-      <h2>One question, one number</h2>
-      <p>You send text and a yes/no question. What comes back is a probability, not a sentence.</p>
+      <h2>Classifier, not generator</h2>
+      <p>One input, two output contracts. Only one of them is a number your code can act on.</p>
     </div>
   </div>
   <div class="scene">
     <svg width="0" height="0" style="position:absolute">
       <defs>
-        <marker id="s1-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#1a52e0"/></marker>
+        <marker id="d1-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#1a52e0"/></marker>
+        <marker id="d1-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#a5a5a5"/></marker>
       </defs>
     </svg>
 
-    <div class="row" style="align-items:center;">
-      <div class="card" style="width:298px;">
+    <div class="row" style="justify-content:center;gap:16px;">
+      <div class="card dashed tint-orange" style="width:340px;">
         <span class="tag">state &middot; the text you send</span>
-        <span class="sub">&ldquo;I have asked three times now. Can I please just talk to a real person?&rdquo;</span>
+        <span class="sub">&ldquo;A hotdog in a bun with mustard.&rdquo;</span>
       </div>
-      <svg class="connector" viewBox="0 0 44 30" width="44" height="30"><path d="M3 15 H36" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#s1-blue)"/></svg>
-      <div class="col" style="width:290px;gap:10px;">
-        <div class="card qcard"><span class="sub">Is the customer asking for a human agent?</span></div>
-        <div class="card qcard"><span class="sub">Has the customer contacted support about this before?</span></div>
+      <div class="card" style="width:250px;">
+        <span class="tag">one yes/no question</span>
+        <span class="sub">Is this a sandwich?</span>
       </div>
-      <svg class="connector" viewBox="0 0 44 30" width="44" height="30"><path d="M3 15 H36" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#s1-blue)"/></svg>
-      <svg width="102" height="102" viewBox="0 0 102 102"><circle cx="51" cy="51" r="41" fill="#1a52e0"/><text x="51" y="49" text-anchor="middle" font-family="-apple-system,Helvetica,Arial,sans-serif" font-size="17" font-weight="700" fill="#fff">Jev</text><text x="51" y="68" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="11" fill="#d9e5ff">1.13.0</text></svg>
     </div>
 
-    <div class="stage" style="height:36px;">
-      <svg class="pin" style="left:768px;top:0;" width="30" height="36" viewBox="0 0 30 36"><path d="M15 2 V28" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#s1-blue)"/></svg>
-    </div>
-
-    <!-- the 0 to 1 readout -->
-    <div class="stage" style="height:132px;">
-      <div class="pin mono-caption" style="left:0;top:0;">what comes back &middot; one number per question, 0 to 1</div>
-
-      <!-- 0..1 track maps 0 -> x=170, 1 -> x=870 -->
-      <div class="pin" style="left:170px;top:30px;width:700px;height:1px;"></div>
-
-      <!-- dashed 0.5 line -->
-      <svg class="pin" style="left:0;top:26px;" width="960" height="104" viewBox="0 0 960 104">
-        <path d="M520 2 V80" stroke="#9a9a9a" stroke-width="1.4" stroke-dasharray="5 5" fill="none"/>
+    <div class="stage" style="height:62px;">
+      <svg class="pin" style="left:0;top:0;" width="960" height="62" viewBox="0 0 960 62">
+        <path d="M480 2 V20" stroke="#9a9a9a" stroke-width="1.6" fill="none"/>
+        <path d="M236 20 H724" stroke="#9a9a9a" stroke-width="1.6" fill="none"/>
+        <path d="M236 20 V46" stroke="#a5a5a5" stroke-width="2" fill="none" marker-end="url(#d1-gray)"/>
+        <path d="M724 20 V46" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#d1-blue)"/>
       </svg>
+    </div>
 
-      <div class="pin dotlab" style="left:0;top:44px;width:158px;text-align:right;">human agent?</div>
-      <div class="pin" style="left:170px;top:42px;width:693px;height:20px;background:#1a52e0;border-radius:2px;"></div>
-      <div class="pin val" style="left:875px;top:42px;">0.99</div>
+    <div class="row top" style="padding:0 46px;justify-content:space-between;">
+      <div class="col" style="width:380px;align-items:center;gap:0;">
+        <svg width="104" height="104" viewBox="0 0 104 104"><circle cx="52" cy="52" r="40" fill="#fff" stroke="#a5a5a5" stroke-width="1.6" stroke-dasharray="5 4"/><text x="52" y="57" text-anchor="middle" font-family="-apple-system,Helvetica,Arial,sans-serif" font-size="15" font-weight="700" fill="#8a8a8a">an LLM</text></svg>
+        <svg class="connector" viewBox="0 0 40 34" width="40" height="34"><path d="M20 2 V26" stroke="#a5a5a5" stroke-width="2" fill="none" marker-end="url(#d1-gray)"/></svg>
+        <div class="card gray" style="width:360px;">
+          <span class="tag">what comes back</span>
+          <span class="sub strike">&ldquo;Well, it depends on how you define&hellip;&rdquo;</span>
+        </div>
+        <div class="verdict" style="margin-top:16px;color:#8a8a8a;">a sentence</div>
+      </div>
 
-      <div class="pin dotlab" style="left:0;top:80px;width:158px;text-align:right;">contacted before?</div>
-      <div class="pin" style="left:170px;top:78px;width:651px;height:20px;background:#1a52e0;border-radius:2px;"></div>
-      <div class="pin val" style="left:875px;top:78px;">0.93</div>
-
-      <div class="pin axis-num" style="left:164px;top:112px;">0</div>
-      <div class="pin axis-num" style="left:508px;top:112px;">0.5</div>
-      <div class="pin axis-num" style="left:864px;top:112px;">1</div>
+      <div class="col" style="width:380px;align-items:center;gap:0;">
+        <svg width="104" height="104" viewBox="0 0 104 104"><circle cx="52" cy="52" r="40" fill="#1a52e0"/><text x="52" y="50" text-anchor="middle" font-family="-apple-system,Helvetica,Arial,sans-serif" font-size="17" font-weight="700" fill="#fff">Jev</text><text x="52" y="68" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="11" fill="#d9e5ff">1.13.0</text></svg>
+        <svg class="connector" viewBox="0 0 40 34" width="40" height="34"><path d="M20 2 V26" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#d1-blue)"/></svg>
+        <div class="card solid" style="width:360px;text-align:center;">
+          <span class="tag" style="text-align:center;">what comes back</span>
+          <span class="big-num">0.66</span>
+        </div>
+        <div class="verdict" style="margin-top:16px;">a number</div>
+      </div>
     </div>
   </div>
   <div class="callout">
-    <strong>The number is the answer and the certainty in one.</strong>
-    <p>TypeSafe&rsquo;s own line. A value near 1 is a strong yes, near 0 a strong no, near 0.5 the model gives both similar odds. $0.042 per million input tokens; output free.</p>
+    <strong>Calibration makes uncertainty usable by software.</strong>
+    <p>TypeSafe&rsquo;s primer, on why the model returns probabilities rather than prose: &ldquo;The model does not generate text.&rdquo; Answers given 0.8 &ldquo;should occur about 80% of the time.&rdquo;</p>
   </div>
-  <p class="footnote">The message, the two questions and both values are TypeSafe&rsquo;s own worked example from their Noul docs, copied verbatim. Bar length is the value itself against a 0 to 1 track. A Noul carries no separate confidence number, because the distribution has only two outcomes.</p>
+  <p class="footnote">0.66 is a live answer from my own terminal, 21 September 2026, model jev-1.13.0. The sentence on the left is illustrative, not a recorded reply.</p>
 </div>
 
 <!-- ============================ 02 ============================ -->
@@ -162,64 +166,56 @@ body { background: #d9d9d9; font-family: var(--mono); color: var(--text); paddin
   <div class="shot-head">
     <span class="shot-index">02</span>
     <div>
-      <h2>Two minds, one sentence</h2>
-      <p>The same line of landing copy, read by a closed list of nouns and by a question.</p>
+      <h2>The pattern underneath</h2>
+      <p>The same four boxes sit under a browser agent, a voice command and a gate inside a product.</p>
     </div>
   </div>
   <div class="scene">
     <svg width="0" height="0" style="position:absolute">
       <defs>
-        <marker id="s2-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#1a52e0"/></marker>
-        <marker id="s2-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#aaa"/></marker>
-        <marker id="s2-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#d66b2f"/></marker>
+        <marker id="d2-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#1a52e0"/></marker>
+        <marker id="d2-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#d66b2f"/></marker>
       </defs>
     </svg>
 
-    <div style="display:flex;justify-content:center;">
-      <div class="card dashed tint-orange" style="width:430px;text-align:center;">
-        <span class="tag">the line on the page</span>
-        <span class="sub" style="font-size:14px;">&ldquo;2,000 bakers already bake with us.&rdquo;</span>
-      </div>
+    <p class="mono-caption" style="margin:0 0 12px;">where the menu comes from</p>
+    <div class="row" style="gap:30px;align-items:stretch;">
+      <div class="card tint-blue" style="width:300px;"><span class="tag">screen</span><span class="sub">page element table &middot; accessibility tree</span></div>
+      <div class="card tint-blue" style="width:300px;"><span class="tag">recording</span><span class="sub">steps a person already performed</span></div>
+      <div class="card tint-blue" style="width:300px;"><span class="tag">planner</span><span class="sub">a cheap model splits a compound goal</span></div>
     </div>
 
-    <div class="stage" style="height:44px;">
-      <svg class="pin" style="left:0;top:0;" width="960" height="44" viewBox="0 0 960 44">
-        <path d="M480 2 H250 Q234 2 234 18 V32" stroke="#d66b2f" stroke-width="1.7" stroke-dasharray="5 5" fill="none" marker-end="url(#s2-orange)"/>
-        <path d="M480 2 H710 Q726 2 726 18 V32" stroke="#d66b2f" stroke-width="1.7" stroke-dasharray="5 5" fill="none" marker-end="url(#s2-orange)"/>
+    <div class="stage" style="height:40px;z-index:5;">
+      <svg class="pin" style="left:0;top:0;overflow:visible;" width="960" height="76" viewBox="0 0 960 76">
+        <path d="M150 4 L333 70" stroke="#1a52e0" stroke-width="1.8" fill="none" marker-end="url(#d2-blue)"/>
+        <path d="M480 4 L359 70" stroke="#1a52e0" stroke-width="1.8" fill="none" marker-end="url(#d2-blue)"/>
+        <path d="M810 4 L385 70" stroke="#1a52e0" stroke-width="1.8" fill="none" marker-end="url(#d2-blue)"/>
       </svg>
     </div>
 
-    <div class="row" style="align-items:flex-start;gap:0;">
-      <!-- left chain: the list -->
-      <div style="flex:0 0 480px;display:flex;flex-direction:column;align-items:center;">
-        <svg width="94" height="94" viewBox="0 0 94 94"><circle cx="47" cy="47" r="37" fill="#fff" stroke="#aaa" stroke-width="1.6" stroke-dasharray="5 4"/><text x="47" y="52" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="15" fill="#8a8a8a">regex</text></svg>
-        <svg width="30" height="30" viewBox="0 0 30 30"><path d="M15 2 V22" stroke="#aaa" stroke-width="2" fill="none" marker-end="url(#s2-gray)"/></svg>
-        <div class="card gray" style="width:352px;"><span class="tag">a closed list of nouns</span><span class="sub">customers &middot; users &middot; subscribers &middot; members &hellip;</span></div>
-        <svg width="30" height="30" viewBox="0 0 30 30"><path d="M15 2 V22" stroke="#aaa" stroke-width="2" fill="none" marker-end="url(#s2-gray)"/></svg>
-        <div class="card gray" style="width:352px;text-align:center;"><span class="sub strike">bakers is not on the list &middot; no match</span></div>
-        <svg width="30" height="30" viewBox="0 0 30 30"><path d="M15 2 V22" stroke="#aaa" stroke-width="2" fill="none" marker-end="url(#s2-gray)"/></svg>
-        <svg width="126" height="56" viewBox="0 0 126 56"><rect x="1" y="1" width="124" height="54" rx="27" fill="#f2f2f2" stroke="#aaa" stroke-width="1.6"/><text x="63" y="33" text-anchor="middle" font-family="-apple-system,Helvetica,Arial,sans-serif" font-size="15" font-weight="700" fill="#7a7a7a">shipped</text></svg>
-        <div class="verdict" style="margin-top:16px;color:#7a7a7a;">passed</div>
+    <div class="dashed-box">
+      <span class="box-label mono-caption">the loop, every time</span>
+      <div class="row" style="gap:0;">
+        <div class="card" style="width:198px;"><span class="label">Text view of state</span><span class="sub">page, tree, OCR, transcript</span></div>
+        <svg class="connector" viewBox="0 0 44 30" width="44" height="30"><path d="M4 15 H36" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#d2-blue)"/></svg>
+        <div class="card" style="width:198px;"><span class="label">A closed menu</span><span class="sub">options that already exist</span></div>
+        <svg class="connector" viewBox="0 0 44 30" width="44" height="30"><path d="M4 15 H36" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#d2-blue)"/></svg>
+        <div class="card" style="width:198px;"><span class="label">One calibrated pick</span><span class="sub">a winner and a probability</span></div>
+        <svg class="connector" viewBox="0 0 44 30" width="44" height="30"><path d="M4 15 H36" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#d2-blue)"/></svg>
+        <div class="card tint-orange" style="width:198px;"><span class="label" style="color:#8a4a25;">Gate: irreversible?</span><span class="sub">stop before the costly thing</span></div>
       </div>
-
-      <!-- right chain: the question -->
-      <div style="flex:0 0 480px;display:flex;flex-direction:column;align-items:center;">
-        <svg width="94" height="94" viewBox="0 0 94 94"><circle cx="47" cy="47" r="37" fill="#1a52e0"/><text x="47" y="52" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="15" fill="#fff">Jev</text></svg>
-        <svg width="30" height="30" viewBox="0 0 30 30"><path d="M15 2 V22" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#s2-blue)"/></svg>
-        <div class="card" style="width:352px;"><span class="tag">one question, no list</span><span class="sub">Does this say some number of people already use it?</span></div>
-        <svg width="30" height="30" viewBox="0 0 30 30"><path d="M15 2 V22" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#s2-blue)"/></svg>
-        <div class="card tint-blue" style="width:352px;text-align:center;"><span class="sub" style="color:#1a52e0;">a probability above the 0.5 bar</span></div>
-        <svg width="30" height="30" viewBox="0 0 30 30"><path d="M15 2 V22" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#s2-blue)"/></svg>
-        <svg width="126" height="56" viewBox="0 0 126 56"><rect x="1" y="1" width="124" height="54" rx="27" fill="#1a52e0"/><text x="63" y="33" text-anchor="middle" font-family="-apple-system,Helvetica,Arial,sans-serif" font-size="15" font-weight="700" fill="#fff">held</text></svg>
-        <div class="verdict" style="margin-top:16px;">caught</div>
+      <div class="stage" style="height:56px;width:924px;">
+        <svg class="pin" style="left:0;top:0;" width="924" height="56" viewBox="0 0 924 56">
+          <path d="M825 2 V26 H99 V6" stroke="#d66b2f" stroke-width="1.7" stroke-dasharray="5 5" fill="none" marker-end="url(#d2-orange)"/>
+        </svg>
+        <span class="pin mono-caption orange" style="left:378px;top:36px;">act, then look again</span>
       </div>
     </div>
   </div>
   <div class="callout">
-    <strong>A list can never finish. A question can.</strong>
-    <p>Every trade has its own noun for a customer. The list has to be widened for each one. The question is already asked.</p>
+    <strong>Where the menu comes from is the whole design question.</strong>
+    <p>Screen, recording, or planner. Jev is identical in all three. Only the box that fills the menu changes.</p>
   </div>
-  <p class="footnote">The sentence is a real leak the noun list missed. On the labelled traction set the list scored precision 0.85 and recall 0.61; the question scored precision 1.00 and recall 0.96 at a 0.5 bar. No per-row probability was published for this one sentence, so none is shown.</p>
 </div>
 
 <!-- ============================ 03 ============================ -->
@@ -227,57 +223,67 @@ body { background: #d9d9d9; font-family: var(--mono); color: var(--text); paddin
   <div class="shot-head">
     <span class="shot-index">03</span>
     <div>
-      <h2>Where the numbers sit</h2>
-      <p>Across three sets the two classes sit either side of the bar. One row fell on the wrong side.</p>
+      <h2>Where I would put it</h2>
+      <p>Eight places across the projects I run. Each card says what Jev is allowed to decide.</p>
     </div>
   </div>
   <div class="scene">
-    <div class="stage" style="height:224px;">
-
-      <!-- one 0 to 1 track: 0 -> x=60, 1 -> x=900 -->
-      <div class="pin mono-caption" style="left:0;top:0;">measured &middot; every set the spike scored</div>
-      <div class="pin mono-caption gray" style="left:466px;top:42px;">0.5</div>
-
-      <svg class="pin" style="left:0;top:34px;" width="960" height="100" viewBox="0 0 960 100">
-        <path d="M60 70 H900" stroke="#c9c9c9" stroke-width="2"/>
-        <path d="M480 30 V84" stroke="#9a9a9a" stroke-width="1.4" stroke-dasharray="5 5" fill="none"/>
-        <text x="52" y="54" font-family="ui-monospace,Menlo,monospace" font-size="13" fill="#8a8a8a">0</text>
-        <text x="890" y="54" font-family="ui-monospace,Menlo,monospace" font-size="13" fill="#8a8a8a">1</text>
-        <circle cx="161" cy="70" r="8" fill="#fff" stroke="#8a8a8a" stroke-width="2"/>
-        <circle cx="388" cy="70" r="8" fill="#fff" stroke="#8a8a8a" stroke-width="2"/>
-        <circle cx="438" cy="70" r="8" fill="#fff" stroke="#8a8a8a" stroke-width="2"/>
-        <circle cx="354" cy="70" r="8" fill="#d66b2f"/>
-        <circle cx="673" cy="70" r="8" fill="#1a52e0"/>
-        <circle cx="774" cy="70" r="8" fill="#1a52e0"/>
-        <circle cx="816" cy="70" r="8" fill="#1a52e0"/>
-        <circle cx="824" cy="70" r="8" fill="#1a52e0"/>
-      </svg>
-
-      <!-- label lane 1 -->
-      <div class="pin dotlab" style="left:86px;top:124px;width:150px;text-align:center;"><span class="val g">0.12</span><br>regex over-fires</div>
-      <div class="pin dotlab" style="left:328px;top:124px;width:120px;text-align:center;"><span class="val g">0.39</span><br>brand heads</div>
-      <div class="pin dotlab" style="left:613px;top:124px;width:120px;text-align:center;"><span class="val">0.73</span><br>brand heads</div>
-      <div class="pin dotlab" style="left:755px;top:124px;width:130px;text-align:center;"><span class="val">0.90 &middot; 0.91</span><br>chatter leaks</div>
-
-      <!-- label lane 2 -->
-      <div class="pin dotlab" style="left:316px;top:176px;width:76px;text-align:center;"><span class="val o">0.35</span><br>the miss</div>
-      <div class="pin dotlab" style="left:400px;top:176px;width:76px;text-align:center;"><span class="val g">0.45</span><br>traction</div>
-      <div class="pin dotlab" style="left:736px;top:176px;width:76px;text-align:center;"><span class="val">0.85</span><br>traction</div>
+    <span class="mono-caption">control &mdash; it picks the next action</span>
+    <div class="row" style="gap:15px;margin:12px 0 26px;align-items:stretch;">
+      <div class="usecard" style="width:310px;">
+        <span class="nm">Browser agent &middot; theirs</span>
+        <span class="dz">which operation, which element</span>
+        <span class="stat live">live</span>
+      </div>
+      <div class="usecard" style="width:310px;">
+        <span class="nm">Voice commands</span>
+        <span class="dz">open app, click, or nothing</span>
+        <span class="stat built">built</span>
+      </div>
+      <div class="usecard soft" style="width:310px;">
+        <span class="nm">Native Mac apps</span>
+        <span class="dz">which control in the tree</span>
+        <span class="stat parked">parked</span>
+      </div>
     </div>
 
-    <div class="stat-row">
-      <div class="stat-tile"><b>421</b><span>rows scored</span></div>
-      <div class="stat-tile"><b>26</b><span>requests</span></div>
-      <div class="stat-tile"><b>$0.012</b><span>for the whole run</span></div>
-      <div class="stat-tile"><b>0.3&ndash;0.6 s</b><span>per 40-row batch</span></div>
-      <div class="stat-tile"><b>0.01&ndash;0.02</b><span>mean move on a repeat ask</span></div>
+    <span class="mono-caption">watching &mdash; it labels, it never acts</span>
+    <div class="row" style="margin:12px 0 26px;align-items:stretch;">
+      <div class="usecard" style="width:960px;">
+        <span class="nm">Day classifier over my own screen text</span>
+        <span class="dz">three questions per capture: which project &middot; deep work? &middot; distraction?</span>
+        <span class="stat built">built</span>
+      </div>
+    </div>
+
+    <span class="mono-caption">gates inside products &mdash; it can only add a refusal</span>
+    <div class="row" style="gap:16px;margin:12px 0 0;align-items:stretch;">
+      <div class="usecard soft" style="width:228px;">
+        <span class="nm">Distill</span>
+        <span class="dz">may this recorded step run</span>
+        <span class="stat idea">idea</span>
+      </div>
+      <div class="usecard" style="width:228px;">
+        <span class="nm">General Formation</span>
+        <span class="dz">claims, skills, citations</span>
+        <span class="stat live">live</span>
+      </div>
+      <div class="usecard soft" style="width:228px;">
+        <span class="nm">Tool-calling agent</span>
+        <span class="dz">which tool, never its arguments</span>
+        <span class="stat parked">parked</span>
+      </div>
+      <div class="usecard soft" style="width:228px;">
+        <span class="nm">Screenshot agent</span>
+        <span class="dz">am I done? is this safe?</span>
+        <span class="stat idea">idea</span>
+      </div>
     </div>
   </div>
   <div class="callout">
-    <strong>Calibrated means the middle is the honest line.</strong>
-    <p>A threshold sweep proposed 0.85 for the traction set. Its two classes were already clean at 0.5, so the higher bar only cost recall.</p>
+    <strong>Jev judges. Something else must produce the menu.</strong>
+    <p>Parked means the text view is too thin to read, or the answer would have been free text.</p>
   </div>
-  <p class="footnote">All values from the spike&rsquo;s own results header, one live run over four labelled sets. Most dots are set statistics, not one sentence&rsquo;s score: 0.45 and 0.39 are the highest-scoring negatives, 0.85 is the median positive, 0.73 the lowest positive, 0.12 the top of the range the three regex over-fires scored. Three dots are single rows: the two chatter leaks the regex cannot safely catch, and the one missed positive, a passive construction.</p>
 </div>
 
 <!-- ============================ 04 ============================ -->
@@ -285,64 +291,61 @@ body { background: #d9d9d9; font-family: var(--mono); color: var(--text); paddin
   <div class="shot-head">
     <span class="shot-index">04</span>
     <div>
-      <h2>The judge decides semantics, code decides policy</h2>
-      <p>Code builds the options and keeps the rule. The model only scores what it is handed.</p>
+      <h2>One gate I would replace</h2>
+      <p>The narration filter that drops beats about the harness instead of the company.</p>
     </div>
   </div>
   <div class="scene">
     <svg width="0" height="0" style="position:absolute">
       <defs>
-        <marker id="s4-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#1a52e0"/></marker>
-        <marker id="s4-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#d66b2f"/></marker>
+        <marker id="d4-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#1a52e0"/></marker>
+        <marker id="d4-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#a5a5a5"/></marker>
       </defs>
     </svg>
 
-    <div class="dashed-box" style="padding:32px 20px 74px;">
-      <span class="box-label mono-caption">one pass through the gate</span>
-      <div class="row" style="justify-content:space-between;">
-        <div class="card" style="width:178px;text-align:center;"><span class="label">code builds</span><span class="sub">the candidates</span></div>
-        <svg class="connector" viewBox="0 0 44 30" width="44" height="30"><path d="M3 15 H36" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#s4-blue)"/></svg>
-        <div class="card solid" style="width:178px;text-align:center;"><span class="label">Jev scores</span><span class="sub">one number each</span></div>
-        <svg class="connector" viewBox="0 0 44 30" width="44" height="30"><path d="M3 15 H36" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#s4-blue)"/></svg>
-        <div class="card" style="width:178px;text-align:center;"><span class="label">code picks</span><span class="sub">by its own rule</span></div>
-        <svg class="connector" viewBox="0 0 44 30" width="44" height="30"><path d="M3 15 H36" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#s4-blue)"/></svg>
-        <div class="card" style="width:178px;text-align:center;"><span class="label">ships</span><span class="sub">what code built</span></div>
+    <div class="row top" style="gap:36px;">
+
+      <div class="col" style="width:320px;gap:0;">
+        <span class="mono-caption gray">today</span>
+        <div class="card gray" style="width:320px;margin-top:12px;"><span class="label" style="color:#4a4a4a;">A beat</span><span class="sub">one sentence the agent emitted</span></div>
+        <svg class="connector" viewBox="0 0 40 30" width="40" height="30" style="margin-left:140px;"><path d="M20 2 V22" stroke="#a5a5a5" stroke-width="2" fill="none" marker-end="url(#d4-gray)"/></svg>
+        <div class="card gray" style="width:320px;"><span class="label" style="color:#4a4a4a;">Regex filter</span><span class="sub">fitted on its own set</span></div>
+        <svg class="connector" viewBox="0 0 40 30" width="40" height="30" style="margin-left:140px;"><path d="M20 2 V22" stroke="#a5a5a5" stroke-width="2" stroke-dasharray="4 4" fill="none" marker-end="url(#d4-gray)"/></svg>
+        <div class="card gray" style="width:320px;"><span class="badge-x">&times;</span><span class="label" style="color:#4a4a4a;">2 known leaks ship</span><span class="sub">the regex cannot safely catch them</span></div>
+        <div class="card dashed gray" style="width:320px;margin-top:22px;"><span class="tag">why it keeps moving</span><span class="sub">wrong in both directions, three rounds running</span></div>
       </div>
 
-      <!-- the failure bypass -->
-      <svg style="position:absolute;left:0;top:0;overflow:visible" width="100%" height="100%"></svg>
-      <svg class="pin" style="left:299px;top:96px;" width="640" height="64" viewBox="0 0 640 64">
-        <path d="M14 2 V40 Q14 54 30 54 H600 Q616 54 616 40 V16" stroke="#d66b2f" stroke-width="1.7" stroke-dasharray="5 5" fill="none" marker-end="url(#s4-orange)"/>
-      </svg>
-      <div class="pin mono-caption orange" style="left:372px;top:132px;background:#f5f7ff;padding:0 12px;">api failure, timeout, bad reply</div>
-    </div>
+      <div class="col" style="width:360px;gap:0;">
+        <span class="mono-caption">proposed</span>
+        <div class="card" style="width:360px;margin-top:12px;"><span class="label">A beat</span><span class="sub">the same sentence</span></div>
+        <svg class="connector" viewBox="0 0 40 26" width="40" height="26" style="margin-left:160px;"><path d="M20 2 V18" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#d4-blue)"/></svg>
+        <div class="card" style="width:360px;"><span class="label">Regex filter</span><span class="sub">unchanged, still first</span></div>
+        <svg class="connector" viewBox="0 0 40 26" width="40" height="26" style="margin-left:160px;"><path d="M20 2 V18" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#d4-blue)"/></svg>
+        <div class="card tint-blue" style="width:360px;"><span class="label">One harness-only question</span><span class="sub">asked of the same beat</span></div>
+        <svg class="connector" viewBox="0 0 40 26" width="40" height="26" style="margin-left:160px;"><path d="M20 2 V18" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#d4-blue)"/></svg>
+        <div class="card solid" style="width:360px;"><span class="label">Both leaks caught</span><span class="sub">0.90 &middot; 0.91</span></div>
+        <svg class="connector" viewBox="0 0 40 26" width="40" height="26" style="margin-left:160px;"><path d="M20 2 V18" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#d4-blue)"/></svg>
+        <div class="card" style="width:360px;"><span class="tag">advisory first</span><span class="sub">regex stays &middot; Jev can only add a drop</span></div>
+      </div>
 
-    <!-- the policy example -->
-    <div class="row top" style="margin-top:24px;gap:18px;">
-      <div style="flex:0 0 272px;">
-        <span class="mono-caption gray">the line the judge cannot draw</span>
-        <p style="margin:8px 0 0;font-family:var(--mono);font-size:13px;line-height:1.55;color:#555;">Both ask where a file lives. Only one is what the gate is for.</p>
+      <div class="col" style="width:208px;gap:0;padding-top:170px;">
+        <span class="mono-caption gray">the trap</span>
+        <div class="card dashed gray" style="width:208px;margin-top:12px;"><span class="badge-x">&times;</span><span class="sub">The company question used as a bare veto eats a devtools founder&rsquo;s own product prose.</span></div>
       </div>
-      <div class="grow">
-        <div class="row" style="gap:14px;margin-bottom:10px;">
-          <div class="card" style="width:284px;"><span class="sub">&ldquo;where&rsquo;s it stored&rdquo;</span></div>
-          <div class="dotlab" style="width:246px;">Jev: yes &middot; policy: yes</div>
-          <svg width="26" height="26" viewBox="0 0 26 26"><path d="M4 13 L10 19 L22 6" stroke="#1a52e0" stroke-width="2.4" fill="none"/></svg>
-        </div>
-        <div class="row" style="gap:14px;">
-          <div class="card gray" style="width:284px;"><span class="sub">&ldquo;don&rsquo;t want it exported&rdquo;</span></div>
-          <div class="dotlab" style="width:246px;">Jev: yes &middot; policy: no</div>
-          <svg width="26" height="26" viewBox="0 0 26 26"><path d="M6 6 L20 20 M20 6 L6 20" stroke="#8a8a8a" stroke-width="2.2" fill="none"/></svg>
-        </div>
-      </div>
+
     </div>
-    <div class="verdict" style="margin-top:26px;">the judge never holds the pen</div>
+  </div>
+  <div class="stat-row" style="grid-template-columns:repeat(4,1fr);">
+    <div class="stat-tile"><b>1.00 / 0.97</b><span>regex P/R, its own fit set</span></div>
+    <div class="stat-tile"><b>1.00 / 0.78</b><span>one question, at 0.5</span></div>
+    <div class="stat-tile"><b>0.91</b><span>recall with a second condition</span></div>
+    <div class="stat-tile"><b>7</b><span>misses left, all deliberation openers</span></div>
   </div>
   <div class="callout">
-    <strong>Any failure ships exactly what code built before.</strong>
-    <p>The model can add a rejection or pick among options. It never grants permission. Untrusted text goes in the state, never in the question.</p>
+    <strong>Same switch the traction judge already shipped with.</strong>
+    <p>Reject, advisory, off. Advisory first, the regex stays, and any API failure ships the regex&rsquo;s answer unchanged.</p>
   </div>
-  <p class="footnote">On one labelled set every false positive at a 0.5 bar was a policy row, not a semantic one: eight of them, each a sentence the model read correctly and the product rule treats differently.</p>
+  <p class="footnote">Scores from one offline spike over the gate&rsquo;s own committed labelled rows, 18 September 2026, model jev-1.13.0. The regex&rsquo;s 0.97 recall is measured on the set the regex was built from.</p>
 </div>
 
 <!-- ============================ 05 ============================ -->
@@ -350,58 +353,66 @@ body { background: #d9d9d9; font-family: var(--mono); color: var(--text); paddin
   <div class="shot-head">
     <span class="shot-index">05</span>
     <div>
-      <h2>Five places I would put a Noul</h2>
-      <p>None of these are built. Each one is a rule I currently keep in my head or in a regex.</p>
+      <h2>Six picks to nineteen</h2>
+      <p>One live Calculator run. Every label and probability is read out of the saved log.</p>
     </div>
   </div>
-  <div class="scene" style="padding:28px 30px 24px;">
-
-    <div class="place-row">
-      <div class="place-idx">01</div>
-      <div class="place-body">
-        <span class="tag">evals</span><span class="q">&ldquo;Does this run meet the criterion as written?&rdquo;</span>
-        <span class="sub2">state: one rated card and the rubric line &middot; code does: shows the number beside the human rating, flags the disagreements</span>
-      </div>
+  <div class="scene">
+    <div class="row" style="justify-content:space-between;margin-bottom:18px;">
+      <span class="mono-caption">goal &middot; 12 + 7</span>
+      <span class="mono-caption gray">state each step: display, buttons pressed, 22 labelled buttons</span>
     </div>
 
-    <div class="place-row">
-      <div class="place-idx">02</div>
-      <div class="place-body">
-        <span class="tag">citations</span><span class="q">&ldquo;Does this passage support the quote attributed to it?&rdquo;</span>
-        <span class="sub2">state: the quote and the passage it came from &middot; code does: holds the citation back below the bar, never rewrites</span>
-      </div>
+    <div class="tl6">
+      <div><span class="btn">1</span></div>
+      <div><span class="btn">2</span></div>
+      <div><span class="btn">Add</span></div>
+      <div><span class="btn">7</span></div>
+      <div><span class="btn">Equals</span></div>
+      <div><span class="btn">DONE</span></div>
     </div>
 
-    <div class="place-row">
-      <div class="place-idx">03</div>
-      <div class="place-body">
-        <span class="tag">pr loop</span><span class="q">&ldquo;Is this reviewer comment a verdict or an acknowledgement?&rdquo;</span>
-        <span class="sub2">state: the comment text alone &middot; code does: starts the fold timer on a verdict, stays quiet on the rest</span>
-      </div>
+    <svg width="960" height="30" viewBox="0 0 960 30" style="display:block;margin:12px 0 0;">
+      <path d="M80 15 H880" stroke="#1a52e0" stroke-width="2"/>
+      <circle cx="80"  cy="15" r="7" fill="#fff" stroke="#1a52e0" stroke-width="2"/>
+      <circle cx="240" cy="15" r="7" fill="#fff" stroke="#1a52e0" stroke-width="2"/>
+      <circle cx="400" cy="15" r="7" fill="#fff" stroke="#1a52e0" stroke-width="2"/>
+      <circle cx="560" cy="15" r="7" fill="#fff" stroke="#1a52e0" stroke-width="2"/>
+      <circle cx="720" cy="15" r="7" fill="#fff" stroke="#1a52e0" stroke-width="2"/>
+      <circle cx="880" cy="15" r="9" fill="#1a52e0"/>
+    </svg>
+
+    <div class="tl6" style="margin-top:4px;">
+      <div><span class="p">0.98</span><span class="d">done 0.02</span></div>
+      <div><span class="p">0.99</span><span class="d">done 0.02</span></div>
+      <div><span class="p">0.99</span><span class="d">done 0.02</span></div>
+      <div><span class="p">1.00</span><span class="d">done 0.02</span></div>
+      <div><span class="p">1.00</span><span class="d">done 0.03</span></div>
+      <div><span class="p">1.00</span><span class="d">done 0.99</span></div>
     </div>
 
-    <div class="place-row">
-      <div class="place-idx">04</div>
-      <div class="place-body">
-        <span class="tag">dogfood</span><span class="q">&ldquo;Is this observation a defect or a taste call?&rdquo;</span>
-        <span class="sub2">state: the note as I typed it &middot; code does: routes defects to the bug list, taste to the backlog</span>
+    <div class="row" style="margin-top:26px;justify-content:space-between;">
+      <div class="card dashed tint-orange" style="width:340px;">
+        <span class="tag">the gate that never fired</span>
+        <span class="sub">every pick sat on the safe allowlist</span>
+      </div>
+      <div class="card solid" style="width:200px;text-align:center;">
+        <span class="tag" style="text-align:center;">display</span>
+        <span class="big-num">19</span>
       </div>
     </div>
-
-    <div class="place-row" style="margin-bottom:0;">
-      <div class="place-idx">05</div>
-      <div class="place-body">
-        <span class="tag">journal</span><span class="q">&ldquo;Does this entry name a decision?&rdquo;</span>
-        <span class="sub2">state: one morning entry &middot; code does: pulls the ones that do into a decision ledger for the week</span>
-      </div>
-    </div>
-
+  </div>
+  <div class="stat-row" style="grid-template-columns:repeat(4,1fr);">
+    <div class="stat-tile"><b>6</b><span>picks, start to finish</span></div>
+    <div class="stat-tile"><b>5,097</b><span>input tokens, whole run</span></div>
+    <div class="stat-tile"><b>$0.00021</b><span>total cost</span></div>
+    <div class="stat-tile"><b>~1.1 s</b><span>per step</span></div>
   </div>
   <div class="callout">
-    <strong>One question per rule. Code keeps the rule.</strong>
-    <p>Each of these replaces a keyword match or a habit, and each one returns a number my own code still has to act on.</p>
+    <strong>The last pick is not a button.</strong>
+    <p>Five presses, then DONE at 1.00 with the done question finally at 0.99. Nothing generated a single character.</p>
   </div>
-  <p class="footnote">Intentions, not shipped work. None of these has been measured; the point of writing them down is that each is one question I can test against a set I already have.</p>
+  <p class="footnote">Buttons, probabilities and token counts are verbatim from the saved run log of 21 September 2026, model jev-1.13.0. The log records no timings, so the per-step figure comes from the experiment ledger. The log also does not record the gate: it never fired because every pick was on the script&rsquo;s safe allowlist.</p>
 </div>
 
 </body>

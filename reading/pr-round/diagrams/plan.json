@@ -1,5 +1,5 @@
 {
-  "url": "file:///Users/sumant/dev/ussumant.github.io/reading/pr-round/diagrams/index.html",
+  "path": "reading/pr-round/diagrams/index.html",
   "viewport": { "width": 1300, "height": 1000, "deviceScaleFactor": 2 },
   "steps": [
     { "type": "waitFor", "expr": "document.fonts.status === 'loaded'", "timeoutMs": 20000 },
@@ -8,22 +8,22 @@
 
     { "type": "eval", "expr": "(function(){var el=document.querySelector('#shot1'); el.scrollIntoView({block:'start'}); return el.getBoundingClientRect().height;})()", "label": "shot1-height" },
     { "type": "wait", "ms": 150 },
-    { "type": "shot", "selector": "#shot1", "path": "/Users/sumant/dev/ussumant.github.io/reading/pr-round/img/01-anatomy-of-a-round.png" },
+    { "type": "shot", "selector": "#shot1", "path": "reading/pr-round/img/01-anatomy-of-a-round.png" },
 
     { "type": "eval", "expr": "(function(){var el=document.querySelector('#shot2'); el.scrollIntoView({block:'start'}); return el.getBoundingClientRect().height;})()", "label": "shot2-height" },
     { "type": "wait", "ms": 150 },
-    { "type": "shot", "selector": "#shot2", "path": "/Users/sumant/dev/ussumant.github.io/reading/pr-round/img/02-eight-rounds.png" },
+    { "type": "shot", "selector": "#shot2", "path": "reading/pr-round/img/02-eight-rounds.png" },
 
     { "type": "eval", "expr": "(function(){var el=document.querySelector('#shot3'); el.scrollIntoView({block:'start'}); return el.getBoundingClientRect().height;})()", "label": "shot3-height" },
     { "type": "wait", "ms": 150 },
-    { "type": "shot", "selector": "#shot3", "path": "/Users/sumant/dev/ussumant.github.io/reading/pr-round/img/03-loop-that-learns.png" },
+    { "type": "shot", "selector": "#shot3", "path": "reading/pr-round/img/03-loop-that-learns.png" },
 
     { "type": "eval", "expr": "(function(){var el=document.querySelector('#shot4'); el.scrollIntoView({block:'start'}); return el.getBoundingClientRect().height;})()", "label": "shot4-height" },
     { "type": "wait", "ms": 150 },
-    { "type": "shot", "selector": "#shot4", "path": "/Users/sumant/dev/ussumant.github.io/reading/pr-round/img/04-by-the-numbers.png" },
+    { "type": "shot", "selector": "#shot4", "path": "reading/pr-round/img/04-by-the-numbers.png" },
 
     { "type": "eval", "expr": "(function(){var el=document.querySelector('#shot5'); el.scrollIntoView({block:'start'}); return el.getBoundingClientRect().height;})()", "label": "shot5-height" },
     { "type": "wait", "ms": 150 },
-    { "type": "shot", "selector": "#shot5", "path": "/Users/sumant/dev/ussumant.github.io/reading/pr-round/img/05-what-broke.png" }
+    { "type": "shot", "selector": "#shot5", "path": "reading/pr-round/img/05-what-broke.png" }
   ]
 }

@@ -123,7 +123,7 @@ def render_home() -> str:
         wordmark(heading=True),
         f'<p class="intro">{e(DATA["hero"]["title"])}</p>',
         f'<p class="intro">Before this I co-founded CustomerGlu and built its gamification SDK from scratch — it reached 150M+ devices.</p>',
-        f'<p class="now-line" id="now"><span class="live-dot" aria-hidden="true"></span><a class="live" href="/work/{e(DATA["now"]["work_slug"])}/">now · august 2026</a> — {e(DATA["now"]["title"])}. {e(DATA["work"][0]["summary"])}</p>',
+        f'<p class="now-line" id="now"><span class="live-dot" aria-hidden="true"></span><a class="live" href="/work/{e(DATA["now"]["work_slug"])}/">{e(DATA["now"]["label"].lower())}</a> — {e(DATA["now"]["title"])}. {e(DATA["work"][0]["summary"])}</p>',
         f'<ul class="project-list" id="work">{featured}</ul>',
         '<p class="small-link"><a class="live" href="/work/">all work →</a> · <a class="live" href="/reading/">reading →</a></p>',
         f'<p class="intro">{e(SITE["location"])}.</p>',

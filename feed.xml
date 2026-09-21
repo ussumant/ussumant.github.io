@@ -7,6 +7,13 @@
   <updated>2026-08-12T00:00:00Z</updated>
   <author><name>Sumant</name></author>
   <entry>
+    <title>A review round is a unit of time</title>
+    <id>https://ussumant.github.io/work/general-formation/#2026-09-21</id>
+    <link href="https://ussumant.github.io/work/general-formation/"/>
+    <updated>2026-09-21T00:00:00Z</updated>
+    <summary>Wrote up two weeks of merged pull requests with one human reviewer. Median merge time fell from 17.5 to 8.7 hours while rounds per PR stayed near three: the round got cheaper, not rarer. Five diagrams.</summary>
+  </entry>
+  <entry>
     <title>Fable Low Power Mode</title>
     <id>https://ussumant.github.io/work/fable-low-power/#2026-08-12</id>
     <link href="https://ussumant.github.io/work/fable-low-power/"/>

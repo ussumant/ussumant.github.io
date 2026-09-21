@@ -354,7 +354,7 @@ body { background: #d9d9d9; font-family: var(--mono); color: var(--text); paddin
     <span class="shot-index">05</span>
     <div>
       <h2>Six picks to nineteen</h2>
-      <p>One live Calculator run. Every label and probability is read out of the saved log.</p>
+      <p>One live Calculator run. Every label and number is read out of the saved log.</p>
     </div>
   </div>
   <div class="scene">
@@ -382,7 +382,8 @@ body { background: #d9d9d9; font-family: var(--mono); color: var(--text); paddin
       <circle cx="880" cy="15" r="9" fill="#1a52e0"/>
     </svg>
 
-    <div class="tl6" style="margin-top:4px;">
+    <p class="mono-caption gray" style="margin:10px 0 0;">confidence in the pick &middot; and the done question under it</p>
+    <div class="tl6" style="margin-top:6px;">
       <div><span class="p">0.98</span><span class="d">done 0.02</span></div>
       <div><span class="p">0.99</span><span class="d">done 0.02</span></div>
       <div><span class="p">0.99</span><span class="d">done 0.02</span></div>
@@ -410,9 +411,9 @@ body { background: #d9d9d9; font-family: var(--mono); color: var(--text); paddin
   </div>
   <div class="callout">
     <strong>The last pick is not a button.</strong>
-    <p>Five presses, then DONE at 1.00 with the done question finally at 0.99. Nothing generated a single character.</p>
+    <p>Five presses, then DONE at 1.00 confidence with the done question finally at 0.99. Nothing generated a single character.</p>
   </div>
-  <p class="footnote">Buttons, probabilities and token counts are verbatim from the saved run log of 21 September 2026, model jev-1.13.0. The log records no timings, so the per-step figure comes from the experiment ledger. The log also does not record the gate: it never fired because every pick was on the script&rsquo;s safe allowlist.</p>
+  <p class="footnote">Buttons, confidences and token counts are verbatim from the saved run log of 21 September 2026, model jev-1.13.0. The log records no timings, so the per-step figure comes from the experiment ledger. The log also does not record the gate: it never fired because every pick was on the script&rsquo;s safe allowlist.</p>
 </div>
 
 </body>

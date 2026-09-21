@@ -425,9 +425,34 @@
         "AI agents",
         "code review"
       ]
+    },
+    {
+      "slug": "jev",
+      "order": "04",
+      "handwritten": true,
+      "title": "A list can never finish",
+      "display": "a list can never finish",
+      "period": "Sep 2026",
+      "venue": "general formation",
+      "status": "Notes",
+      "summary": "A closed list of nouns let a real claim through. One calibrated yes/no question caught it, for $0.012 over 421 labelled rows. What it replaced, what it cannot do, and where I would use one next.",
+      "tags": [
+        "AI systems",
+        "evaluation",
+        "engineering workflow"
+      ]
     }
   ],
   "updates": [
+    {
+      "date": "2026-09-21",
+      "date_label": "21 Sep 2026",
+      "stage": "Written · Measured",
+      "title": "A list can never finish",
+      "body": "Wrote up replacing a closed-list regex gate with one calibrated yes/no question. Over 421 hand-labelled rows the question scored precision 1.00 and recall 0.96 where the list managed 0.85 and 0.61, and the whole run cost $0.012. Five diagrams.",
+      "work_slug": "general-formation",
+      "external_url": "https://ussumant.github.io/reading/jev/"
+    },
     {
       "date": "2026-09-21",
       "date_label": "21 Sep 2026",

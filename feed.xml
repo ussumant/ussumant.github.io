@@ -7,6 +7,13 @@
   <updated>2026-08-12T00:00:00Z</updated>
   <author><name>Sumant</name></author>
   <entry>
+    <title>A list can never finish</title>
+    <id>https://ussumant.github.io/work/general-formation/#2026-09-21</id>
+    <link href="https://ussumant.github.io/work/general-formation/"/>
+    <updated>2026-09-21T00:00:00Z</updated>
+    <summary>Wrote up replacing a closed-list regex gate with one calibrated yes/no question. Over 421 hand-labelled rows the question scored precision 1.00 and recall 0.96 where the list managed 0.85 and 0.61, and the whole run cost $0.012. Five diagrams.</summary>
+  </entry>
+  <entry>
     <title>A review round is a unit of time</title>
     <id>https://ussumant.github.io/work/general-formation/#2026-09-21</id>
     <link href="https://ussumant.github.io/work/general-formation/"/>

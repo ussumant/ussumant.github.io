@@ -1,5 +1,5 @@
 {
-  "_run": "from the repo root: node ~/.claude/skills/explainer-diagrams/shoot.mjs reading/jev/diagrams/plan.json",
+  "_run": "from the repo root: node <explainer-diagrams>/shoot.mjs reading/jev/diagrams/plan.json",
   "path": "reading/jev/diagrams/index.html",
   "viewport": { "width": 1300, "height": 1000, "deviceScaleFactor": 2 },
   "steps": [

@@ -1,41 +1,11 @@
-#!/usr/bin/env python3
-"""Build the checked-in static site from content/site.json."""
-
-from __future__ import annotations
-
-import html
-import json
-import re
-from pathlib import Path
-from xml.sax.saxutils import escape as xml_escape
-
-ROOT = Path(__file__).resolve().parents[1]
-DATA = json.loads((ROOT / "content" / "site.json").read_text(encoding="utf-8"))
-SITE = DATA["site"]
-WORK = DATA["work"]
-READING = DATA.get("reading", [])
-SAFE_SLUG = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
-
-
-def e(value: object) -> str:
-    return html.escape(str(value), quote=True)
-
-
-def absolute(path: str) -> str:
-    return f"{SITE['url']}{path}"
-
-
-def head(title: str, description: str, path: str, *, typing: bool = False) -> str:
-    canonical = absolute(path)
-    typing_init = "  <script>document.documentElement.classList.add('js-typing');</script>\n" if typing else ""
-    return f"""<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-{typing_init}  <title>{e(title)}</title>
-  <meta name="description" content="{e(description)}">
-  <link rel="canonical" href="{e(canonical)}">
+  <title>Generative Agents: Interactive Simulacra of Human Behavior — Sumant</title>
+  <meta name="description" content="A visual walk-through of how memory, retrieval, reflection, and planning make an LLM character coherent over time.">
+  <link rel="canonical" href="https://ussumant.github.io/reading/generative-agents/">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A5%8A%3C/text%3E%3C/svg%3E">
   <link rel="alternate" type="application/atom+xml" title="Sumant — recent work" href="/feed.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -43,244 +13,50 @@ def head(title: str, description: str, path: str, *, typing: bool = False) -> st
   <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="{e(canonical)}">
-  <meta property="og:title" content="{e(title)}">
-  <meta property="og:description" content="{e(description)}">
-  <meta property="og:image" content="{e(absolute('/og.png'))}">
+  <meta property="og:url" content="https://ussumant.github.io/reading/generative-agents/">
+  <meta property="og:title" content="Generative Agents: Interactive Simulacra of Human Behavior — Sumant">
+  <meta property="og:description" content="A visual walk-through of how memory, retrieval, reflection, and planning make an LLM character coherent over time.">
+  <meta property="og:image" content="https://ussumant.github.io/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{e(title)}">
-  <meta name="twitter:description" content="{e(description)}">
-  <meta name="twitter:image" content="{e(absolute('/og.png'))}">
-</head>"""
-
-
-def wordmark(*, heading: bool = False) -> str:
-    tag = "h1" if heading else "p"
-    typing_attr = " data-typing-logo" if heading else ""
-    return f'<{tag} class="wordmark"{typing_attr}><a href="/">sumant</a></{tag}>'
-
-
-def footer(*, copyright: bool = True) -> str:
-    socials = " · ".join(
-        f'<a href="{e(item["url"])}" rel="me noopener">{e(item["label"].lower())}</a>'
-        for item in SITE["social"]
-    )
-    copyright_line = f'  <p class="copyright">© 2026 Sumant · {e(SITE["location"])}</p>\n' if copyright else ""
-    return f"""<footer class="site-footer">
-  <p>Contact:<br>{socials} · <a href="/reading/">reading</a> · <a href="/feed.xml">rss</a></p>
-{copyright_line}</footer>"""
-
-
-def project_item(item: dict, *, include_meta: bool = False) -> str:
-    meta = f' <span class="project-meta">({e(item["stage"].lower())} · {e(item["period"])})</span>' if include_meta else ""
-    summary = item["summary"] if include_meta else item.get("home_summary", item["summary"])
-    return (
-        f'<li><span aria-hidden="true">{e(item["emoji"])}</span> '
-        f'<a class="live" href="/work/{e(item["slug"])}/">{e(item["display"])}</a> '
-        f'— {e(summary)}{meta}</li>'
-    )
-
-
-def render_reel() -> str:
-    return """<div class="reel-thumb" id="reelThumb" role="button" tabindex="0" aria-label="Play Muay Thai reel">
-  <video id="reelVideo" src="/muay-thai-demo.mp4?v=2" poster="/poster.jpg?v=1" muted loop autoplay playsinline preload="metadata"></video>
-</div>
-<div class="reel-lightbox" id="reelLightbox" aria-hidden="true">
-  <div class="reel-backdrop" id="reelBackdrop"></div>
-  <div class="reel-stage" id="reelStage">
-    <div class="reel-controls">
-      <span class="reel-time" id="reelTime">0:00 / 0:00</span>
-      <span class="reel-actions"><span class="esc-hint">esc to close</span><button class="reel-btn" id="reelRestart" type="button">Restart</button></span>
-    </div>
-  </div>
-</div>"""
-
-
-def render_home() -> str:
-    current_slug = DATA["now"]["work_slug"]
-    featured = "".join(
-        project_item(item)
-        for item in WORK
-        if item["featured"] and item["slug"] != current_slug
-    )
-    updates = []
-    for item in DATA["updates"]:
-        external = f' · <a href="{e(item["external_url"])}" rel="noopener">artifact ↗</a>' if item.get("external_url") else ""
-        updates.append(f"""<li>
-  <time datetime="{e(item['date'])}">{e(item['date_label'])}</time><br>
-  <a class="live" href="/work/{e(item['work_slug'])}/">{e(item['title'])}</a> — {e(item['body'])}
-  <span class="update-links">{external}</span>
-</li>""")
-    about = "".join(f"<p>{e(paragraph)}</p>" for paragraph in DATA["about"])
-    side = DATA["side_quest"]
-    return "".join([
-        head(SITE["title"], SITE["description"], "/", typing=True),
-        '<body class="home-page"><a class="skip-link" href="#main">Skip to content</a>',
-        '<main id="main" tabindex="-1">',
-        '<section class="home-scene" aria-label="Introduction">',
-        wordmark(heading=True),
-        f'<p class="intro">{e(DATA["hero"]["title"])}</p>',
-        f'<p class="intro">Before this I co-founded CustomerGlu and built its gamification SDK from scratch — it reached 150M+ devices.</p>',
-        f'<p class="now-line" id="now"><span class="live-dot" aria-hidden="true"></span><a class="live" href="/work/{e(DATA["now"]["work_slug"])}/">now · august 2026</a> — {e(DATA["now"]["title"])}. {e(DATA["work"][0]["summary"])}</p>',
-        f'<ul class="project-list" id="work">{featured}</ul>',
-        '<p class="small-link"><a class="live" href="/work/">all work →</a> · <a class="live" href="/reading/">reading →</a></p>',
-        f'<p class="intro">{e(SITE["location"])}.</p>',
-        '<p>Contact:<br><a class="live" href="https://github.com/ussumant" rel="me noopener">github</a> · <a class="live" href="https://x.com/sumant_us" rel="me noopener">x</a> · <a class="live" href="https://www.linkedin.com/in/sumantus/" rel="me noopener">linkedin</a></p>',
-        render_reel(),
-        f'''<figure class="charm">
-  <a class="gif-link" href="https://github.com/ussumant/muay-thai" rel="noopener"><img class="gifimg" src="{e(side['image'])}" alt="{e(side['alt'])}" width="460" height="252"></a>
-  <figcaption>🥊 <a href="https://github.com/ussumant/muay-thai" rel="noopener">sofia vs sumant</a> — best of 3</figcaption>
-  <p class="copyright">© 2026 Sumant</p>
-</figure>''',
-        '</section>',
-        f'''<section class="home-section" id="updates" aria-labelledby="updates-title">
-  <h2 id="updates-title">recently</h2>
-  <p class="section-note">A small reverse-chronological shipping log. Updated {e(SITE['updated_label'])}. <a href="/feed.xml">rss ↗</a></p>
-  <ol class="update-list">{''.join(updates)}</ol>
-</section>''',
-        f'''<section class="home-section" id="about" aria-labelledby="about-title">
-  <h2 id="about-title">about</h2>
-  <div class="about-copy">{about}</div>
-</section>''',
-        '</main><script src="/scripts/site.js"></script></body></html>\n',
-    ])
-
-
-def plain_open(title: str, description: str, path: str, *, body_class: str = "notes-page") -> str:
-    return "".join([
-        head(title, description, path),
-        f'<body class="{e(body_class)}"><a class="skip-link" href="#main">Skip to content</a>',
-        f'<header class="plain-header">{wordmark()}<a href="/">← home</a></header>',
-    ])
-
-
-def render_archive() -> str:
-    rows = "".join(project_item(item, include_meta=True) for item in WORK)
-    return "".join([
-        plain_open("Work — Sumant", "Products, systems, and experiments built by Sumant.", "/work/"),
-        '<main id="main" tabindex="-1">',
-        '<header class="page-intro"><h1>work</h1><p>Proof, not a project inventory. Each note records what I built and the honest stage it reached.</p></header>',
-        f'<ul class="project-list archive-list">{rows}</ul>',
-        '</main>', footer(), '</body></html>\n',
-    ])
-
-
-def render_detail(item: dict, next_item: dict) -> str:
-    sections = "".join(
-        f'<section><h2>{e(section["title"])}</h2><p>{e(section["body"])}</p></section>'
-        for section in item["sections"]
-    )
-    links = " · ".join(
-        f'<a href="{e(link["url"])}" rel="noopener">{e(link["label"])} ↗</a>'
-        for link in item["links"]
-    )
-    links_block = f'<p class="detail-links">{links}</p>' if links else ""
-    cover = item.get("cover")
-    cover_block = ""
-    if cover:
-        cover_block = f'''<figure class="detail-media">
-  <a href="{e(cover['src'])}"><img src="{e(cover['src'])}" alt="{e(cover['alt'])}" loading="eager"></a>
-  <figcaption>{e(cover['caption'])} <a href="{e(cover['src'])}">Open full size ↗</a></figcaption>
-</figure>'''
-    return "".join([
-        plain_open(f"{item['title']} — Sumant", item["summary"], f"/work/{item['slug']}/"),
-        '<main id="main" tabindex="-1"><article class="detail">',
-        f'''<header class="detail-header">
-  <a class="breadcrumb" href="/work/">← work / {e(item['order'])}</a>
-  <p class="detail-meta">{e(item['stage'].lower())} · {e(item['period'])}</p>
-  <h1>{e(item['title'])}</h1>
-  <p class="detail-lead">{e(item['lead'])}</p>
+  <meta name="twitter:title" content="Generative Agents: Interactive Simulacra of Human Behavior — Sumant">
+  <meta name="twitter:description" content="A visual walk-through of how memory, retrieval, reflection, and planning make an LLM character coherent over time.">
+  <meta name="twitter:image" content="https://ussumant.github.io/og.png">
+</head><body class="notes-page reading-page reading-detail-page"><a class="skip-link" href="#main">Skip to content</a><header class="plain-header"><p class="wordmark"><a href="/">sumant</a></p><a href="/">← home</a></header><main id="main" tabindex="-1"><article class="reading-entry"><header class="detail-header reading-entry-header">
+  <a class="breadcrumb" href="/reading/">← reading / 01</a>
+  <p class="detail-meta">read · 2023 · UIST &#x27;23</p>
+  <h1>Generative Agents</h1>
+  <p class="reading-paper-title">Interactive Simulacra of Human Behavior · UIST &#x27;23</p>
+  <p class="reading-story-hook">A town wakes up. One idea moves through it.</p>
+  <p class="detail-lead">Smallville is not interesting because its people can talk. It is interesting because they carry yesterday into today, then change the day for one another.</p>
 </header>
-{cover_block}
-<dl class="meta-list">
-  <div><dt>role</dt><dd>{e(item['role'])}</dd></div>
-  <div><dt>fields</dt><dd>{e(' · '.join(item['tags']))}</dd></div>
+<dl class="meta-list reading-meta-list">
+  <div><dt>authors</dt><dd>Joon Sung Park et al.</dd></div>
+  <div><dt>fields</dt><dd>agent systems · memory · behavior</dd></div>
+  <div><dt>paper</dt><dd><a href="https://doi.org/10.1145/3586183.3606763" rel="noopener">DOI / published paper ↗</a></dd></div>
 </dl>
-<div class="detail-body">{sections}{links_block}</div>
-<p class="next-work"><span>next note:</span><br><a class="live" href="/work/{e(next_item['slug'])}/">{e(next_item['display'])} →</a></p>''',
-        '</article></main>', footer(), '</body></html>\n',
-    ])
-
-
-def reading_item(item: dict) -> str:
-    tags = " · ".join(e(tag) for tag in item["tags"])
-    return f'''<li class="reading-item">
-  <p class="reading-item-meta">{e(item["status"].lower())} · {e(item["period"])} · {e(item["venue"])}</p>
-  <h2><a href="/reading/{e(item['slug'])}/">{e(item["display"])}</a></h2>
-  <p>{e(item["summary"])}</p>
-  <p class="reading-item-links"><a class="live" href="/reading/{e(item['slug'])}/">read note →</a> · <a href="{e(item['source_url'])}" rel="noopener">paper ↗</a></p>
-  <p class="reading-tags">{tags}</p>
-</li>'''
-
-
-def render_reading_archive() -> str:
-    rows = "".join(reading_item(item) for item in READING)
-    return "".join([
-        plain_open("Reading — Sumant", "Papers Sumant is reading, with notes on what they make possible.", "/reading/", body_class="notes-page reading-page reading-index"),
-        '<main id="main" tabindex="-1">',
-        '<header class="page-intro"><h1>reading</h1><p>Papers I am reading to understand products, behavior, and AI systems. The notes are working interpretations, not paper abstracts.</p></header>',
-        f'<ul class="reading-list">{rows}</ul>',
-        '</main>', footer(), '</body></html>\n',
-    ])
-
-
-def render_reading_orientation(item: dict) -> str:
-    use_cases = "".join(
-        f'<li><strong>{e(use_case["label"])}</strong><span>{e(use_case["body"])}</span></li>'
-        for use_case in item["use_cases"]
-    )
-    return f'''<section class="reading-orientation" aria-labelledby="reading-orientation-title">
-  <div class="reading-tldr"><p class="reading-label">TL;DR</p><h2 id="reading-orientation-title">{e(item["takeaway"])}</h2><p>{e(item["tldr"])}</p></div>
-  <div class="reading-use-cases"><p class="reading-label">WHERE THIS BECOMES USEFUL</p><ul>{use_cases}</ul></div>
-</section>'''
-
-
-def render_reading_story(item: dict) -> str:
-    scenes = "".join(
-        f'''<li class="reading-scene"><div class="reading-scene-time">{e(scene["time"])}</div><div class="reading-scene-marker" aria-hidden="true"><span></span></div><div class="reading-scene-copy"><h3>{e(scene["title"])}</h3><p>{e(scene["body"])}</p><small>{e(scene["signal"])}</small></div></li>'''
-        for scene in item["story"]["scenes"]
-    )
-    return f'''<section class="reading-story-section" aria-labelledby="reading-story-title">
-  <div class="reading-story-head"><p class="reading-label">START WITH THE FEELING</p><h2 id="reading-story-title">{e(item["story"].get("section_headline", "Follow the day."))}</h2><p>{e(item["story"]["intro"])}</p></div>
+<div class="reading-body">
+<section class="reading-orientation" aria-labelledby="reading-orientation-title">
+  <div class="reading-tldr"><p class="reading-label">TL;DR</p><h2 id="reading-orientation-title">Believable behavior comes from managing time and state around the model.</h2><p>An LLM can make a character sound believable once. This paper adds a notebook, selective attention, reflection, and planning so the character can carry a day forward.</p></div>
+  <div class="reading-use-cases"><p class="reading-label">WHERE THIS BECOMES USEFUL</p><ul><li><strong>Games</strong><span>Characters who remember what you did, not just answer the latest line.</span></li><li><strong>Social worlds</strong><span>A way to watch news, invitations, trust, and plans move through a group.</span></li><li><strong>What you could build</strong><span>A small model of a team or community before changing the real one.</span></li></ul></div>
+</section>
+<section class="reading-story-section" aria-labelledby="reading-story-title">
+  <div class="reading-story-head"><p class="reading-label">START WITH THE FEELING</p><h2 id="reading-story-title">Follow the day.</h2><p>Smallville is not interesting because its people can talk. It is interesting because they carry yesterday into today, then change the day for one another.</p></div>
   <div class="reading-story-grid">
-    <ol class="reading-scene-list">{scenes}</ol>
+    <ol class="reading-scene-list"><li class="reading-scene"><div class="reading-scene-time">07:00</div><div class="reading-scene-marker" aria-hidden="true"><span></span></div><div class="reading-scene-copy"><h3>A want</h3><p>Isabella wakes up with one idea: throw a Valentine’s Day party.</p><small>Isabella’s goal</small></div></li><li class="reading-scene"><div class="reading-scene-time">10:30</div><div class="reading-scene-marker" aria-hidden="true"><span></span></div><div class="reading-scene-copy"><h3>A memory</h3><p>She tells Maria. That conversation becomes a fact Isabella and Maria can carry forward.</p><small>a new memory</small></div></li><li class="reading-scene"><div class="reading-scene-time">13:00</div><div class="reading-scene-marker" aria-hidden="true"><span></span></div><div class="reading-scene-copy"><h3>A ripple</h3><p>Maria tells Sam. The invitation is no longer only Isabella’s plan; it is now part of the town’s social fabric.</p><small>information spreads</small></div></li><li class="reading-scene"><div class="reading-scene-time">17:45</div><div class="reading-scene-marker" aria-hidden="true"><span></span></div><div class="reading-scene-copy"><h3>A conflict</h3><p>Sam finishes work. He knows about the party, but his evening already has a shape.</p><small>the world pushes back</small></div></li><li class="reading-scene"><div class="reading-scene-time">18:00</div><div class="reading-scene-marker" aria-hidden="true"><span></span></div><div class="reading-scene-copy"><h3>An imperfect result</h3><p>Thirteen people know about the party. Only five of the twelve invitees show up.</p><small>awareness ≠ coordination</small></div></li></ol>
     <div class="reading-town-stage" role="img" aria-label="A simple map of Smallville with Isabella's house, Maria's house, the cafe, and the party as an idea moves through the town.">
       <div class="reading-town-top"><strong>SMALLVILLE</strong><span>DAY 02 / PARTY DAY</span></div>
       <div class="reading-town-map" aria-hidden="true"><span class="reading-town-route reading-town-route-one"></span><span class="reading-town-route reading-town-route-two"></span><span class="reading-town-route reading-town-route-three"></span><div class="reading-town-place reading-town-house"><strong>Isabella’s house</strong><small>the idea starts here</small></div><div class="reading-town-place reading-town-cafe"><strong>the café</strong><small>people cross paths</small></div><div class="reading-town-place reading-town-party"><strong>the party</strong><small>6:00 pm</small></div><span class="reading-town-person reading-town-person-isabella">I</span><span class="reading-town-person reading-town-person-maria">M</span><span class="reading-town-person reading-town-person-sam">S</span></div>
       <div class="reading-town-bottom"><strong>One plan becomes many possibilities.</strong><span>The world is the part that pushes back.</span></div>
     </div>
   </div>
-</section>'''
-
-
-def render_reading_principles(item: dict) -> str:
-    signals = ["world", "view", "memory", "choice", "consequence"]
-    principles = "".join(
-        f'<li><span class="reading-principle-number">{e(principle["number"])}</span><div><h3>{e(principle["title"])}</h3><p>{e(principle["body"])}</p></div><small>{signals[index]}</small></li>'
-        for index, principle in enumerate(item["principles"])
-    )
-    return f'''<section class="reading-principles-section" aria-labelledby="reading-principles-title">
+</section>
+<section class="reading-principles-section" aria-labelledby="reading-principles-title">
   <div class="reading-principles-head"><p class="reading-label">FIRST PRINCIPLES</p><h2 id="reading-principles-title">What must be true before a world can behave?</h2><p>Strip away the language model for a moment. These are the basic conditions that make a simulated life possible.</p></div>
-  <ol class="reading-principle-list">{principles}</ol>
-</section>'''
-
-
-def render_reading_build(item: dict) -> str:
-    steps = "".join(
-        f'<li><span class="reading-build-number">{e(step["number"])}</span><div><h3>{e(step["title"])}</h3><p>{e(step["body"])}</p></div></li>'
-        for step in item["build_steps"]
-    )
-    return f'''<section class="reading-build-section" aria-labelledby="reading-build-title">
-  <div class="reading-subhead"><span class="reading-index">06</span><div><h2 id="reading-build-title">How we would build it.</h2><p>Start with a world that works. Add intelligence only where it helps us see behavior change.</p></div></div>
-  <ol class="reading-build-list">{steps}</ol>
-  <div class="reading-build-stop"><p class="reading-label">STOP HERE FIRST</p><p>If we cannot explain one surprising action from a person’s memories, goals, and surroundings, we should not add more people or more features.</p></div>
-</section>'''
-
-
-def render_reading_loop() -> str:
-    return '''<section class="reading-subsection" aria-labelledby="reading-loop-title">
+  <ol class="reading-principle-list"><li><span class="reading-principle-number">01</span><div><h3>The world has facts</h3><p>There is a clock, a place, other people, and rules about what can happen.</p></div><small>world</small></li><li><span class="reading-principle-number">02</span><div><h3>A person sees only part of it</h3><p>Isabella does not know everything in town. She knows what she noticed or what someone told her.</p></div><small>view</small></li><li><span class="reading-principle-number">03</span><div><h3>Experience becomes memory</h3><p>Important events are saved so the past can affect a later choice.</p></div><small>memory</small></li><li><span class="reading-principle-number">04</span><div><h3>Memory changes the next action</h3><p>The person uses a few relevant memories to decide what to do now.</p></div><small>choice</small></li><li><span class="reading-principle-number">05</span><div><h3>Actions create new facts</h3><p>A conversation, arrival, or missed appointment changes what everyone else can notice next.</p></div><small>consequence</small></li></ol>
+</section>
+<section class="reading-subsection" aria-labelledby="reading-loop-title">
   <div class="reading-subhead"><span class="reading-index">01</span><div><h2 id="reading-loop-title">The architecture is the argument.</h2><p>The paper’s key move is a loop around the language model: keep a record, choose what matters, make meaning, make a plan, act, and observe the consequences.</p></div></div>
   <div class="reading-loop-grid">
     <div class="reading-diagram reading-loop-diagram">
@@ -313,11 +89,8 @@ def render_reading_loop() -> str:
     </div>
     <aside class="reading-explainer" aria-live="polite"><p class="reading-label">SELECTED COMPONENT</p><h3 data-reading-detail-title>Retrieve what matters now.</h3><p data-reading-detail-copy>The full history is too large and too distracting to place in every prompt. Retrieval selects a compact set of memories that can inform the current decision.</p><ul data-reading-detail-list><li>Use the current situation as a query.</li><li>Balance recency, importance, and relevance.</li><li>Pass only the top-ranked memories onward.</li></ul><p class="reading-explainer-foot" data-reading-detail-foot>Attention over an external, persistent notebook.</p></aside>
   </div>
-</section>'''
-
-
-def render_reading_retrieval() -> str:
-    return '''<section class="reading-subsection" aria-labelledby="reading-retrieval-title">
+</section>
+<section class="reading-subsection" aria-labelledby="reading-retrieval-title">
   <div class="reading-subhead"><span class="reading-index">02</span><div><h2 id="reading-retrieval-title">Memory is selective attention.</h2><p>Isabella may have thousands of observations. The question decides which few records become “present” for the next answer.</p></div></div>
   <div class="reading-retrieval-grid">
     <div class="reading-question-block"><p class="reading-label">QUESTION</p><blockquote>“What are you looking forward to the most?”</blockquote><p>The paper’s retrieval score combines three signals:</p><p class="reading-formula">recency + importance + relevance</p><p class="reading-small">The scores below are the paper’s own retrieval illustration. The bars are labeled directly so the mechanism can be read at a glance.</p></div>
@@ -329,11 +102,8 @@ def render_reading_retrieval() -> str:
       <div class="reading-memory-row is-muted"><div><strong>the refrigerator is idle</strong><small>environmental state</small></div><div class="reading-memory-score"><b>—</b><span>not top-ranked</span></div></div>
     </div>
   </div>
-</section>'''
-
-
-def render_reading_reflection() -> str:
-    return '''<section class="reading-subsection" aria-labelledby="reading-reflection-title">
+</section>
+<section class="reading-subsection" aria-labelledby="reading-reflection-title">
   <div class="reading-subhead"><span class="reading-index">03</span><div><h2 id="reading-reflection-title">Reflection turns events into identity.</h2><p>An observation records an event. A reflection turns several events into a reusable idea about a person, a relationship, or the world.</p></div></div>
   <div class="reading-diagram reading-reflection-diagram">
     <svg class="reading-svg" viewBox="0 0 840 330" role="img" aria-labelledby="reflection-svg-title reflection-svg-desc">
@@ -351,11 +121,8 @@ def render_reading_reflection() -> str:
     </svg>
   </div>
   <p class="reading-caption">Events → patterns → a usable story about the self. Because reflections are stored as memories, the tree can keep growing upward.</p>
-</section>'''
-
-
-def render_reading_planning() -> str:
-    return '''<section class="reading-subsection" aria-labelledby="reading-planning-title">
+</section>
+<section class="reading-subsection" aria-labelledby="reading-planning-title">
   <div class="reading-subhead"><span class="reading-index">04</span><div><h2 id="reading-planning-title">Planning gives time a shape.</h2><p>The agent starts broad, decomposes the next hours into smaller actions, and regenerates the plan when an important observation interrupts the day.</p></div></div>
   <div class="reading-plan">
     <div class="reading-plan-axis"><span></span><span>7a</span><span>9a</span><span>11a</span><span>1p</span><span>3p</span><span>5p</span><span>7p</span><span>9p</span></div>
@@ -364,11 +131,8 @@ def render_reading_planning() -> str:
     <div class="reading-plan-row"><strong>moment to moment</strong><div class="reading-plan-track"><i class="quiet" style="grid-column:8 / span 1">snack</i><i class="quiet" style="grid-column:9 / span 1">walk</i><i class="warm" style="grid-column:10 / span 1">reset</i><i class="quiet" style="grid-column:11 / span 1">clean desk</i></div></div>
   </div>
   <p class="reading-replan"><span aria-hidden="true">↳</span><span><strong>Unexpected observation:</strong> John sees Eddy walking. John retrieves what he knows about Eddy, decides a conversation is appropriate, generates dialogue, and rebuilds the plan from that moment.</span></p>
-</section>'''
-
-
-def render_reading_society() -> str:
-    return '''<section class="reading-subsection" aria-labelledby="reading-society-title">
+</section>
+<section class="reading-subsection" aria-labelledby="reading-society-title">
   <div class="reading-subhead"><span class="reading-index">05</span><div><h2 id="reading-society-title">Then one intention becomes a cascade.</h2><p>Isabella’s party is the paper’s compact demonstration of group behavior: information spreads, ties form, preparations happen, and attendance remains imperfect.</p></div></div>
   <div class="reading-society-grid">
     <div class="reading-diagram reading-network-diagram">
@@ -383,132 +147,20 @@ def render_reading_society() -> str:
     </div>
     <div class="reading-society-copy"><p class="reading-caption reading-society-caption">Arrows show a simplified mix of direct invitations and second-hop conversations.</p><div class="reading-society-metrics"><div><b>1 → 13</b><span>knew about the party</span></div><div><b>5 / 12</b><span>invitees showed up</span></div><div><b>0.167 → 0.74</b><span>network density</span></div><div><b>1 → 8</b><span>knew Sam’s candidacy</span></div></div><div class="reading-callout"><strong>Awareness is not coordination.</strong><p>The information moved farther than the people did. Some had conflicts; others were interested but never turned interest into a plan.</p></div></div>
   </div>
-</section>'''
-
-
-def render_reading_evidence() -> str:
-    return '''<section class="reading-subsection" aria-labelledby="reading-evidence-title">
+</section>
+<section class="reading-build-section" aria-labelledby="reading-build-title">
+  <div class="reading-subhead"><span class="reading-index">06</span><div><h2 id="reading-build-title">How we would build it.</h2><p>Start with a world that works. Add intelligence only where it helps us see behavior change.</p></div></div>
+  <ol class="reading-build-list"><li><span class="reading-build-number">01</span><div><h3>Make the world before the intelligence</h3><p>Create one place, a clock, a few activities, and one event. Make sure time and consequences work without a language model.</p></div></li><li><span class="reading-build-number">02</span><div><h3>Give one person a notebook</h3><p>Save what they saw, what they want, and what happened to them. This is the beginning of continuity.</p></div></li><li><span class="reading-build-number">03</span><div><h3>Let the person choose</h3><p>Show the person the current situation and a few relevant memories. Ask for one possible next action, then check that action against the world’s rules.</p></div></li><li><span class="reading-build-number">04</span><div><h3>Let consequences spread</h3><p>Add four more people. A conversation should create a new fact that another person can notice, remember, and act on.</p></div></li><li><span class="reading-build-number">05</span><div><h3>Add patterns later</h3><p>Only after the basic loop works, add daily plans and broader reflections about relationships, habits, and goals.</p></div></li></ol>
+  <div class="reading-build-stop"><p class="reading-label">STOP HERE FIRST</p><p>If we cannot explain one surprising action from a person’s memories, goals, and surroundings, we should not add more people or more features.</p></div>
+</section>
+<section class="reading-subsection" aria-labelledby="reading-evidence-title">
   <div class="reading-subhead"><span class="reading-index">07</span><div><h2 id="reading-evidence-title">The result—and the boundary.</h2><p>When evaluators ranked five versions of the agent, the full architecture came out on top. That supports the value of the scaffold in this setting, not a claim of general intelligence.</p></div></div>
   <div class="reading-evidence-grid"><div class="reading-evidence-bars"><div class="reading-evidence-row"><span>full architecture</span><i style="width:99.6%"></i><b>29.89</b></div><div class="reading-evidence-row"><span>no reflection</span><i style="width:89.6%"></i><b>26.88</b></div><div class="reading-evidence-row"><span>no reflection + planning</span><i style="width:85.5%"></i><b>25.64</b></div><div class="reading-evidence-row muted"><span>human crowdworker</span><i style="width:76.5%"></i><b>22.95</b></div><div class="reading-evidence-row muted"><span>no memory / plan / reflection</span><i style="width:70.7%"></i><b>21.21</b></div></div><div class="reading-boundary"><p class="reading-label">READ IT CRITICALLY</p><p><strong>Believable</strong> means the behavior reads as plausible to evaluators.</p><p><strong>Emergent</strong> means the event was not scripted step by step.</p><p><strong>Neither</strong> establishes consciousness, human-level understanding, or robust long-term autonomy.</p></div></div>
-</section>'''
-
-
-def render_reading_detail(item: dict) -> str:
-    short_title = item.get("short_title", item["title"])
-    subtitle = item.get("subtitle", "")
-    story = item["story"]
-    sections = "".join(
-        f'<section class="reading-text-section"><h2>{e(section["title"])}</h2><p>{e(section["body"])}</p></section>'
-        for section in item["sections"]
-    )
-    tags = " · ".join(e(tag) for tag in item["tags"])
-    return "".join([
-        plain_open(f"{item['title']} — Sumant", item["summary"], f"/reading/{item['slug']}/", body_class="notes-page reading-page reading-detail-page"),
-        '<main id="main" tabindex="-1"><article class="reading-entry">',
-        f'''<header class="detail-header reading-entry-header">
-  <a class="breadcrumb" href="/reading/">← reading / {e(item['order'])}</a>
-  <p class="detail-meta">{e(item['status'].lower())} · {e(item['period'])} · {e(item['venue'])}</p>
-  <h1>{e(short_title)}</h1>
-  <p class="reading-paper-title">{e(subtitle)} · {e(item['venue'])}</p>
-  <p class="reading-story-hook">{e(story['headline'])}</p>
-  <p class="detail-lead">{e(story['intro'])}</p>
-</header>
-<dl class="meta-list reading-meta-list">
-  <div><dt>authors</dt><dd>{e(item['authors'])}</dd></div>
-  <div><dt>fields</dt><dd>{tags}</dd></div>
-  <div><dt>paper</dt><dd><a href="{e(item['source_url'])}" rel="noopener">DOI / published paper ↗</a></dd></div>
-</dl>
-<div class="reading-body">
-{render_reading_orientation(item)}
-{render_reading_story(item)}
-{render_reading_principles(item)}
-{render_reading_loop()}
-{render_reading_retrieval()}
-{render_reading_reflection()}
-{render_reading_planning()}
-{render_reading_society()}
-{render_reading_build(item)}
-{render_reading_evidence()}
-{sections}
+</section>
+<section class="reading-text-section"><h2>The question</h2><p>An LLM can answer plausibly in the moment, but without continuity it can forget an election, flatten a person into a stereotype, or eat lunch twice. The paper treats memory and time as an architecture problem, not just a prompting problem.</p></section><section class="reading-text-section"><h2>What the experiment shows</h2><p>In Smallville, 25 agents accumulate experiences, form relationships, diffuse information, and coordinate around a Valentine’s Day party. Human evaluators preferred the full architecture over versions with reflection, planning, or memory access removed.</p></section><section class="reading-text-section"><h2>What it does not show</h2><p>The result is a believable simulacrum in a small, two-day sandbox—not consciousness, human-level understanding, or robust long-term autonomy. Retrieval failures, hallucinated embellishments, over-polite dialogue, missing world norms, and inference cost remain visible boundaries.</p></section>
 </div>
-<p class="detail-links reading-detail-links"><a href="{e(item['source_url'])}" rel="noopener">Read the paper ↗</a></p>
-<p class="next-work"><span>reading list:</span><br><a class="live" href="/reading/">← all papers</a></p>''',
-        '</article></main>', footer(), '<script src="/scripts/site.js"></script></body></html>\n',
-    ])
-
-
-def render_feed() -> str:
-    entries = []
-    for item in DATA["updates"]:
-        url = absolute(f"/work/{item['work_slug']}/")
-        entries.append(f"""  <entry>
-    <title>{xml_escape(item['title'])}</title>
-    <id>{xml_escape(url)}#{xml_escape(item['date'])}</id>
-    <link href="{xml_escape(url)}"/>
-    <updated>{xml_escape(item['date'])}T00:00:00Z</updated>
-    <summary>{xml_escape(item['body'])}</summary>
-  </entry>""")
-    return f"""<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Sumant — recent work</title>
-  <id>{xml_escape(SITE['url'])}/</id>
-  <link href="{xml_escape(SITE['url'])}/feed.xml" rel="self"/>
-  <link href="{xml_escape(SITE['url'])}/"/>
-  <updated>{xml_escape(SITE['updated'])}T00:00:00Z</updated>
-  <author><name>Sumant</name></author>
-{chr(10).join(entries)}
-</feed>
-"""
-
-
-def write(relative: str, value: str) -> None:
-    path = (ROOT / relative).resolve()
-    if path == ROOT or ROOT not in path.parents:
-        raise ValueError(f"refusing to write outside site root: {relative!r}")
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(value, encoding="utf-8")
-    print(f"built {path.relative_to(ROOT)}")
-
-
-def validate_data() -> None:
-    if not WORK:
-        raise ValueError("content must include at least one work record")
-    slugs = [item["slug"] for item in WORK]
-    invalid = [slug for slug in slugs if not SAFE_SLUG.fullmatch(slug)]
-    if invalid:
-        raise ValueError(f"unsafe work slug(s): {invalid}")
-    if len(slugs) != len(set(slugs)):
-        raise ValueError("work slugs must be unique")
-    references = [DATA["now"]["work_slug"]]
-    references.extend(item["work_slug"] for item in DATA["updates"])
-    missing = sorted(set(references) - set(slugs))
-    if missing:
-        raise ValueError(f"unknown work reference(s): {missing}")
-    for item in WORK:
-        cover = item.get("cover")
-        if cover and cover["src"].startswith("/"):
-            asset = (ROOT / cover["src"].lstrip("/")).resolve()
-            if ROOT not in asset.parents or not asset.is_file():
-                raise ValueError(f"missing or unsafe cover asset: {cover['src']!r}")
-    reading_slugs = [item["slug"] for item in READING]
-    invalid_reading = [slug for slug in reading_slugs if not SAFE_SLUG.fullmatch(slug)]
-    if invalid_reading:
-        raise ValueError(f"unsafe reading slug(s): {invalid_reading}")
-    if len(reading_slugs) != len(set(reading_slugs)):
-        raise ValueError("reading slugs must be unique")
-
-
-def main() -> None:
-    validate_data()
-    write("index.html", render_home())
-    write("work/index.html", render_archive())
-    for index, item in enumerate(WORK):
-        write(f"work/{item['slug']}/index.html", render_detail(item, WORK[(index + 1) % len(WORK)]))
-    write("reading/index.html", render_reading_archive())
-    for item in READING:
-        write(f"reading/{item['slug']}/index.html", render_reading_detail(item))
-    write("feed.xml", render_feed())
-
-
-if __name__ == "__main__":
-    main()
+<p class="detail-links reading-detail-links"><a href="https://doi.org/10.1145/3586183.3606763" rel="noopener">Read the paper ↗</a></p>
+<p class="next-work"><span>reading list:</span><br><a class="live" href="/reading/">← all papers</a></p></article></main><footer class="site-footer">
+  <p>Contact:<br><a href="https://github.com/ussumant" rel="me noopener">github</a> · <a href="https://x.com/sumant_us" rel="me noopener">x</a> · <a href="https://www.linkedin.com/in/sumantus/" rel="me noopener">linkedin</a> · <a href="/reading/">reading</a> · <a href="/feed.xml">rss</a></p>
+  <p class="copyright">© 2026 Sumant · Bengaluru · often elsewhere in Southeast Asia</p>
+</footer><script src="/scripts/site.js"></script></body></html>

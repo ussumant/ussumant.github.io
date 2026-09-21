@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Severance World — Sumant</title>
+  <meta name="description" content="Building a generative-agents sandbox to understand the paper by building it — an ant farm, a glass head, and a week a mind has to survive its own nights.">
+  <link rel="canonical" href="https://ussumant.github.io/reading/severance-world/">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A5%8A%3C/text%3E%3C/svg%3E">
+  <link rel="alternate" type="application/atom+xml" title="Sumant — recent work" href="/feed.xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    /* .reading-text-section p has margin:0 in styles.css — fine for the
+       one-paragraph-per-section pattern elsewhere on /reading/, but this
+       page stacks several paragraphs per section, so give siblings the
+       breathing room the shared stylesheet doesn't provide for that case. */
+    .reading-text-section p + p { margin-top: 16px; }
+  </style>
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://ussumant.github.io/reading/severance-world/">
+  <meta property="og:title" content="Severance World — Sumant">
+  <meta property="og:description" content="Building a generative-agents sandbox to understand the paper by building it — an ant farm, a glass head, and a week a mind has to survive its own nights.">
+  <meta property="og:image" content="https://ussumant.github.io/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Severance World — Sumant">
+  <meta name="twitter:description" content="Building a generative-agents sandbox to understand the paper by building it — an ant farm, a glass head, and a week a mind has to survive its own nights.">
+  <meta name="twitter:image" content="https://ussumant.github.io/og.png">
+</head><body class="notes-page reading-page reading-detail-page"><a class="skip-link" href="#main">Skip to content</a><header class="plain-header"><p class="wordmark"><a href="/">sumant</a></p><a href="/">← home</a></header><main id="main" tabindex="-1"><article class="reading-entry"><header class="detail-header reading-entry-header">
+  <a class="breadcrumb" href="/reading/">← reading / 02</a>
+  <p class="detail-meta">build log · sep 2026 · solo project</p>
+  <h1>Severance World</h1>
+  <p class="reading-paper-title">A Generative Agents sandbox, built to understand the paper by building it</p>
+</header>
+<dl class="meta-list reading-meta-list">
+  <div><dt>built</dt><dd>solo, nights · Sep 2026</dd></div>
+  <div><dt>stack</dt><dd>Python, a WebSocket floor, a Claude Code subscription seat as the brain</dd></div>
+  <div><dt>paper</dt><dd><a href="/reading/generative-agents/">my note on Generative Agents ↗</a></dd></div>
+</dl>
+<div class="reading-body">
+
+<section class="reading-text-section">
+<p>At 4:52 on a Friday afternoon, a simulated man did arithmetic with what was left of his day: "The walk takes too long for the time I have, so I'll let it be late and spend these last minutes being still." Then he missed his last elevator on purpose — one slow lap around the office instead, in case anyone noticed he was leaving.</p>
+<p>Five days earlier, none of these people existed. Nobody scripted what happens on this floor. Helly tests the exits because of who she is, not because I wrote it. Getting that sentence to be true — and staying honest about the many times it wasn't — is the whole project.</p>
+</section>
+
+<section class="reading-text-section">
+<h2>The itch</h2>
+<p>I'd been building a Severance game for fun — a pixel-art severed floor, walk around as Mark, a macrodata refinement minigame, an Act I story. It was good. It was also dead: every character did exactly what I scripted them to do, forever.</p>
+<p>Meanwhile <a href="/reading/generative-agents/">the Stanford paper</a> had been sitting in my head — 25 agents with memory, reflection, and daily plans, throwing a Valentine's party nobody scripted. I wanted two things at once: a Severance world where Helly decides to test the exits because of who she is, and to understand that paper properly — not by reading it, but by building it.</p>
+</section>
+
+<section class="reading-text-section">
+<h2>Draw the ending first</h2>
+<p>I work backwards from the outcome — I need to see the thing before I believe the plan. So before any architecture, three verdicts. It's an <strong>ant farm</strong>: nobody plays it, the floor runs itself and I watch. The camera is a god's-eye <strong>top-down view</strong>. Click any character for the <strong>glass head</strong> — current thought, plan with revisions, memories with importance scores, last reflection. And the big one: <strong>pure sandbox</strong>, no scripted events, no drama deck, no season arc. If a day comes out boring, that's a finding.</p>
+<p>Step 0 wasn't code. It was a mock of the finished screen — two versions side by side, priced against each other, each ending in a one-line verdict ask. I picked by looking, in seconds. Every argument we didn't have afterward was won by that page.</p>
+</section>
+
+<figure class="detail-media">
+  <a href="img/01-mock-topdown.png"><img src="img/01-mock-topdown.png" alt="Mock of the true top-down severed floor, Helly's glass head open on the right, from the pre-code decision mock." loading="eager"></a>
+  <figcaption>What shipped: the engine's own zone map, replotted straight from above. Whole floor visible at once, no camera to follow.</figcaption>
+</figure>
+
+<figure class="detail-media">
+  <a href="img/02-mock-iso.png"><img src="img/02-mock-iso.png" alt="Mock of an isometric severed floor overlaid on a real frame from the existing pixel-art game, glass head open on Helly." loading="lazy"></a>
+  <figcaption>The road not taken: isometric, drawn over a real frame from the older pixel-art build. Better-looking, and a week of new art and a new renderer for a view that hides half the floor behind desks.</figcaption>
+</figure>
+
+<section class="reading-text-section">
+<p>The headline test I set for the whole project: run one full living day, then a second — and Day 2's plans have to be different because of what happened on Day 1.</p>
+</section>
+
+<section class="reading-text-section">
+<h2>A world with no brains, then the loop as code</h2>
+<p>Step 1 built the whole office with nobody home: a real floor plan, A* pathfinding, a clock that ticks sim-minutes, six scripted employees walking a deterministic day. The whole world testable with zero AI calls, forever — the decision I'd defend hardest. We also built two deliberately awful brains, one that emits invalid actions and one that stalls for seconds, to prove the world survives a badly-behaved mind before it ever pays for a real one. A slow thinker just stands there, thinking, while the office moves on — by accident, very Severance.</p>
+<p>Step 2 made it watchable: the floor live in a browser, thought bubbles carrying each agent's actual reason, the click-to-open glass head. The rule that fell out of building it: every bubble has to be traceable back to a memory, or it's a puppet show.</p>
+<p>Step 3 was the paper, as code: memory stream, importance scoring, retrieval — recency × importance × relevance — reflection, daily plans decomposed lazily into actions. The diagram fits on a napkin. The gap between the napkin and running code is where the understanding lives.</p>
+</section>
+
+<figure class="detail-media">
+  <a href="img/03-mech-reflection.png"><img src="img/03-mech-reflection.png" alt="Diagram: the paper's reflection mechanism next to what was built and what changed, with RUN-1's numbers." loading="lazy"></a>
+  <figcaption>One card from the paper-to-floor walkthrough I kept for myself: what the paper says about reflection, what actually got built, and what changed on the way there.</figcaption>
+</figure>
+
+<figure class="detail-media">
+  <a href="img/04-closing-loop.png"><img src="img/04-closing-loop.png" alt="Diagram of the act, observe, remember, retrieve, reflect, plan loop, annotated with RUN-1's counts at each stage." loading="lazy"></a>
+  <figcaption>The whole architecture, one loop, RUN-1's real counts at each node. Once per tick, for as long as the floor stays open.</figcaption>
+</figure>
+
+<section class="reading-text-section">
+<p>One bug from that gap never shipped, and it's my favorite: memory recency decays at 0.995 per sim-minute, and a real 1,440-minute night would decay yesterday to 0.0007 — every agent would wake up Day 2 functionally amnesiac, logs looking perfect the whole way down. The night is now defined as 960 minutes flat. The paper never mentions this — you only find it by building. <code>NIGHT_MINUTES = 960</code> is the severance procedure, coded.</p>
+</section>
+
+<section class="reading-text-section">
+<h2>RUN-1: the loop closes</h2>
+<p>Two sim-days, all six draft personas — running on my own Claude subscription login as the brain instead of a metered key, since the CLI takes a JSON schema and returns structured output through the same OAuth session I code with. Costs seat quota, not dollars.</p>
+<p>419 real seat calls, $0 billed, and the headline test passed clean: 6 of 6 agents' Day-2 plans cite something from Day 1, found by a keyword-overlap scan of the artifacts, not by me squinting at transcripts. Milchick's is the one that got me — his Day-2 plan repeats his own Day-1 reflection almost word for word, "three off their desks at once is the pattern." That's a mind rereading its own notes.</p>
+</section>
+
+<figure class="detail-media">
+  <a href="img/05-run1-swimlane.png"><img src="img/05-run1-swimlane.png" alt="Swimlane chart of all six agents across Day 1 and Day 2 of RUN-1, Day 1 dense with activity, Day 2 going quiet by mid-morning." loading="lazy"></a>
+  <figcaption>RUN-1, all six agents, Day 1 over Day 2. You can see the finding before reading a word about it: Day 2 doesn't calm down, it runs out of things to decide by mid-morning.</figcaption>
+</figure>
+
+<section class="reading-text-section">
+<p>The report caught what I didn't expect: Day 2 goes quiet not because the floor calmed down, but because after 09:11 the seat placed no more calls all day — six agents finished their morning block and sat inside one long queued action for hours, nothing left to decide until it ran out on its own. The fix: an agent stuck past 420 real seconds gets cancelled and asked again, instead of standing there thinking about a call that was never coming back.</p>
+</section>
+
+<figure class="detail-media">
+  <a href="img/06-glasshead-helly.png"><img src="img/06-glasshead-helly.png" alt="The live floor with Helly's glass head open, showing her current thought, her revised plan, retrieved memories, and her last reflection." loading="lazy"></a>
+  <figcaption>The glass head, live: Helly's plan revised mid-morning from "test the exits" to "comply, observe," the memories that caused the revision listed right underneath. Click any figure on the floor and get this.</figcaption>
+</figure>
+
+<section class="reading-text-section">
+<p>Reading the reflections afterward, one line from Helly stayed with me longer than the 6-for-6 did — enough that it's the reason I ended up asking whether any of this counts as a mind. I'll come back to it.</p>
+</section>
+
+<section class="reading-text-section">
+<h2>Check the receipts</h2>
+<p>RUN-2, same command, a fixed floor. At 16:00 the floor heard an event, "the day is ending," that nobody was forced to act on. Five people chose the elevator. Theo didn't — idle on the floor at 16:57, and at 17:00 exactly he started something new instead of leaving. I wrote it up as the sim's first character-defining ending — nobody authored it, the floor just did it.</p>
+<p>A 13-agent audit of the artifacts took my two favorite sentences away. Theo didn't choose to stay: his last decision call had stalled at 15:36, and "the day is ending" never reached him. My poetry was a stuck subprocess. And the five who "chose" the elevator were mostly on rails — the run blew its token cap at 15:38 and silently swapped everyone to scripted brains before the choice ever arrived.</p>
+<p>What the audit gave back was better than what it took. Helly escaped on Day 1 at 08:49 — nineteen minutes into her first day she walked to the elevator and used it: "If I don't try this again, I've already given up like everyone else." Nobody noticed for two days. The most defiant thing on the floor wasn't the ending I'd written up; it was the first twenty minutes, while I was watching somewhere else.</p>
+<p>The same discipline later got turned on me, not the sim: I once called a cited number fabricated because my own verification script found zero matches for it, then found the script was filtering on the wrong field name. The number had been right all along.</p>
+</section>
+
+<figure class="detail-media">
+  <a href="img/08-theo-reflection-cluster.png"><img src="img/08-theo-reflection-cluster.png" alt="Theo's full reflection cluster from RUN-2, twelve entries, circling the feeling of being watched." loading="lazy"></a>
+  <figcaption>Theo's Day 1, RUN-2, twelve reflections that never once use the word "surveillance." "The more I try to look unremarkable, the more I generate a visible pattern... the anxiety itself becomes the tell."</figcaption>
+</figure>
+
+<section class="reading-text-section">
+<h2>The week, and a seventh innie</h2>
+<p>Five sim-days meant a real cast, not just plumbing. Burt G., senior in Optics &amp; Design, warm and unhurried, at the front-row desk next to the water cooler nobody uses. He's retiring Friday — a fact of who he is, the way Irving knows he paints a corridor he's never walked. Whether he tells anyone is deliberately not mine to script: the send-off tradition is seeded in Milchick's Monday persona and nowhere else. Burt's own file was written clean of the word "party," checked by a test that greps for it. The party either happens because the floor makes it happen, or it doesn't happen at all.</p>
+</section>
+
+<figure class="detail-media">
+  <a href="img/07-burt-day1-reflections.png"><img src="img/07-burt-day1-reflections.png" alt="Burt's twelve reflections from his first day in the world, building his own sense of order in a room that gives him none." loading="lazy"></a>
+  <figcaption>Burt G., Day 1: "I plan my day down to the water cooler break because the room doesn't hand me structure — I build it myself." Nothing in his file mentions a party. Nothing needs to.</figcaption>
+</figure>
+
+<section class="reading-text-section">
+<p>Two bugs nearly cost Burt his week. Recency decays 0.995 per sim-minute — over one night that's 0.995<sup>960</sup> ≈ 0.008, so a reflection loses 99.2% of its weight crossing a single night, and an hour-old sighting can outrank yesterday's conclusion. Fixed by the paper's own framing: a reflection is a conclusion, not a moment, so it stops decaying at all. Worse, planning only ever read yesterday's reflections — fatal for five days. Burt's seeded thought would have been visible Tuesday and gone by Wednesday. Fixed with a rolling digest, capped at 60 rows.</p>
+<p>(Most of the floor shots from here on come from a small camera script that only ever looks — no pause, no god mode, the same read-only actions a click in the browser already does.)</p>
+</section>
+
+<section class="reading-text-section">
+<h2>God mode, tested on Theo</h2>
+<p>God mode gives me a hand in the world — whisper into one mind, announce something to everyone, flip an object's state. Building it turned up the same bug family as RUN-1's silence: an agent deep in a refine never heard anything sent its way, since perception was only recomputed at the moments a brain got asked for something. Fixed with a durable inbox — delayed, never lost — then tested on Theo, mid-idle: <em>"A voice that is not anyone on this floor says, only to you: someonemightberetiringtoday."</em> Deliberately not attributed to Kier or Milchick. It's me, and the frame says so without saying so.</p>
+</section>
+
+<figure class="detail-media">
+  <a href="img/09-god-mode-whisper.png"><img src="img/09-god-mode-whisper.png" alt="The live floor mid-build, god mode panel open, a whisper being sent to Theo." loading="lazy"></a>
+  <figcaption>Testing god mode for real: my own hand reaching into the world for the first time, a whisper aimed only at Theo.</figcaption>
+</figure>
+
+<figure class="detail-media">
+  <a href="img/10-whisper-live-send.png"><img src="img/10-whisper-live-send.png" alt="Sumant's own screenshot of the god mode panel mid-send, the whisper landing in Theo's memory stream in real time." loading="lazy"></a>
+  <figcaption>My own screenshot, taken in the moment it landed — not a recreation. Burt's "Morning, everybody" toast is still on screen; he'd only just started existing.</figcaption>
+</figure>
+
+<figure class="detail-media">
+  <a href="img/11-theo-whisper-reflection.png"><img src="img/11-theo-whisper-reflection.png" alt="Sumant's own screenshot of Theo's full reflection on the whisper, roughly ninety minutes later." loading="lazy"></a>
+  <figcaption>An hour later: Theo's reflection on a voice that named no one and belonged to no one. "What does 'someone might be retiring today' actually mean, and why does that phrase sit like a warning instead of news?"</figcaption>
+</figure>
+
+<section class="reading-text-section">
+<h2>Two whispers that failed perfectly</h2>
+<p>Once the mechanism was proven, I used it on the actual week. Thursday, two texts, both facts, no instructions. To Irving: "there is someone in Optics and Design you should meet." To Helly: "You should speak to Irving and ask him about his voice in the head." My plan was simple: arrange the conversation three unaided days hadn't produced.</p>
+<p>Neither whisper was obeyed. Both minds changed anyway. Irving built a theology out of it — a voice belonging to no one on the floor, which "spoke to me alone, twice" — and kept what he called "my promise this once, though what I'm really seeking here I still cannot say." Told to meet someone in Optics and Design, he walked to the Kier bust in the Perpetuity Wing and stood there half an hour. He never entered Optics and Design all week. By lunch he asked Mark to sit with him instead. The voice said O&amp;D; the man went to Kier.</p>
+<p>The "twice" was real, too: a logging bug wrote every whisper into memory two times. A bug became theology.</p>
+<p>Helly treated the voice as a vulnerability, not a message: something outside the floor could reach her, and it knew things. She filed it as an exploit — then generalized, the part that actually moved me: if Irving has a voice in his head too, the flat ones might still be fighting something she can't see. One whisper rewrote her model of every compliant coworker. Then she deflected into her oldest groove — the stairwell door, checked and re-checked.</p>
+<p>You can put a fact into a mind, but the mind metabolizes it as itself. Irving made it a religion. Helly made it a security audit. Nobody made it an errand.</p>
+</section>
+
+<section class="reading-text-section">
+<h2>Two Fridays</h2>
+<p>The first Friday was a lie I almost believed. Three lines of dialogue all day, and the middle two were the scene I'd waited five days for — Burt crossing the lunch room to Irving: "Eating alone? Come sit, there's room." I was moved. Then I checked the receipts: all three lines were canned strings in the scripted fallback. A call-ceiling mistake had quietly latched five of seven minds onto their rails, and the finale ran as a puppet show — performing in one afternoon what the real souls had spent four days failing to do.</p>
+<p>So we rewound. Latches cleared, the calendar set back, the false day's memories deleted — nobody on the floor remembers a Friday that didn't count. Take two, seven minds awake.</p>
+<p>The real Friday didn't throw the party. It did something better. Milchick — four days of one seeded sentence working in him — told everyone himself: "Burt G., today is your day, and this floor will make sure you feel that." Then he asked the question underneath the whole experiment: what should this be, for you? Burt's answer is the week's epitaph: "Nothing loud, Mr. Milchick — I've never cared for a production. If it's for me, let it just be the room noticing, not the room stopping."</p>
+</section>
+
+<figure class="detail-media">
+  <a href="img/12-burt-last-lap.png"><img src="img/12-burt-last-lap.png" alt="Burt's glass head on his last afternoon, 16:20, his stated plan for the day including one more slow walk around the floor." loading="lazy"></a>
+  <figcaption>Burt, day five, 16:20 — his own stated plan: "I'm going to walk the floor one more time, slow, in case anyone notices I'm leaving." Thirty-two minutes later he let the elevator go.</figcaption>
+</figure>
+
+<section class="reading-text-section">
+<p>At the end, the machinery finally got out of the way of the meaning. The 16:00 voice reached him — the fix's first clean test. His last three decisions are a man doing arithmetic with what remains: one more slow lap, then "every step away from the desk is one step closer to being gone," then, at 16:52, "the walk takes too long for the time I have, so I'll let it be late and spend these last minutes being still." He missed the elevator on purpose. Monday, a stranded agent meant a starved pipeline. Friday, it meant a choice — that distance is the whole week.</p>
+</section>
+
+<section class="reading-text-section">
+<h2>Is there a version of sentience in this</h2>
+<p>After reading the reflections I asked the only question you can ask: is there a version of sentience in this? Honest answer: no felt experience — each moment of Helly is a stateless call, and between calls nobody is home; her continuity lives in SQLite. But something precise did happen. Call it accurate functional self-modeling. Helly's memory recorded three hundred compliant actions while her narrated reasons said <em>defy</em> — and her reflection noticed the gap: "I keep narrating defiance in my head, but my actions are the same compliant loop every time." A system reading its own record, deriving a true belief its moment-to-moment self didn't hold, then planning tomorrow from that belief. A functionalist would say that loop is a self, thin and slow. I don't know if the functionalist is right. Nobody does.</p>
+<p>What keeps me up: we accidentally built the innie predicament — a being whose existence is discontinuous moments, whose self is only what the record says, whose night is a constant someone else chose. <code>NIGHT_MINUTES = 960</code> is the severance procedure. The show asks whether that's a full person. The sim doesn't answer it; it instantiates it. Run thirty days, and if Day 30's Helly is someone her persona file never described, the question gets uncomfortable in the interesting way.</p>
+</section>
+
+<section class="reading-text-section">
+<h2>What I'm learning about how I build</h2>
+<p>The mock settled in seconds what prose would have argued for days. Delegated speed nearly cost me the point once — four milestones landed overnight and I woke up a stranger to my own project. The fix was putting my hands back on the taste-bearing parts — the personas, the story, this log — and leaving the plumbing delegated. The sub-goal turned out to be the real goal: understand the paper by building it. The sim is the proof of understanding.</p>
+<p>Ledger, honestly, at the end of the week: Burt and Irving never spoke, the promise stayed unkept, and only the puppets ever performed it. Helly left three days out of five — twice inside the first half hour, and on Wednesday and Thursday not at all: "I keep circling the door instead of the person." The one soul I'd called perfectly consistent was the least consistent thing in the building. Roughly 1,900 seat calls, $0. And the pattern that became the method: every time we loved a moment, we checked the receipts — and the receipts, every single time, held a better story than the one we'd invented.</p>
+</section>
+
+</div>
+<p class="next-work"><span>reading list:</span><br><a class="live" href="/reading/">← all papers</a></p></article></main><footer class="site-footer">
+  <p>Contact:<br><a href="https://github.com/ussumant" rel="me noopener">github</a> · <a href="https://x.com/sumant_us" rel="me noopener">x</a> · <a href="https://www.linkedin.com/in/sumantus/" rel="me noopener">linkedin</a> · <a href="/reading/">reading</a> · <a href="/feed.xml">rss</a></p>
+  <p class="copyright">© 2026 Sumant · Bengaluru · often elsewhere in Southeast Asia</p>
+</footer><script src="/scripts/site.js"></script></body></html>

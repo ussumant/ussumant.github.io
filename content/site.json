@@ -159,6 +159,62 @@
       "links": [{"label": "Visit Stoicism Daily", "url": "https://stoicismdaily.com"}]
     }
   ],
+  "reading": [
+    {
+      "slug": "generative-agents",
+      "order": "01",
+      "title": "Generative Agents: Interactive Simulacra of Human Behavior",
+      "display": "generative agents",
+      "period": "2023",
+      "venue": "UIST '23",
+      "status": "Read",
+      "authors": "Joon Sung Park et al.",
+      "summary": "A visual walk-through of how memory, retrieval, reflection, and planning make an LLM character coherent over time.",
+      "tldr": "An LLM can make a character sound believable once. This paper adds a notebook, selective attention, reflection, and planning so the character can carry a day forward.",
+      "lead": "Park et al. ask what it takes to make a computational character believable beyond a single prompt. Their answer is an architecture that carries experience forward: a memory stream, selective retrieval, reflection, planning, and a world that can push back.",
+      "tags": ["agent systems", "memory", "behavior"],
+      "source_url": "https://doi.org/10.1145/3586183.3606763",
+      "takeaway": "Believable behavior comes from managing time and state around the model.",
+      "short_title": "Generative Agents",
+      "subtitle": "Interactive Simulacra of Human Behavior",
+      "story": {
+        "headline": "A town wakes up. One idea moves through it.",
+        "section_headline": "Follow the day.",
+        "intro": "Smallville is not interesting because its people can talk. It is interesting because they carry yesterday into today, then change the day for one another.",
+        "scenes": [
+          {"time": "07:00", "title": "A want", "body": "Isabella wakes up with one idea: throw a Valentine’s Day party.", "signal": "Isabella’s goal"},
+          {"time": "10:30", "title": "A memory", "body": "She tells Maria. That conversation becomes a fact Isabella and Maria can carry forward.", "signal": "a new memory"},
+          {"time": "13:00", "title": "A ripple", "body": "Maria tells Sam. The invitation is no longer only Isabella’s plan; it is now part of the town’s social fabric.", "signal": "information spreads"},
+          {"time": "17:45", "title": "A conflict", "body": "Sam finishes work. He knows about the party, but his evening already has a shape.", "signal": "the world pushes back"},
+          {"time": "18:00", "title": "An imperfect result", "body": "Thirteen people know about the party. Only five of the twelve invitees show up.", "signal": "awareness ≠ coordination"}
+        ]
+      },
+      "use_cases": [
+        {"label": "Games", "body": "Characters who remember what you did, not just answer the latest line."},
+        {"label": "Social worlds", "body": "A way to watch news, invitations, trust, and plans move through a group."},
+        {"label": "What you could build", "body": "A small model of a team or community before changing the real one."}
+      ],
+      "principles": [
+        {"number": "01", "title": "The world has facts", "body": "There is a clock, a place, other people, and rules about what can happen."},
+        {"number": "02", "title": "A person sees only part of it", "body": "Isabella does not know everything in town. She knows what she noticed or what someone told her."},
+        {"number": "03", "title": "Experience becomes memory", "body": "Important events are saved so the past can affect a later choice."},
+        {"number": "04", "title": "Memory changes the next action", "body": "The person uses a few relevant memories to decide what to do now."},
+        {"number": "05", "title": "Actions create new facts", "body": "A conversation, arrival, or missed appointment changes what everyone else can notice next."}
+      ],
+      "build_steps": [
+        {"number": "01", "title": "Make the world before the intelligence", "body": "Create one place, a clock, a few activities, and one event. Make sure time and consequences work without a language model."},
+        {"number": "02", "title": "Give one person a notebook", "body": "Save what they saw, what they want, and what happened to them. This is the beginning of continuity."},
+        {"number": "03", "title": "Let the person choose", "body": "Show the person the current situation and a few relevant memories. Ask for one possible next action, then check that action against the world’s rules."},
+        {"number": "04", "title": "Let consequences spread", "body": "Add four more people. A conversation should create a new fact that another person can notice, remember, and act on."},
+        {"number": "05", "title": "Add patterns later", "body": "Only after the basic loop works, add daily plans and broader reflections about relationships, habits, and goals."}
+      ],
+      "sections": [
+        {"title": "The question", "body": "An LLM can answer plausibly in the moment, but without continuity it can forget an election, flatten a person into a stereotype, or eat lunch twice. The paper treats memory and time as an architecture problem, not just a prompting problem."},
+        {"title": "What the experiment shows", "body": "In Smallville, 25 agents accumulate experiences, form relationships, diffuse information, and coordinate around a Valentine’s Day party. Human evaluators preferred the full architecture over versions with reflection, planning, or memory access removed."},
+        {"title": "What it does not show", "body": "The result is a believable simulacrum in a small, two-day sandbox—not consciousness, human-level understanding, or robust long-term autonomy. Retrieval failures, hallucinated embellishments, over-polite dialogue, missing world norms, and inference cost remain visible boundaries."}
+      ]
+    }
+  ],
   "updates": [
     {
       "date": "2026-08-12",

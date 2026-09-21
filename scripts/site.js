@@ -307,3 +307,78 @@
     run();
   }
 })();
+
+(function () {
+  var buttons = Array.prototype.slice.call(document.querySelectorAll('.reading-node-button'));
+  var nodes = Array.prototype.slice.call(document.querySelectorAll('.reading-arch-node'));
+  if (!buttons.length || !nodes.length) return;
+
+  var details = {
+    observe: {
+      title: 'Observe what is happening.',
+      copy: 'The agent receives a local view of the sandbox: nearby agents, objects, actions, and changes in the environment.',
+      points: ['Observations are written in natural language.', 'The agent is not omniscient; its world model is partial.', 'Every perception becomes a possible future memory.'],
+      foot: 'The outside world is the source of new evidence.'
+    },
+    memory: {
+      title: 'Keep the record.',
+      copy: 'The memory stream is a growing list of natural-language experiences. It includes observations, plans, and reflections.',
+      points: ['Each item has a description and timestamps.', 'Important events can outlive mundane ones.', 'Plans and reflections are written back into the same stream.'],
+      foot: 'Persistent state turns prompts into a life history.'
+    },
+    retrieve: {
+      title: 'Retrieve what matters now.',
+      copy: 'The full history is too large and too distracting to place in every prompt. Retrieval selects a compact set of memories that can inform the current decision.',
+      points: ['Use the current situation as a query.', 'Balance recency, importance, and relevance.', 'Pass only the top-ranked memories onward.'],
+      foot: 'Attention over an external, persistent notebook.'
+    },
+    reflect: {
+      title: 'Turn events into meaning.',
+      copy: 'Reflection synthesizes several observations into a higher-level insight about the agent, another person, or the world.',
+      points: ['Recent memories suggest questions worth asking.', 'Relevant evidence is retrieved for each question.', 'The resulting insight becomes a new memory.'],
+      foot: 'A history starts to feel like a point of view.'
+    },
+    plan: {
+      title: 'Shape the next hours.',
+      copy: 'Planning creates a broad daily agenda, decomposes it into smaller actions, and gives the agent a way to stay coherent across time.',
+      points: ['Plans include location, start time, and duration.', 'High-level plans are recursively decomposed.', 'Unexpected events can trigger a re-plan.'],
+      foot: 'A plan is a temporary spine, not a promise.'
+    },
+    act: {
+      title: 'Change the world.',
+      copy: 'The model’s chosen action is translated into movement, dialogue, or an object-state change in Smallville.',
+      points: ['Actions create consequences in the sandbox.', 'Those consequences are perceived again.', 'The loop continues with a changed context.'],
+      foot: 'Generated language becomes a testable event.'
+    }
+  };
+
+  var title = document.querySelector('[data-reading-detail-title]');
+  var copy = document.querySelector('[data-reading-detail-copy]');
+  var list = document.querySelector('[data-reading-detail-list]');
+  var foot = document.querySelector('[data-reading-detail-foot]');
+
+  function select(name) {
+    var detail = details[name];
+    if (!detail) return;
+    buttons.forEach(function (button) {
+      button.setAttribute('aria-pressed', String(button.dataset.readingNode === name));
+    });
+    nodes.forEach(function (node) {
+      var active = node.dataset.readingNode === name;
+      node.classList.toggle('is-focus', active);
+      node.classList.toggle('is-dim', !active);
+    });
+    title.textContent = detail.title;
+    copy.textContent = detail.copy;
+    list.innerHTML = detail.points.map(function (point) { return '<li>' + point + '</li>'; }).join('');
+    foot.textContent = detail.foot;
+  }
+
+  buttons.forEach(function (button) {
+    button.addEventListener('click', function () { select(button.dataset.readingNode); });
+  });
+  nodes.forEach(function (node) {
+    node.addEventListener('click', function () { select(node.dataset.readingNode); });
+  });
+  select('retrieve');
+})();

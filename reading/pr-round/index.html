@@ -34,6 +34,13 @@
     .round-table tbody td + td { color: var(--muted); }
     .round-table tbody td:last-child { color: var(--ink); }
 
+    /* Pixelify Sans ships no fi/fl/ff ligature glyphs; the browser substitutes
+       another face for the pair and "finding" renders as "Anding". Scoped to
+       this page's Pixelify elements only, never to styles.css. */
+    .reading-entry-header h1,
+    .reading-story-hook,
+    .reading-text-section h2 { font-variant-ligatures: none; font-feature-settings: "liga" 0, "clig" 0, "dlig" 0; }
+
     @media (max-width: 720px) {
       .reading-body .detail-media.diagram { max-width: 100%; }
     }

@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A review round is a unit of time — Sumant</title>
+  <meta name="description" content="One pull request took eight reviewer rounds and 26.5 hours. Four days later one in the same arc merged in 4.3 hours. The reviewer did not find less. The round got cheaper.">
+  <link rel="canonical" href="https://ussumant.github.io/reading/pr-round/">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A5%8A%3C/text%3E%3C/svg%3E">
+  <link rel="alternate" type="application/atom+xml" title="Sumant — recent work" href="/feed.xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    /* .reading-text-section p has margin:0 in styles.css, which suits the
+       one-paragraph-per-section pattern elsewhere on /reading/. This page
+       stacks several paragraphs and a list per section. */
+    .reading-text-section p + p,
+    .reading-text-section ul + p,
+    .reading-text-section p + ul { margin-top: 16px; }
+    .reading-text-section ul { margin: 0; padding-left: 20px; color: #3f3f3f; font-size: 13px; line-height: 1.75; }
+    .reading-text-section ul li + li { margin-top: 12px; }
+
+    /* the explainer diagrams are 1100px scenes; give them the body column */
+    .reading-body .detail-media.diagram { max-width: 1040px; margin: 0 0 46px; }
+    .reading-body .detail-media.diagram img { border-radius: 3px; box-shadow: 0 2px 10px rgba(0, 0, 0, .08); }
+
+    .round-table { width: 100%; max-width: 620px; margin: 16px 0 0; border-collapse: collapse; font-size: 13px; }
+    .round-table th, .round-table td { padding: 7px 10px 7px 0; text-align: left; border-bottom: 1px solid #e0e0e0; }
+    .round-table thead th { color: var(--muted); font-weight: 400; }
+    .round-table td:first-child { color: #3f3f3f; }
+    .round-table td + td, .round-table th + th { width: 108px; font-variant-numeric: tabular-nums; }
+    .round-table tbody td + td { color: var(--muted); }
+    .round-table tbody td:last-child { color: var(--ink); }
+
+    @media (max-width: 720px) {
+      .reading-body .detail-media.diagram { max-width: 100%; }
+    }
+  </style>
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://ussumant.github.io/reading/pr-round/">
+  <meta property="og:title" content="A review round is a unit of time — Sumant">
+  <meta property="og:description" content="One pull request took eight reviewer rounds and 26.5 hours. Four days later one in the same arc merged in 4.3 hours. The reviewer did not find less. The round got cheaper.">
+  <meta property="og:image" content="https://ussumant.github.io/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="A review round is a unit of time — Sumant">
+  <meta name="twitter:description" content="One pull request took eight reviewer rounds and 26.5 hours. Four days later one in the same arc merged in 4.3 hours. The reviewer did not find less. The round got cheaper.">
+  <meta name="twitter:image" content="https://ussumant.github.io/og.png">
+</head><body class="notes-page reading-page reading-detail-page"><a class="skip-link" href="#main">Skip to content</a><header class="plain-header"><p class="wordmark"><a href="/">sumant</a></p><a href="/">← home</a></header><main id="main" tabindex="-1"><article class="reading-entry"><header class="detail-header reading-entry-header">
+  <a class="breadcrumb" href="/reading/">← reading / 03</a>
+  <p class="detail-meta">notes · sep 2026 · general formation</p>
+  <h1>A review round is a unit of time</h1>
+  <p class="reading-paper-title">What one pass of human code review costs when agents write the code</p>
+  <p class="reading-story-hook">Eight rounds. Four days later, three.</p>
+  <p class="detail-lead">One pull request took eight reviewer rounds and 26.5 hours to merge. Four days after it opened, one in the same feature arc merged in 4.3 hours. The reviewer did not find less. The round got cheaper.</p>
+</header>
+<dl class="meta-list reading-meta-list">
+  <div><dt>written</dt><dd>21 September 2026</dd></div>
+  <div><dt>about</dt><dd>engineering workflow · AI agents · code review</dd></div>
+  <div><dt>window</dt><dd>two weeks of merged pull requests, Sep 7 to Sep 20, 2026</dd></div>
+</dl>
+<div class="reading-body">
+
+<section class="reading-text-section">
+<p>I am the founding engineer at General Formation. Two people, one product: Garage, an AI agent suite for one-person companies. Agents write most of the code. My co-founder reviews every pull request I open. That is the only human gate it passes.</p>
+<p>So a review round is my unit of work. Not the commit. Not the line.</p>
+<p>The two pull requests above are #286 and #317, four days apart in the same login arc. Between them, findings per pull request did not drop. Rounds per pull request actually went up.</p>
+<p>What fell was the price of a round. That is the whole post.</p>
+</section>
+
+<section class="reading-text-section">
+<h2>What a round actually costs</h2>
+<p>A round is a loop, not a moment. I push. The tests run. My co-founder reads the diff. A verdict lands. I fold the findings in and push again.</p>
+<p>The reading itself is the short part. On one pull request the verdict arrived fifteen minutes after my fold.</p>
+<p>The wait around the reading was the expensive part. The old test lane took 45 to 50 minutes per push, and the review monitor does not close a round until the tests are green on that exact head. So every fold paid the full test wait before the next verdict could begin.</p>
+<p>Across the previous week that averaged 6.2 hours per round.</p>
+</section>
+
+<figure class="detail-media diagram">
+  <a href="img/01-anatomy-of-a-round.png"><img src="img/01-anatomy-of-a-round.png" alt="Diagram: the five steps of a review round drawn as a loop, above two time bars comparing 6.2 hours per round before sharding with 3.6 hours after." loading="eager"></a>
+  <figcaption>The loop, then the two weeks laid against each other. The reviewer did not get faster. The wait around them did.</figcaption>
+</figure>
+
+<section class="reading-text-section">
+<h2>The bad one</h2>
+<p>PR #286 was the first pull request of the login arc. Eight verdicts, 26.5 hours.</p>
+<p>Round 1 found three defects that were already there when I opened it. That round was fair.</p>
+<p>Rounds 2 to 4 were mostly the transport, and mostly my own doing. Each fold's new code drew the next round's finding. I rewrote the transport a second time inside the loop, and that one rewrite produced three of them.</p>
+<p>Rounds 5 to 7 were a different failure. They were spent hardening a cancel-and-rollback design for the sign-in flow. The spec never asked for it. Neither did my co-founder. It came from our own pre-review bots, which had called for cancellable async execution before the pull request ever opened.</p>
+<p>We built it anyway. The review harness then took what shipped as the contract and probed one adjacent cell of it per round.</p>
+<p>A pre-review finding is a proposal, not a requirement. If the spec does not ask for a mechanism, do not build it to satisfy a bot. That lesson cost three rounds.</p>
+</section>
+
+<figure class="detail-media diagram">
+  <a href="img/02-eight-rounds.png"><img src="img/02-eight-rounds.png" alt="Timeline of PR #286: eight verdict nodes with their clock times, labelled round 1 present at open, rounds 2 to 4 born in our own folds, and rounds 5 to 7 inside a dashed orange box marked a design nobody asked for, fed by a seed card reading pre-review bots: add cancel / rollback." loading="lazy"></a>
+  <figcaption>Eight verdicts over 26.5 hours. Only the first round found defects that were there when I opened it.</figcaption>
+</figure>
+
+<section class="reading-text-section">
+<h2>What changed</h2>
+<p>Five things, in the order they mattered.</p>
+<ul>
+  <li><strong>Sharded the test lanes four ways.</strong> The wait per push went from 45 to 50 minutes down to about 14, and unlike every other item here it shortens every round of every pull request.</li>
+  <li><strong>A written post-mortem on every merged pull request, feeding one pattern log.</strong> The log went from 12 known bounce causes to 27 in a week, and it is read before anything new opens.</li>
+  <li><strong>A second agent session that reads the reviewer's rounds and hands the builder session a converge plan.</strong> It reads and it rules. It never writes code, which is what keeps it honest about the diff.</li>
+  <li><strong>Pull request bodies open with a real run.</strong> A terminal transcript, or a screenshot of the actual screen, because a reviewer who can see the thing does not have to guess what it does.</li>
+  <li><strong>Zero comments between a review round and the fold push.</strong> The review monitor re-reviews on any author comment, so a polite acknowledgement buys a duplicate round at the unchanged head.</li>
+</ul>
+<p>Ten post-mortems were written that week.</p>
+</section>
+
+<figure class="detail-media diagram">
+  <a href="img/03-loop-that-learns.png"><img src="img/03-loop-that-learns.png" alt="Before and after architecture: on the left a straight chain of build, open, review, merge ending in nothing carried forward; on the right the same chain inside a dashed container with an orange return path through a write-up, a pattern log marked 12 to 27, and a pre-open checklist." loading="lazy"></a>
+  <figcaption>The four steps are the same. The difference is whether anything survives the merge.</figcaption>
+</figure>
+
+<section class="reading-text-section">
+<h2>Numbers, honestly</h2>
+<table class="round-table">
+  <thead><tr><th scope="col"></th><th scope="col">Sep 7–13</th><th scope="col">Sep 14–20</th></tr></thead>
+  <tbody>
+    <tr><td>PRs merged</td><td>5</td><td>8</td></tr>
+    <tr><td>Median hours to merge</td><td>17.5</td><td>8.7</td></tr>
+    <tr><td>Reviewer rounds per PR</td><td>2.8</td><td>3.6</td></tr>
+    <tr><td>Hours per round</td><td>6.2</td><td>3.6</td></tr>
+    <tr><td>CI minutes per push</td><td>45–50</td><td>14</td></tr>
+  </tbody>
+</table>
+<p>Rounds per pull request went up, not down. The reviewer found as much as ever, on more code than the week before.</p>
+<p>Hours per round nearly halved. Median time from open to merge went from 17.5 hours to 8.7.</p>
+<p>Eight merged pull requests against five is a small sample. One 120-hour outlier that opened the week before is left out of both columns. I would not bet a quarter on this. I would bet another week.</p>
+</section>
+
+<figure class="detail-media diagram">
+  <a href="img/04-by-the-numbers.png"><img src="img/04-by-the-numbers.png" alt="Five stat tiles comparing the two weeks, with paired bars showing rounds per PR rising from 2.8 to 3.6 while hours per round fall from 6.2 to 3.6." loading="lazy"></a>
+  <figcaption>Two of these moved the way I wanted. One did not, and it is the one everybody tries to move first.</figcaption>
+</figure>
+
+<section class="reading-text-section">
+<h2>What broke, and what it became</h2>
+<p>Four failures from that fortnight, and the rule each one turned into. They are rows in the pattern log now, which is the only reason any of them outlives the week it was learned.</p>
+<p>An acknowledgement posted before the fix triggered a second review at the unchanged head. Rule: no comments between a review round and the fold push.</p>
+<p>A defect our own pre-push review had already reproduced was waved off as disclosed. The reviewer cited the same lines the next round. Rule: anything reproduced before the push gets fixed before the push.</p>
+<p>One fix closed the single call site the reviewer flagged. The same rounding rule resurfaced in three other paths. Rule: fix the class, not the leaf.</p>
+<p>The review matrix tracked whether an account existed, never what its ledger already held. Rule: enumerate the target's prior state before the first fix.</p>
+</section>
+
+<figure class="detail-media diagram">
+  <a href="img/05-what-broke.png"><img src="img/05-what-broke.png" alt="Ladder diagram: four orange fail cards on the left, each with a blue arrow into a white rule card in a panel column headed House law." loading="lazy"></a>
+  <figcaption>Four failures, four house laws. A rule only counts once it is written where the next pull request will read it.</figcaption>
+</figure>
+
+<section class="reading-text-section">
+<h2>Next week, the same loop</h2>
+<p>I will run it again and measure it the same way. The number I want down is hours per round. The one I have stopped trying to move is rounds per pull request.</p>
+<p>If you take one thing from this, take the post-mortem feeding a checklist. One file, one row per way a pull request has bounced, with the check that prevents it, read before the next one opens. It costs about an hour a week. Everything else here was a one-time win.</p>
+</section>
+
+</div>
+<p class="next-work"><span>reading list:</span><br><a class="live" href="/reading/">← all notes</a></p></article></main><footer class="site-footer">
+  <p>Contact:<br><a href="https://github.com/ussumant" rel="me noopener">github</a> · <a href="https://x.com/sumant_us" rel="me noopener">x</a> · <a href="https://www.linkedin.com/in/sumantus/" rel="me noopener">linkedin</a> · <a href="/reading/">reading</a> · <a href="/feed.xml">rss</a></p>
+  <p class="copyright">© 2026 Sumant · Bengaluru · often elsewhere in Southeast Asia</p>
+</footer><script src="/scripts/site.js"></script></body></html>

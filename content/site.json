@@ -213,6 +213,18 @@
         {"title": "What the experiment shows", "body": "In Smallville, 25 agents accumulate experiences, form relationships, diffuse information, and coordinate around a Valentine’s Day party. Human evaluators preferred the full architecture over versions with reflection, planning, or memory access removed."},
         {"title": "What it does not show", "body": "The result is a believable simulacrum in a small, two-day sandbox—not consciousness, human-level understanding, or robust long-term autonomy. Retrieval failures, hallucinated embellishments, over-polite dialogue, missing world norms, and inference cost remain visible boundaries."}
       ]
+    },
+    {
+      "slug": "pr-round",
+      "order": "03",
+      "handwritten": true,
+      "title": "A review round is a unit of time",
+      "display": "a review round is a unit of time",
+      "period": "Sep 2026",
+      "venue": "general formation",
+      "status": "Notes",
+      "summary": "One pull request took eight reviewer rounds and 26.5 hours. Four days later one in the same arc merged in 4.3 hours. What changed was the price of a round, not the findings.",
+      "tags": ["engineering workflow", "AI agents", "code review"]
     }
   ],
   "updates": [

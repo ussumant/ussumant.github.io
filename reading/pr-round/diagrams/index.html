@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>pr-round — explainer diagrams</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+<style>
+/* ===== the reading grammar (ussumant.github.io/reading) — shared, do not restyle ===== */
+:root {
+  --ink: #000; --text: #666; --muted: #767676;
+  --blue: #1a52e0; --blue-lite: #a8c0f7; --orange: #d66b2f; --gold: #aa8b32; --slate: #557c9b;
+  --paper: #fff; --panel: #f5f7ff; --orange-tint: #fff3ea; --bg: #fbfbfb; --border: #dcdcdc;
+  --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --pixel: "Pixelify Sans", sans-serif;
+  --sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { background: #d9d9d9; font-family: var(--mono); color: var(--text); padding: 40px 0 80px; }
+.page-note { max-width: 1100px; margin: 0 auto 28px; padding: 0 4px; color: var(--muted); font-size: 11px; }
+
+.shot { width: 1100px; margin: 0 auto 40px; padding: 40px; background: var(--paper); }
+.shot-head { display: grid; grid-template-columns: 34px minmax(0,1fr); gap: 14px; align-items: start; margin-bottom: 22px; }
+.shot-index { padding-top: 6px; color: var(--blue); font-family: var(--mono); font-size: 14px; }
+.shot-head h2 { margin: 0 0 8px; color: var(--ink); font-family: var(--pixel); font-size: 27px; font-weight: 400; line-height: 1.35; }
+.shot-head p { margin: 0; max-width: 860px; color: #3f3f3f; font-family: var(--mono); font-size: 14px; line-height: 1.6; }
+.scene { position: relative; background: var(--bg); border: 1px solid var(--border); padding: 30px; width: 1020px; }
+
+.card { position: relative; background: #fff; border: 1px solid var(--blue); border-radius: 3px; padding: 10px 13px; }
+.card.tint-orange { border-color: var(--orange); background: var(--orange-tint); }
+.card.tint-blue { background: var(--panel); }
+.card.solid { background: var(--blue); border-color: var(--blue); }
+.card.dashed { border-style: dashed; }
+.card.gray { border-color: #aaa; background: #f2f2f2; opacity: .85; }
+.card .label { display: block; margin-bottom: 4px; font-family: var(--sans); font-size: 15px; font-weight: 700; color: var(--ink); line-height: 1.35; }
+.card.solid .label { color: #fff; }
+.card .sub { display: block; font-family: var(--mono); font-size: 13px; color: #555; line-height: 1.5; }
+.card.solid .sub { color: #d9e5ff; }
+.card.tint-orange .sub { color: #8a4a25; }
+.card.gray .sub { color: #5a5a5a; }
+.card .tag { display: block; margin-bottom: 5px; font-family: var(--mono); font-size: 12px; letter-spacing: .02em; color: var(--muted); text-transform: uppercase; }
+.card.tint-orange .tag { color: var(--orange); }
+.card.solid .tag { color: #cfe0ff; }
+.card.gray .tag { color: #767676; }
+.card .strike { text-decoration: line-through; text-decoration-color: #888; }
+
+.dashed-box { position: relative; border: 1px dashed var(--blue); background: var(--panel); border-radius: 3px; padding: 34px 18px 18px; }
+.dashed-box > .box-label { position: absolute; top: 10px; left: 14px; }
+.mono-caption { color: var(--blue); font-family: var(--mono); font-size: 12px; letter-spacing: .07em; text-transform: uppercase; }
+.mono-caption.orange { color: var(--orange); }
+.mono-caption.gray { color: #8a8a8a; }
+.verdict { font-family: var(--pixel); font-size: 18px; color: var(--ink); text-align: center; }
+.badge-x { position: absolute; top: -12px; right: -12px; width: 26px; height: 26px; border-radius: 50%; background: #fff; border: 2px solid #b33; color: #b33; font-family: var(--sans); font-weight: 700; font-size: 15px; line-height: 22px; text-align: center; }
+
+.row { display: flex; align-items: center; gap: 14px; }
+.row.top { align-items: flex-start; }
+.col { display: flex; flex-direction: column; gap: 12px; }
+.grow { flex: 1 1 auto; min-width: 0; }
+.connector { flex: 0 0 auto; display: block; }
+
+.stat-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 20px; }
+.stat-tile { padding: 14px 12px; border: 1px solid var(--border); background: var(--bg); text-align: center; }
+.stat-tile b { display: block; color: var(--blue); font-family: var(--mono); font-size: 24px; font-weight: 500; }
+.stat-tile span { display: block; margin-top: 4px; color: var(--muted); font-family: var(--mono); font-size: 11px; }
+.bar { display: flex; height: 30px; border-radius: 2px; overflow: hidden; margin-top: 22px; }
+.bar .seg { height: 100%; }
+.bar-tag { position: absolute; left: 10px; top: 7px; color: #fff; font-family: var(--mono); font-size: 13px; font-weight: 700; }
+.legend { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 6px 22px; margin-top: 12px; font-family: var(--mono); font-size: 12px; color: #444; }
+.legend i { display: inline-block; width: 11px; height: 11px; margin-right: 8px; vertical-align: -1px; }
+.callout { padding: 16px 18px; border-left: 2px solid var(--blue); background: var(--panel); margin-top: 20px; }
+.callout strong { display: block; margin-bottom: 7px; font-family: var(--pixel); font-size: 19px; font-weight: 400; color: var(--ink); }
+.callout p { margin: 0; font-family: var(--mono); font-size: 13px; color: #3f3f3f; line-height: 1.55; }
+.footnote { max-width: 960px; margin: 12px 0 0; color: var(--muted); font-family: var(--mono); font-size: 11px; line-height: 1.6; }
+
+/* ===== page-local additions, inside the grammar ===== */
+.stage { position: relative; width: 960px; }
+.pin { position: absolute; font-family: var(--mono); }
+.node-label { width: 88px; margin-left: -44px; text-align: center; }
+.node-label b { display: block; font-family: var(--sans); font-size: 14px; font-weight: 700; color: var(--ink); }
+.node-label span { display: block; margin-top: 2px; font-family: var(--mono); font-size: 13px; color: #555; }
+.node-label.o b { color: #8a4a25; }
+.node-label.o span { color: #8a4a25; }
+.node-label.g b { color: #7a7a7a; }
+.node-label.g span { color: #7a7a7a; }
+.track-label { width: 150px; }
+.track-label b { display: block; font-family: var(--sans); font-size: 15px; font-weight: 700; color: var(--ink); }
+.track-label span { display: block; margin-top: 3px; font-family: var(--mono); font-size: 13px; color: #555; }
+.tbar { height: 34px; border-radius: 2px; display: flex; align-items: center; }
+.tbar .ci { height: 34px; display: flex; align-items: center; justify-content: center; }
+.total { font-family: var(--mono); font-size: 15px; color: var(--blue); white-space: nowrap; }
+.total.g { color: #7a7a7a; }
+.ladder-row { display: flex; align-items: stretch; gap: 0; }
+.ladder-fail { flex: 0 0 430px; padding: 14px 0; display: flex; align-items: center; }
+.ladder-arrow { flex: 0 0 56px; display: flex; align-items: center; justify-content: center; }
+.ladder-rule { flex: 1 1 auto; background: var(--panel); padding: 14px 16px; display: flex; align-items: center; }
+.ladder-cap { flex: 1 1 auto; background: var(--panel); padding: 10px 16px 0; }
+</style>
+</head>
+<body>
+<p class="page-note">pr-round diagrams — five shots, shot with shoot.mjs into ../img/</p>
+
+<!-- ============================ 01 ============================ -->
+<div id="shot1" class="shot">
+  <div class="shot-head">
+    <span class="shot-index">01</span>
+    <div>
+      <h2>Anatomy of a review round</h2>
+      <p>A round is a loop, not a moment. The reviewer's own reading is the short part of it.</p>
+    </div>
+  </div>
+  <div class="scene">
+
+    <!-- the loop ribbon -->
+    <div style="position:relative;padding-bottom:58px;">
+      <svg width="0" height="0" style="position:absolute">
+        <defs>
+          <marker id="s1-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#1a52e0"/></marker>
+          <marker id="s1-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#d66b2f"/></marker>
+        </defs>
+      </svg>
+      <div class="row" style="justify-content:center;">
+        <div class="card" style="width:150px;text-align:center;"><span class="label">push</span></div>
+        <svg class="connector" viewBox="0 0 46 30" width="46" height="30"><path d="M3 15 H38" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#s1-blue)"/></svg>
+        <div class="card" style="width:150px;text-align:center;"><span class="label">CI</span></div>
+        <svg class="connector" viewBox="0 0 46 30" width="46" height="30"><path d="M3 15 H38" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#s1-blue)"/></svg>
+        <div class="card" style="width:150px;text-align:center;"><span class="label">review</span></div>
+        <svg class="connector" viewBox="0 0 46 30" width="46" height="30"><path d="M3 15 H38" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#s1-blue)"/></svg>
+        <div class="card" style="width:150px;text-align:center;"><span class="label">verdict</span></div>
+        <svg class="connector" viewBox="0 0 46 30" width="46" height="30"><path d="M3 15 H38" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#s1-blue)"/></svg>
+        <div class="card" style="width:150px;text-align:center;"><span class="label">fold</span></div>
+      </div>
+      <svg style="position:absolute;left:0;top:42px;overflow:visible" width="960" height="52" viewBox="0 0 960 52">
+        <path d="M872 2 V28 Q872 42 856 42 H104 Q88 42 88 28 V12" stroke="#d66b2f" stroke-width="1.7" stroke-dasharray="5 5" fill="none" marker-end="url(#s1-orange)"/>
+      </svg>
+      <div class="pin mono-caption orange" style="left:414px;top:75px;background:#fbfbfb;padding:0 12px;">one round</div>
+    </div>
+
+    <!-- two tracks -->
+    <div style="margin-top:26px;border-top:1px solid #e3e3e3;padding-top:26px;">
+      <div class="row" style="margin-bottom:20px;">
+        <div class="track-label"><b>Sep 7&ndash;13</b><span>before sharding</span></div>
+        <div style="position:relative;">
+          <div class="tbar" style="width:660px;background:#ececec;border:1px solid #cfcfcf;">
+            <div class="ci" style="width:84px;background:#9a9a9a;"></div>
+          </div>
+          <div class="pin" style="left:0;top:38px;font-size:12.5px;color:#6b6b6b;">CI 45&ndash;50 min per push</div>
+        </div>
+        <div class="total g" style="margin-left:16px;">6.2 h per round</div>
+      </div>
+      <div class="row" style="margin-top:38px;">
+        <div class="track-label"><b>Sep 14&ndash;20</b><span>after sharding</span></div>
+        <div style="position:relative;">
+          <div class="tbar" style="width:383px;background:#e4ecff;border:1px solid var(--blue);">
+            <div class="ci" style="width:25px;background:var(--blue);"></div>
+          </div>
+          <div class="pin" style="left:0;top:38px;font-size:12.5px;color:var(--blue);">CI ~14 min per push</div>
+        </div>
+        <div class="total" style="margin-left:16px;">3.6 h per round</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="callout">
+    <strong>The reviewer did not get faster. The wait around them did.</strong>
+    <p>A round cannot close until the tests are green on that exact head, so every fold pays the full test wait before the next verdict can start.</p>
+  </div>
+  <p class="footnote">Hours per round is the week&rsquo;s average hours from open to merge divided by its average reviewer rounds. Bar length is that average; the darker block is one test run on one push, drawn to scale against it.</p>
+</div>
+
+<!-- ============================ 02 ============================ -->
+<div id="shot2" class="shot">
+  <div class="shot-head">
+    <span class="shot-index">02</span>
+    <div>
+      <h2>One pull request, eight rounds</h2>
+      <p>PR #286, opened 07:47 on Sep 15, merged 10:14 the next day. 26.5 hours, eight verdicts.</p>
+    </div>
+  </div>
+  <div class="scene">
+    <div class="stage" style="height:214px;">
+      <svg width="0" height="0" style="position:absolute">
+        <defs>
+          <marker id="s2-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#d66b2f"/></marker>
+        </defs>
+      </svg>
+
+      <!-- the injected-design box -->
+      <div style="position:absolute;left:504px;top:70px;width:232px;height:118px;border:1px dashed var(--orange);background:var(--orange-tint);border-radius:3px;"></div>
+      <div class="pin mono-caption orange" style="left:512px;top:78px;">a design nobody asked for</div>
+
+      <!-- seed card -->
+      <div class="card tint-orange pin" style="left:0;top:0;width:300px;">
+        <span class="tag">Seed &middot; before the PR opened</span>
+        <span class="sub">pre-review bots: add cancel / rollback</span>
+      </div>
+      <svg class="pin" style="left:302px;top:18px;overflow:visible" width="212" height="64" viewBox="0 0 212 64">
+        <path d="M2 26 C 96 26, 122 46, 196 50" stroke="#d66b2f" stroke-width="1.7" stroke-dasharray="5 5" fill="none" marker-end="url(#s2-orange)"/>
+      </svg>
+
+      <!-- baseline + nodes -->
+      <svg class="pin" style="left:0;top:118px;" width="960" height="30" viewBox="0 0 960 30">
+        <path d="M20 14 H294" stroke="#1a52e0" stroke-width="2"/>
+        <path d="M294 14 H540" stroke="#9a9a9a" stroke-width="2" stroke-dasharray="6 5"/>
+        <path d="M540 14 H930" stroke="#1a52e0" stroke-width="2"/>
+        <circle cx="20" cy="14" r="5" fill="#1a52e0"/>
+        <circle cx="90" cy="14" r="7" fill="#1a52e0"/>
+        <circle cx="158" cy="14" r="7" fill="#1a52e0"/>
+        <circle cx="226" cy="14" r="7" fill="#1a52e0"/>
+        <circle cx="294" cy="14" r="7" fill="#1a52e0"/>
+        <circle cx="540" cy="14" r="7" fill="#fff" stroke="#d66b2f" stroke-width="2.4"/>
+        <circle cx="608" cy="14" r="7" fill="#fff" stroke="#d66b2f" stroke-width="2.4"/>
+        <circle cx="676" cy="14" r="7" fill="#fff" stroke="#d66b2f" stroke-width="2.4"/>
+        <circle cx="810" cy="14" r="7" fill="#1a52e0"/>
+        <circle cx="930" cy="14" r="8" fill="#fff" stroke="#1a52e0" stroke-width="2.4"/>
+      </svg>
+
+      <div class="pin" style="left:298px;top:94px;width:124px;text-align:center;font-size:12.5px;line-height:1.45;color:#7a7a7a;">overnight fold<br>11.6 h</div>
+      <svg class="pin" style="left:424px;top:110px;" width="12" height="46" viewBox="0 0 12 46"><path d="M6 0 V44" stroke="#b5b5b5" stroke-width="1.3" stroke-dasharray="4 4" fill="none"/></svg>
+      <div class="pin" style="left:438px;top:112px;font-size:11.5px;color:#8a8a8a;">Sep 16</div>
+
+      <div class="pin node-label" style="left:90px;top:150px;"><b>r1</b><span>09:59</span></div>
+      <div class="pin node-label" style="left:158px;top:150px;"><b>r2</b><span>11:13</span></div>
+      <div class="pin node-label" style="left:226px;top:150px;"><b>r3</b><span>11:59</span></div>
+      <div class="pin node-label" style="left:294px;top:150px;"><b>r4</b><span>13:18</span></div>
+      <div class="pin node-label o" style="left:540px;top:150px;"><b>r5</b><span>01:28</span></div>
+      <div class="pin node-label o" style="left:608px;top:150px;"><b>r6</b><span>03:25</span></div>
+      <div class="pin node-label o" style="left:676px;top:150px;"><b>r7</b><span>04:51</span></div>
+      <div class="pin node-label" style="left:810px;top:150px;"><b>r8</b><span>09:34</span></div>
+      <div class="pin node-label" style="left:930px;top:150px;width:110px;margin-left:-55px;"><b>merged</b><span>26.5 h</span></div>
+      <div class="pin mono-caption" style="left:14px;top:196px;">r1 &middot; present at open</div>
+      <div class="pin mono-caption" style="left:196px;top:196px;">r2&ndash;r4 &middot; born in our own folds</div>
+      <div class="pin mono-caption orange" style="left:504px;top:196px;">r5&ndash;r7 &middot; the injected design</div>
+    </div>
+  </div>
+  <div class="callout">
+    <strong>A pre-review finding is a proposal, not a requirement.</strong>
+    <p>The spec never asked for cancel or rollback. Our own bots did. The reviewer's harness then took what shipped as the contract and probed one adjacent cell of it per round.</p>
+  </div>
+  <p class="footnote">Verdict times are the timestamps on the reviewer's own comments, UTC, from the pull request's post-merge write-up. Nodes are evenly spaced; the dashed segment marks the one gap that was not.</p>
+</div>
+
+<!-- ============================ 03 ============================ -->
+<div id="shot3" class="shot">
+  <div class="shot-head">
+    <span class="shot-index">03</span>
+    <div>
+      <h2>The loop that learns</h2>
+      <p>Same four steps either way. The difference is whether anything survives the merge.</p>
+    </div>
+  </div>
+  <div class="scene">
+    <svg width="0" height="0" style="position:absolute">
+      <defs>
+        <marker id="s3-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#1a52e0"/></marker>
+        <marker id="s3-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#d66b2f"/></marker>
+        <marker id="s3-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#aaa"/></marker>
+      </defs>
+    </svg>
+    <div class="row" style="gap:34px;align-items:stretch;">
+
+      <!-- left: the straight line -->
+      <div style="width:186px;display:flex;flex-direction:column;">
+        <div class="col" style="gap:0;align-items:center;">
+          <div class="card gray" style="width:150px;text-align:center;"><span class="label">build</span></div>
+          <svg class="connector" viewBox="0 0 30 30" width="30" height="30"><path d="M15 2 V20" stroke="#aaa" stroke-width="2" fill="none" marker-end="url(#s3-gray)"/></svg>
+          <div class="card gray" style="width:150px;text-align:center;"><span class="label">open</span></div>
+          <svg class="connector" viewBox="0 0 30 30" width="30" height="30"><path d="M15 2 V20" stroke="#aaa" stroke-width="2" fill="none" marker-end="url(#s3-gray)"/></svg>
+          <div class="card gray" style="width:150px;text-align:center;"><span class="label">review</span></div>
+          <svg class="connector" viewBox="0 0 30 30" width="30" height="30"><path d="M15 2 V20" stroke="#aaa" stroke-width="2" fill="none" marker-end="url(#s3-gray)"/></svg>
+          <div class="card gray" style="width:150px;text-align:center;"><span class="label">merge</span></div>
+          <svg class="connector" viewBox="0 0 30 32" width="30" height="32"><path d="M15 2 V28" stroke="#aaa" stroke-width="1.5" stroke-dasharray="4 4" fill="none"/></svg>
+          <div style="width:186px;text-align:center;font-family:var(--mono);font-size:12.5px;color:#8a8a8a;">nothing carried forward</div>
+        </div>
+        <div class="verdict" style="margin-top:auto;padding-top:26px;color:#6f6f6f;">every PR starts from zero</div>
+      </div>
+
+      <!-- right: the loop -->
+      <div class="grow" style="display:flex;flex-direction:column;">
+        <div class="dashed-box" style="position:relative;padding:34px 22px 26px;">
+          <span class="box-label mono-caption">the same four steps</span>
+          <div class="row" style="justify-content:space-between;">
+            <div class="card" style="width:140px;text-align:center;"><span class="label">build</span></div>
+            <svg class="connector" viewBox="0 0 40 30" width="40" height="30"><path d="M3 15 H32" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#s3-blue)"/></svg>
+            <div class="card" style="width:140px;text-align:center;"><span class="label">open</span></div>
+            <svg class="connector" viewBox="0 0 40 30" width="40" height="30"><path d="M3 15 H32" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#s3-blue)"/></svg>
+            <div class="card" style="width:140px;text-align:center;"><span class="label">review</span></div>
+            <svg class="connector" viewBox="0 0 40 30" width="40" height="30"><path d="M3 15 H32" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#s3-blue)"/></svg>
+            <div class="card" style="width:140px;text-align:center;"><span class="label">merge</span></div>
+          </div>
+
+          <div class="row" style="margin-top:62px;justify-content:space-between;">
+            <div class="card tint-orange" style="width:170px;"><span class="sub">pre-open checklist</span></div>
+            <svg class="connector" viewBox="0 0 54 30" width="54" height="30"><path d="M50 15 H8" stroke="#d66b2f" stroke-width="1.7" stroke-dasharray="5 5" fill="none" marker-end="url(#s3-orange)"/></svg>
+            <div class="card tint-orange" style="width:214px;"><span class="sub">pattern log &middot; <b style="color:#8a4a25;font-family:var(--mono);">12 &rarr; 27</b></span></div>
+            <svg class="connector" viewBox="0 0 54 30" width="54" height="30"><path d="M50 15 H8" stroke="#d66b2f" stroke-width="1.7" stroke-dasharray="5 5" fill="none" marker-end="url(#s3-orange)"/></svg>
+            <div class="card tint-orange" style="width:170px;"><span class="sub">write-up per merge</span></div>
+          </div>
+
+          <!-- vertical return edges -->
+          <svg style="position:absolute;left:0;top:0;overflow:visible" width="100%" height="100%" viewBox="0 0 660 214" preserveAspectRatio="none"></svg>
+          <svg style="position:absolute;right:112px;top:76px;overflow:visible" width="30" height="62" viewBox="0 0 30 62"><path d="M15 2 V48" stroke="#d66b2f" stroke-width="1.7" stroke-dasharray="5 5" fill="none" marker-end="url(#s3-orange)"/></svg>
+          <svg style="position:absolute;left:90px;top:76px;overflow:visible" width="30" height="62" viewBox="0 0 30 62"><path d="M15 60 V14" stroke="#d66b2f" stroke-width="1.7" stroke-dasharray="5 5" fill="none" marker-end="url(#s3-orange)"/></svg>
+        </div>
+        <div class="verdict" style="margin-top:auto;padding-top:26px;">every PR starts from the last one</div>
+      </div>
+
+    </div>
+  </div>
+  <div class="callout">
+    <strong>The only part that compounds.</strong>
+    <p>Every merged pull request gets a written post-mortem, and each one appends a row to one log of known bounce causes. That log is read before the next one opens.</p>
+  </div>
+</div>
+
+<!-- ============================ 04 ============================ -->
+<div id="shot4" class="shot">
+  <div class="shot-head">
+    <span class="shot-index">04</span>
+    <div>
+      <h2>By the numbers, honestly</h2>
+      <p>One week against the one before it. Two of these moved the way I wanted. One did not.</p>
+    </div>
+  </div>
+  <div class="scene">
+    <div class="stat-row" style="margin-top:0;">
+      <div class="stat-tile"><b>5 &rarr; 8</b><span>PRs merged</span></div>
+      <div class="stat-tile"><b>17.5 &rarr; 8.7</b><span>median hours to merge</span></div>
+      <div class="stat-tile"><b>2.8 &rarr; 3.6</b><span>rounds per PR</span></div>
+      <div class="stat-tile"><b>6.2 &rarr; 3.6</b><span>hours per round</span></div>
+      <div class="stat-tile"><b>45&ndash;50 &rarr; 14</b><span>CI minutes per push</span></div>
+    </div>
+
+    <div style="margin-top:34px;border-top:1px solid #e3e3e3;padding-top:26px;">
+      <div class="row" style="margin-bottom:14px;">
+        <div style="width:168px;font-family:var(--mono);font-size:13px;color:#555;">rounds per PR</div>
+        <div style="width:620px;">
+          <div class="row" style="gap:10px;margin-bottom:8px;"><div style="width:253px;height:20px;background:#d2d2d2;"></div><span style="font-family:var(--mono);font-size:13px;color:#6b6b6b;">2.8</span></div>
+          <div class="row" style="gap:10px;"><div style="width:325px;height:20px;background:var(--blue);"></div><span style="font-family:var(--mono);font-size:13px;color:var(--blue);">3.6</span></div>
+        </div>
+        <div style="font-family:var(--mono);font-size:13px;color:#555;">went up</div>
+      </div>
+      <div class="row" style="margin-top:26px;">
+        <div style="width:168px;font-family:var(--mono);font-size:13px;color:#555;">hours per round</div>
+        <div style="width:620px;">
+          <div class="row" style="gap:10px;margin-bottom:8px;"><div style="width:560px;height:20px;background:#d2d2d2;"></div><span style="font-family:var(--mono);font-size:13px;color:#6b6b6b;">6.2</span></div>
+          <div class="row" style="gap:10px;"><div style="width:325px;height:20px;background:var(--blue);"></div><span style="font-family:var(--mono);font-size:13px;color:var(--blue);">3.6</span></div>
+        </div>
+        <div style="font-family:var(--mono);font-size:13px;color:var(--blue);">nearly halved</div>
+      </div>
+      <div class="legend" style="margin-top:22px;">
+        <div><i style="background:#d2d2d2;"></i>Sep 7&ndash;13</div>
+        <div><i style="background:var(--blue);"></i>Sep 14&ndash;20</div>
+      </div>
+    </div>
+  </div>
+  <div class="callout">
+    <strong>Rounds went up. The round got cheaper.</strong>
+    <p>The reviewer found as much as before. Eight merged pull requests against five is a small sample.</p>
+  </div>
+  <p class="footnote">Sep 7&ndash;13 vs Sep 14&ndash;20, 2026. Rounds = reviewer verdicts from each pull request&rsquo;s post-merge write-up. One 120 h outlier that opened the week before is excluded.</p>
+</div>
+
+<!-- ============================ 05 ============================ -->
+<div id="shot5" class="shot">
+  <div class="shot-head">
+    <span class="shot-index">05</span>
+    <div>
+      <h2>What broke, and what it became</h2>
+      <p>Four failures from one week. Each one is now a line in the log, checked before the next pull request opens.</p>
+    </div>
+  </div>
+  <div class="scene" style="padding:30px 30px 24px;">
+    <svg width="0" height="0" style="position:absolute">
+      <defs>
+        <marker id="s5-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#1a52e0"/></marker>
+      </defs>
+    </svg>
+    <div class="ladder-row">
+      <div class="ladder-fail" style="padding-bottom:0;"><span class="mono-caption gray">What broke</span></div>
+      <div class="ladder-arrow"></div>
+      <div class="ladder-cap"><span class="mono-caption">House law</span></div>
+    </div>
+
+    <div class="ladder-row">
+      <div class="ladder-fail"><div class="card tint-orange grow"><span class="sub">An acknowledgement posted before the fix triggered a second review at the unchanged head.</span></div></div>
+      <div class="ladder-arrow"><svg viewBox="0 0 50 30" width="50" height="30"><path d="M4 15 H40" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#s5-blue)"/></svg></div>
+      <div class="ladder-rule"><div class="card grow"><span class="sub">No comments between a review round and the fold push.</span></div></div>
+    </div>
+
+    <div class="ladder-row">
+      <div class="ladder-fail"><div class="card tint-orange grow"><span class="sub">A defect our own pre-push review had reproduced was waved off as disclosed. The reviewer cited the same lines next round.</span></div></div>
+      <div class="ladder-arrow"><svg viewBox="0 0 50 30" width="50" height="30"><path d="M4 15 H40" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#s5-blue)"/></svg></div>
+      <div class="ladder-rule"><div class="card grow"><span class="sub">Anything reproduced before the push is fixed before the push.</span></div></div>
+    </div>
+
+    <div class="ladder-row">
+      <div class="ladder-fail"><div class="card tint-orange grow"><span class="sub">One fix closed the one call site the reviewer flagged. The same rounding rule resurfaced in three paths.</span></div></div>
+      <div class="ladder-arrow"><svg viewBox="0 0 50 30" width="50" height="30"><path d="M4 15 H40" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#s5-blue)"/></svg></div>
+      <div class="ladder-rule"><div class="card grow"><span class="sub">Fix the class, not the leaf. Grep every other call site before folding.</span></div></div>
+    </div>
+
+    <div class="ladder-row">
+      <div class="ladder-fail"><div class="card tint-orange grow"><span class="sub">The review matrix tracked whether the account existed, never what its ledger already held.</span></div></div>
+      <div class="ladder-arrow"><svg viewBox="0 0 50 30" width="50" height="30"><path d="M4 15 H40" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#s5-blue)"/></svg></div>
+      <div class="ladder-rule" style="padding-bottom:20px;"><div class="card grow"><span class="sub">Enumerate the target&rsquo;s prior state before the first fix.</span></div></div>
+    </div>
+  </div>
+  <div class="callout">
+    <strong>Four rounds, four rules.</strong>
+    <p>A rule only counts once it is written where the next pull request will read it.</p>
+  </div>
+</div>
+
+</body>
+</html>

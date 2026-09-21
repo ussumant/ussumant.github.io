@@ -206,11 +206,14 @@ def render_detail(item: dict, next_item: dict) -> str:
 
 def reading_item(item: dict) -> str:
     tags = " · ".join(e(tag) for tag in item["tags"])
+    links = f'<a class="live" href="/reading/{e(item["slug"])}/">read note →</a>'
+    if item.get("source_url"):
+        links += f' · <a href="{e(item["source_url"])}" rel="noopener">paper ↗</a>'
     return f'''<li class="reading-item">
   <p class="reading-item-meta">{e(item["status"].lower())} · {e(item["period"])} · {e(item["venue"])}</p>
   <h2><a href="/reading/{e(item['slug'])}/">{e(item["display"])}</a></h2>
   <p>{e(item["summary"])}</p>
-  <p class="reading-item-links"><a class="live" href="/reading/{e(item['slug'])}/">read note →</a> · <a href="{e(item['source_url'])}" rel="noopener">paper ↗</a></p>
+  <p class="reading-item-links">{links}</p>
   <p class="reading-tags">{tags}</p>
 </li>'''
 
@@ -506,6 +509,11 @@ def main() -> None:
         write(f"work/{item['slug']}/index.html", render_detail(item, WORK[(index + 1) % len(WORK)]))
     write("reading/index.html", render_reading_archive())
     for item in READING:
+        # A "handwritten" entry keeps its own reading/<slug>/index.html on disk and
+        # only takes its row in the archive from here. render_reading_detail() renders
+        # the paper-note layout and would overwrite a hand-built page.
+        if item.get("handwritten"):
+            continue
         write(f"reading/{item['slug']}/index.html", render_reading_detail(item))
     write("feed.xml", render_feed())
 

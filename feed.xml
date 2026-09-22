@@ -7,6 +7,13 @@
   <updated>2026-08-12T00:00:00Z</updated>
   <author><name>Sumant</name></author>
   <entry>
+    <title>Talk to your Mac in 300 ms: the code owns the menu, Jev picks from it</title>
+    <id>https://ussumant.github.io/work/general-formation/#2026-09-22</id>
+    <link href="https://ussumant.github.io/work/general-formation/"/>
+    <updated>2026-09-22T00:00:00Z</updated>
+    <summary>Read the code of macbrow, a voice assistant for the Mac that never hands your sentence to a big model. Your words go to Jev as a multiple-choice question over a menu of about 30 buttons; the code presses the winner. Eight diagrams, plain words first, code names in the footnotes.</summary>
+  </entry>
+  <entry>
     <title>Jev replaces the decision, never the eyes or the pen</title>
     <id>https://ussumant.github.io/work/general-formation/#2026-09-21</id>
     <link href="https://ussumant.github.io/work/general-formation/"/>

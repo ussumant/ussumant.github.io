@@ -209,6 +209,8 @@ def reading_item(item: dict) -> str:
     links = f'<a class="live" href="/reading/{e(item["slug"])}/">read note →</a>'
     if item.get("source_url"):
         links += f' · <a href="{e(item["source_url"])}" rel="noopener">paper ↗</a>'
+    if item.get("repo_url"):
+        links += f' · <a href="{e(item["repo_url"])}" rel="noopener">repo ↗</a>'
     return f'''<li class="reading-item">
   <p class="reading-item-meta">{e(item["status"].lower())} · {e(item["period"])} · {e(item["venue"])}</p>
   <h2><a href="/reading/{e(item['slug'])}/">{e(item["display"])}</a></h2>

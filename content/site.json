@@ -5,7 +5,7 @@
     "description": "Sumant builds products end to end, usually where software, motivation, and AI meet.",
     "url": "https://ussumant.github.io",
     "updated": "2026-08-12",
-    "updated_label": "21 September 2026",
+    "updated_label": "22 September 2026",
     "location": "Bengaluru · often elsewhere in Southeast Asia",
     "social": [
       {
@@ -441,9 +441,35 @@
         "computer use",
         "evaluation"
       ]
+    },
+    {
+      "slug": "macbrow",
+      "order": "05",
+      "handwritten": true,
+      "title": "Talk to your Mac in 300 ms: the code owns the menu, Jev picks from it",
+      "display": "talk to your mac in 300 ms",
+      "period": "Sep 2026",
+      "venue": "timpratim/macbrow",
+      "status": "Notes",
+      "summary": "Read the code of macbrow, a voice assistant for the Mac that never hands your sentence to a big model. Your words go to Jev as a multiple-choice question over a menu of about 30 buttons; the code presses the winner. Eight diagrams, plain words first, code names in the footnotes.",
+      "repo_url": "https://github.com/timpratim/macbrow",
+      "tags": [
+        "voice agents",
+        "Mac automation",
+        "tool routing"
+      ]
     }
   ],
   "updates": [
+    {
+      "date": "2026-09-22",
+      "date_label": "22 Sep 2026",
+      "stage": "Written · Diagrammed",
+      "title": "Talk to your Mac in 300 ms: the code owns the menu, Jev picks from it",
+      "body": "Read the code of macbrow, a voice assistant for the Mac that never hands your sentence to a big model. Your words go to Jev as a multiple-choice question over a menu of about 30 buttons; the code presses the winner. Eight diagrams, plain words first, code names in the footnotes.",
+      "work_slug": "general-formation",
+      "external_url": "https://ussumant.github.io/reading/macbrow/"
+    },
     {
       "date": "2026-09-21",
       "date_label": "21 Sep 2026",

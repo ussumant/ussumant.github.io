@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>macbrow — plain-words pass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+<style>
+/* ===== the reading grammar (ussumant.github.io/reading) — shared, do not restyle ===== */
+:root {
+  --ink: #000; --text: #666; --muted: #767676;
+  --blue: #1a52e0; --blue-lite: #a8c0f7; --orange: #d66b2f; --gold: #aa8b32; --slate: #557c9b;
+  --paper: #fff; --panel: #f5f7ff; --orange-tint: #fff3ea; --bg: #fbfbfb; --border: #dcdcdc;
+  --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --pixel: "Pixelify Sans", sans-serif;
+  --sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { background: #d9d9d9; font-family: var(--mono); color: var(--text); padding: 40px 0 80px; }
+.page-note { max-width: 1100px; margin: 0 auto 28px; padding: 0 4px; color: var(--muted); font-size: 11px; }
+
+.shot { width: 1100px; margin: 0 auto 40px; padding: 40px; background: var(--paper); }
+.shot-head { display: grid; grid-template-columns: 34px minmax(0,1fr); gap: 14px; align-items: start; margin-bottom: 22px; }
+.shot-index { padding-top: 6px; color: var(--blue); font-family: var(--mono); font-size: 14px; }
+.shot-head h2 { margin: 0 0 8px; color: var(--ink); font-family: var(--pixel); font-size: 27px; font-weight: 400; line-height: 1.35; }
+.shot-head p { margin: 0; max-width: 860px; color: #3f3f3f; font-family: var(--mono); font-size: 14px; line-height: 1.6; }
+.scene { position: relative; background: var(--bg); border: 1px solid var(--border); padding: 30px; width: 1020px; }
+
+.card { position: relative; background: #fff; border: 1px solid var(--blue); border-radius: 3px; padding: 10px 13px; }
+.card.tint-orange { border-color: var(--orange); background: var(--orange-tint); }
+.card.tint-blue { background: var(--panel); }
+.card.solid { background: var(--blue); border-color: var(--blue); }
+.card.dashed { border-style: dashed; }
+.card.gray { border-color: #aaa; background: #f2f2f2; opacity: .85; }
+.card .label { display: block; margin-bottom: 4px; font-family: var(--sans); font-size: 15px; font-weight: 700; color: var(--ink); line-height: 1.35; }
+.card.solid .label { color: #fff; }
+.card .sub { display: block; font-family: var(--mono); font-size: 13px; color: #555; line-height: 1.5; }
+.card.solid .sub { color: #d9e5ff; }
+.card.tint-orange .sub { color: #8a4a25; }
+.card.gray .sub { color: #5a5a5a; }
+.card .tag { display: block; margin-bottom: 5px; font-family: var(--mono); font-size: 12px; letter-spacing: .02em; color: var(--muted); text-transform: uppercase; }
+.card.tint-orange .tag { color: var(--orange); }
+.card.solid .tag { color: #cfe0ff; }
+.card.gray .tag { color: #767676; }
+
+.dashed-box { position: relative; border: 1px dashed var(--blue); background: var(--panel); border-radius: 3px; padding: 34px 18px 18px; }
+.dashed-box > .box-label { position: absolute; top: 10px; left: 14px; }
+.mono-caption { color: var(--blue); font-family: var(--mono); font-size: 12px; letter-spacing: .07em; text-transform: uppercase; }
+.mono-caption.orange { color: var(--orange); }
+.mono-caption.gray { color: #8a8a8a; }
+.badge-x { position: absolute; top: -12px; right: -12px; width: 26px; height: 26px; border-radius: 50%; background: #fff; border: 2px solid #b33; color: #b33; font-family: var(--sans); font-weight: 700; font-size: 15px; line-height: 22px; text-align: center; }
+
+.row { display: flex; align-items: center; gap: 14px; }
+.row.top { align-items: flex-start; }
+.col { display: flex; flex-direction: column; gap: 12px; }
+.grow { flex: 1 1 auto; min-width: 0; }
+.connector { flex: 0 0 auto; display: block; }
+
+.callout { padding: 16px 18px; border-left: 2px solid var(--blue); background: var(--panel); margin-top: 20px; }
+.callout strong { display: block; margin-bottom: 7px; font-family: var(--pixel); font-size: 19px; font-weight: 400; color: var(--ink); }
+.callout p { margin: 0; font-family: var(--mono); font-size: 13px; color: #3f3f3f; line-height: 1.55; }
+.footnote { max-width: 960px; margin: 12px 0 0; color: var(--muted); font-family: var(--mono); font-size: 11px; line-height: 1.6; }
+
+/* ===================================================================== */
+/* ===== plain-words scene styles (P01, P02) ============================ */
+/* ===================================================================== */
+.p-abs { position: absolute; }
+
+/* ---- P01 ---- */
+.p1-diagram { position: relative; height: 490px; }
+.p1-jev-cap { font-family: var(--mono); font-size: 10.5px; color: var(--blue); line-height: 1.4; text-align: center; }
+.p1-menu-cap { font-family: var(--mono); font-size: 11px; color: #555; margin-top: 10px; }
+.pmenu-list { display: flex; flex-direction: column; gap: 8px; }
+.pmenu-row { background: #fff; border: 1px solid var(--blue); border-radius: 3px; padding: 7px 11px; }
+.pmenu-row.winner { background: var(--blue); border-color: var(--blue); }
+.pmenu-row.winner .pmenu-label { color: #fff; }
+.pmenu-row.dim { background: #f2f2f2; border-color: #aaa; }
+.pmenu-row.dim .pmenu-label { color: #767676; }
+.pmenu-label { display: block; font-family: var(--sans); font-weight: 700; font-size: 13px; color: #000; margin-bottom: 5px; }
+.pmenu-bar-track { height: 6px; background: #e6e6e6; border-radius: 2px; overflow: hidden; }
+.pmenu-row.winner .pmenu-bar-track { background: rgba(255,255,255,.35); }
+.pmenu-bar-fill { height: 100%; background: var(--blue); }
+.pmenu-row.winner .pmenu-bar-fill { background: #fff; }
+.pmenu-row.dim .pmenu-bar-fill { background: #aaa; }
+
+/* ---- P02 ---- */
+.p2-track { display: grid; grid-template-columns: 210px 34px 160px 34px 170px 34px 220px; align-items: center; column-gap: 0; }
+.p2-track + .p2-track { margin-top: 30px; }
+.p2-track.is-orange .card { border-color: var(--orange); }
+.p2-score-cell { display: flex; flex-direction: column; gap: 6px; }
+.p2-score-row { display: flex; align-items: center; gap: 8px; }
+.p2-score-bar-track { flex: 1 1 auto; height: 8px; background: #e6e6e6; border-radius: 2px; overflow: hidden; }
+.p2-score-bar-fill { height: 100%; background: var(--blue); }
+.p2-score-num { font-family: var(--mono); font-size: 11px; color: #444; width: 74px; flex: 0 0 auto; }
+.p2-score-label { text-align: center; font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--blue); margin-top: 2px; }
+.p2-score-label.is-warn { color: var(--orange); }
+.p2-footer { font-family: var(--mono); font-size: 11px; color: #767676; margin-top: 10px; }
+.p2-track3-wrap { position: relative; }
+.p2-yes-row { display: flex; justify-content: flex-end; margin-top: 12px; }
+
+/* ---- shared utility (stat tiles, mb- helpers) ---- */
+.mb-row { display: flex; align-items: center; gap: 10px; }
+.mb-col { display: flex; flex-direction: column; gap: 10px; }
+.mb-grow { flex: 1 1 0; min-width: 0; }
+.stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
+.stat-tile { padding: 14px 12px; border: 1px solid var(--border); background: var(--bg); text-align: center; }
+.stat-tile b { display: block; color: var(--blue); font-family: var(--mono); font-size: 24px; font-weight: 500; }
+.stat-tile span { display: block; margin-top: 4px; color: var(--muted); font-family: var(--mono); font-size: 11px; }
+
+/* ---- P03: two questions, one envelope ---- */
+.p3-center { display: flex; justify-content: center; }
+.p3-envelope-row { display: flex; gap: 14px; align-items: stretch; }
+.p3-q-card { flex: 1 1 0; background: #fff; border: 1px solid var(--blue); border-radius: 3px; padding: 11px 13px; }
+.p3-q-title { display: block; font-family: var(--sans); font-weight: 700; font-size: 13px; color: #000; margin-bottom: 9px; }
+.p3-opt { margin-top: 7px; }
+.p3-opt:first-of-type { margin-top: 0; }
+.p3-opt-label { display: block; font-family: var(--mono); font-size: 11.5px; color: #444; margin-bottom: 3px; }
+.p3-opt-bar { height: 5px; background: #e6e6e6; border-radius: 2px; overflow: hidden; }
+.p3-opt-bar > div { height: 100%; background: var(--blue); }
+.p3-highlight { font-weight: 700; color: var(--blue); text-decoration: underline; text-decoration-color: var(--blue); text-decoration-thickness: 2px; }
+
+/* ---- P04: gauntlet (six checks) ---- */
+.p4-wrap { position: relative; }
+.p4-repair-svg { position: absolute; left: 0; top: 0; width: 100%; height: 606px; pointer-events: none; }
+.p4-repair-label { position: absolute; left: 660px; top: 58px; width: 190px; font-family: var(--mono); font-size: 10.5px; color: #8a4a25; line-height: 1.4; }
+.p4-gauntlet { display: flex; gap: 46px; margin-top: 10px; align-items: flex-start; }
+.p4-gates { flex: 1 1 0; background: var(--panel); border: 1px dashed var(--blue); border-radius: 3px; padding: 16px 16px 14px; position: relative; }
+.p4-gates .box-label { position: absolute; top: -10px; left: 14px; background: var(--panel); padding: 0 6px; }
+.p4-gate-row { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+.p4-gate-row:first-child { margin-top: 0; }
+.p4-gate-row .card { flex: 1 1 0; }
+.p4-exit { font-family: var(--mono); font-size: 10.5px; color: #888; width: 230px; flex: 0 0 auto; line-height: 1.4; }
+.p4-side { flex: 0 0 240px; display: flex; flex-direction: column; gap: 10px; }
+
+/* ---- P05: browser loop ---- */
+.p5-cycle-wrap { position: relative; padding-top: 30px; }
+.p5-return-arc { display: block; width: 100%; height: 30px; }
+.p5-cycle { display: flex; justify-content: space-between; align-items: center; margin-top: 2px; }
+.p5-node { text-align: center; flex: 1 1 0; }
+.p5-node .dot { width: 78px; height: 78px; border-radius: 50%; background: var(--panel); border: 1.5px solid var(--blue); display: flex; align-items: center; justify-content: center; font-family: var(--sans); font-weight: 600; font-size: 11px; color: var(--blue); margin: 0 auto 6px; text-align: center; padding: 4px; line-height: 1.25; }
+.p5-steps { text-align: center; font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 6px; }
+.p5-budget-label { text-align: center; font-family: var(--mono); font-size: 13px; color: var(--blue); margin-top: 16px; }
+.p5-budget-wrap { position: relative; margin-top: 6px; }
+.p5-budget-note { text-align: center; font-family: var(--mono); font-size: 11px; color: #b33; margin-top: 4px; }
+.p5-results { display: flex; gap: 12px; margin-top: 14px; }
+.p5-connectors { position: absolute; left: 0; top: -46px; width: 100%; height: 120px; pointer-events: none; }
+.p5-side-row { position: relative; display: flex; gap: 14px; margin-top: 46px; align-items: stretch; }
+.p5-panel { flex: 0 0 260px; }
+
+/* ---- P06: same bouncer, three doors on the path ---- */
+.p6-top-row { display: flex; margin-bottom: 18px; }
+.p6-doors-row { display: flex; align-items: stretch; gap: 0; }
+.p6-door { width: 260px; text-align: center; }
+.p6-door-arrow { flex: 0 0 auto; align-self: center; }
+.p6-stamp { display: block; margin-top: 6px; font-family: var(--mono); font-size: 10px; color: #8a8a8a; }
+.p6-examples-row { display: flex; gap: 20px; margin-top: 20px; }
+.p6-example { flex: 1 1 0; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.p6-example-outcome { font-family: var(--mono); font-size: 11.5px; font-weight: 600; text-align: center; line-height: 1.4; }
+
+/* ---- P07: two kinds of question ---- */
+.p7-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.p7-col-head { text-align: center; margin-bottom: 8px; }
+.p7-card .sub { font-size: 12.5px; }
+
+/* ---- P08: choose, don't generate ---- */
+.p8-split { display: flex; align-items: stretch; gap: 0; }
+.p8-col { flex: 1 1 0; display: flex; flex-direction: column; gap: 9px; padding: 0 20px; }
+.p8-col .card { text-align: left; }
+.p8-divider { flex: 0 0 auto; width: 1px; border-left: 1px dashed var(--border); }
+.p8-col-head { text-align: center; margin-bottom: 8px; }
+.p8-footer { margin-top: 12px; text-align: center; font-family: var(--pixel); font-size: 15px; color: #3f3f3f; }
+.p8-note { font-family: var(--mono); font-size: 11.5px; color: #999; text-align: center; margin-top: 6px; }
+.p8-loop-box { padding: 30px 60px 16px 16px; position: relative; }
+.p8-return-svg { position: absolute; right: 12px; top: 30px; width: 44px; height: calc(100% - 46px); display: block; }
+</style>
+</head>
+<body>
+<p class="page-note">macbrow — plain-words test pass (P01, P02). Same grammar as the main set; code names live in one footnote line each, never in a card or tag.</p>
+
+<!-- ============================================================ P01 ============================================================ -->
+<div id="shot1" class="shot">
+  <div class="shot-head">
+    <span class="shot-index">01</span>
+    <div><h2>You talk. The code picks a button. Jev scores the buttons.</h2><p>what happens in the 300 ms after you say &ldquo;turn the volume up&rdquo;</p></div>
+  </div>
+  <div class="scene">
+    <div class="p1-diagram">
+      <div class="card tint-orange p-abs" style="left:0;top:39px;width:170px;height:70px;">
+        <span class="tag">You say</span>
+        <span class="sub">&ldquo;turn the volume up&rdquo;</span>
+      </div>
+
+      <svg class="p-abs" style="left:172px;top:60px;" viewBox="0 0 30 30" width="30" height="30">
+        <defs>
+          <marker id="p1-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#1a52e0"/></marker>
+          <marker id="p1-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#999"/></marker>
+        </defs>
+        <path d="M2 15 H24" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#p1-blue)"/>
+      </svg>
+
+      <div class="p-abs" style="left:210px;top:14px;width:120px;height:120px;">
+        <svg viewBox="0 0 120 120" width="120" height="120"><circle cx="60" cy="60" r="56" fill="#1a52e0"/><text x="60" y="64" text-anchor="middle" font-family="-apple-system,Helvetica,Arial,sans-serif" font-size="20" font-weight="700" fill="#fff">Jev</text></svg>
+      </div>
+      <div class="p-abs p1-jev-cap" style="left:190px;top:140px;width:160px;">one question &middot; about 300 ms</div>
+
+      <svg class="p-abs" style="left:332px;top:60px;" viewBox="0 0 30 30" width="30" height="30">
+        <path d="M2 15 H24" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#p1-blue)"/>
+      </svg>
+
+      <div class="p-abs" style="left:364px;top:0;width:320px;">
+        <div class="dashed-box" style="padding:54px 16px 16px;">
+          <span class="box-label mono-caption">the menu &middot; about 32 buttons the code already knows</span>
+          <div class="pmenu-list">
+            <div class="pmenu-row winner">
+              <span class="pmenu-label">Set the volume</span>
+              <div class="pmenu-bar-track"><div class="pmenu-bar-fill" style="width:92%;"></div></div>
+            </div>
+            <div class="pmenu-row">
+              <span class="pmenu-label">Open an app</span>
+              <div class="pmenu-bar-track"><div class="pmenu-bar-fill" style="width:22%;"></div></div>
+            </div>
+            <div class="pmenu-row">
+              <span class="pmenu-label">Make a note</span>
+              <div class="pmenu-bar-track"><div class="pmenu-bar-fill" style="width:16%;"></div></div>
+            </div>
+            <div class="pmenu-row">
+              <span class="pmenu-label">Open a website</span>
+              <div class="pmenu-bar-track"><div class="pmenu-bar-fill" style="width:14%;"></div></div>
+            </div>
+            <div class="pmenu-row dim">
+              <span class="pmenu-label">Just chat</span>
+              <div class="pmenu-bar-track"><div class="pmenu-bar-fill" style="width:6%;"></div></div>
+            </div>
+            <div class="pmenu-row dim">
+              <span class="pmenu-label">Write a new button</span>
+              <div class="pmenu-bar-track"><div class="pmenu-bar-fill" style="width:4%;"></div></div>
+            </div>
+          </div>
+          <div class="p1-menu-cap">Jev gives every button a score, all at once.</div>
+        </div>
+      </div>
+
+      <svg class="p-abs" style="left:686px;top:60px;" viewBox="0 0 30 30" width="30" height="30">
+        <path d="M2 15 H24" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#p1-blue)"/>
+      </svg>
+
+      <div class="card solid p-abs" style="left:718px;top:39px;width:110px;height:70px;">
+        <span class="tag">The code presses it</span>
+        <span class="label" style="font-size:13px;">volume up</span>
+      </div>
+
+      <svg class="p-abs" style="left:830px;top:60px;" viewBox="0 0 30 30" width="30" height="30">
+        <path d="M2 15 H24" stroke="#1a52e0" stroke-width="2" fill="none" marker-end="url(#p1-blue)"/>
+      </svg>
+
+      <div class="card tint-orange p-abs" style="left:862px;top:39px;width:98px;height:70px;text-align:center;">
+        <span class="tag">Mac says</span>
+        <span class="sub">&ldquo;done&rdquo;</span>
+      </div>
+
+      <svg class="p-abs" style="left:0;top:0;" viewBox="0 0 960 460" width="960" height="460">
+        <path d="M255 130 C 250 240, 255 340, 290 390 C 330 430, 440 430, 518 405" stroke="#999" stroke-width="1.5" stroke-dasharray="4 4" fill="none" marker-end="url(#p1-gray)"/>
+      </svg>
+      <div class="card gray dashed p-abs" style="left:520px;top:388px;width:300px;text-align:center;">
+        <span class="badge-x">&times;</span>
+        <span class="sub">a ChatGPT-style model is never called for this</span>
+      </div>
+    </div>
+  </div>
+  <div class="callout">
+    <strong>Jev never writes. It picks from a list your code gave it.</strong>
+    <p>That is why it takes 300 ms and cannot invent a button that isn&rsquo;t there.</p>
+  </div>
+  <p class="footnote">code: JevRouter.route() &rarr; system_one &rarr; registry (tools/seed.json, 32 tools) &rarr; run_applescript.</p>
+</div>
+
+<!-- ============================================================ P02 ============================================================ -->
+<div id="shot2" class="shot">
+  <div class="shot-head">
+    <span class="shot-index">02</span>
+    <div><h2>Sure, unsure, dangerous</h2><p>the score is a number, so the code can decide what to do with it</p></div>
+  </div>
+  <div class="scene">
+
+    <div class="p2-track">
+      <div class="card tint-orange"><span class="tag">You say</span><span class="sub">&ldquo;turn the volume up&rdquo;</span></div>
+      <svg viewBox="0 0 34 20" width="34" height="20"><defs><marker id="p2-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#1a52e0"/></marker></defs><path d="M2 10 H26" stroke="#1a52e0" stroke-width="1.8" fill="none" marker-end="url(#p2-blue)"/></svg>
+      <div class="p2-score-cell">
+        <div class="p2-score-row"><div class="p2-score-bar-track"><div class="p2-score-bar-fill" style="width:90%;"></div></div><span class="p2-score-num">0.9</span></div>
+        <div class="p2-score-label">sure</div>
+      </div>
+      <svg viewBox="0 0 34 20" width="34" height="20"><path d="M2 10 H26" stroke="#1a52e0" stroke-width="1.8" fill="none" marker-end="url(#p2-blue)"/></svg>
+      <div class="card"><span class="label" style="font-size:14px;">runs it</span></div>
+      <svg viewBox="0 0 34 20" width="34" height="20"><path d="M2 10 H26" stroke="#1a52e0" stroke-width="1.8" fill="none" marker-end="url(#p2-blue)"/></svg>
+      <div class="card tint-orange" style="text-align:center;"><span class="tag">Mac says</span><span class="sub">&ldquo;done&rdquo;</span></div>
+    </div>
+
+    <div class="p2-track">
+      <div class="card tint-orange"><span class="tag">You say</span><span class="sub">&ldquo;open the thing I was writing&rdquo;</span></div>
+      <svg viewBox="0 0 34 20" width="34" height="20"><path d="M2 10 H26" stroke="#1a52e0" stroke-width="1.8" fill="none" marker-end="url(#p2-blue)"/></svg>
+      <div class="p2-score-cell">
+        <div class="p2-score-row"><div class="p2-score-bar-track"><div class="p2-score-bar-fill" style="width:40%;"></div></div><span class="p2-score-num">0.40 Notes</span></div>
+        <div class="p2-score-row"><div class="p2-score-bar-track"><div class="p2-score-bar-fill" style="width:35%;"></div></div><span class="p2-score-num">0.35 Reminders</span></div>
+        <div class="p2-score-label">unsure</div>
+      </div>
+      <svg viewBox="0 0 34 20" width="34" height="20"><path d="M2 10 H26" stroke="#1a52e0" stroke-width="1.8" fill="none" marker-end="url(#p2-blue)"/></svg>
+      <div class="card"><span class="label" style="font-size:14px;">asks first</span></div>
+      <svg viewBox="0 0 34 20" width="34" height="20"><path d="M2 10 H26" stroke="#1a52e0" stroke-width="1.8" fill="none" marker-end="url(#p2-blue)"/></svg>
+      <div class="card tint-orange"><span class="tag">Mac says</span><span class="sub">&ldquo;Did you want Notes or Reminders?&rdquo;</span></div>
+    </div>
+    <div class="p2-footer">unsure = the top score is below the bar the code set</div>
+
+    <div class="p2-track3-wrap">
+      <div class="p2-track is-orange">
+        <div class="card tint-orange dashed"><span class="tag">You say</span><span class="sub">&ldquo;empty the trash&rdquo;</span></div>
+        <svg viewBox="0 0 34 20" width="34" height="20"><defs><marker id="p2-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#d66b2f"/></marker></defs><path d="M2 10 H26" stroke="#d66b2f" stroke-width="1.7" stroke-dasharray="4 4" fill="none" marker-end="url(#p2-orange)"/></svg>
+        <div class="p2-score-cell">
+          <div class="p2-score-row"><div class="p2-score-bar-track"><div class="p2-score-bar-fill" style="width:90%;background:var(--orange);"></div></div><span class="p2-score-num">0.9</span></div>
+          <div class="p2-score-label is-warn">sure, but marked dangerous</div>
+        </div>
+        <svg viewBox="0 0 34 20" width="34" height="20"><path d="M2 10 H26" stroke="#d66b2f" stroke-width="1.7" stroke-dasharray="4 4" fill="none" marker-end="url(#p2-orange)"/></svg>
+        <div class="card tint-orange dashed"><span class="label" style="font-size:14px;">reads it back and waits</span></div>
+        <svg viewBox="0 0 34 20" width="34" height="20"><path d="M2 10 H26" stroke="#d66b2f" stroke-width="1.7" stroke-dasharray="4 4" fill="none" marker-end="url(#p2-orange)"/></svg>
+        <div class="card tint-orange"><span class="tag">Mac says</span><span class="sub">&ldquo;That will empty the trash. Should I go ahead?&rdquo;</span></div>
+
+        <div></div><div></div><div></div><div></div>
+        <div id="p2-runs-it" class="card" style="margin-top:14px;text-align:center;"><span class="label" style="font-size:13px;">runs it</span></div>
+        <svg viewBox="0 0 34 24" width="34" height="24" style="margin-top:14px;"><path d="M32 12 H8" stroke="#d66b2f" stroke-width="1.7" stroke-dasharray="4 4" fill="none" marker-end="url(#p2-orange)"/></svg>
+        <div id="p2-yes" class="card tint-orange dashed" style="margin-top:14px;text-align:center;"><span class="tag">You</span><span class="sub">&ldquo;yes&rdquo;</span></div>
+      </div>
+    </div>
+    <div class="p2-footer">dangerous = the button touches files, trash, passwords, or the shell</div>
+  </div>
+  <div class="callout">
+    <strong>High: do it. Middle: ask. Dangerous: read it back first.</strong>
+    <p>Three behaviours from one number. No LLM in any of them.</p>
+  </div>
+  <p class="footnote">code: MIN_TOOL_CONFIDENCE 0.45 &middot; tool.risky &rarr; AWAITING_CONFIRM &middot; CONFIRM_THRESHOLD 0.6 (router.py, agent.py). Example utterances are illustrative; scores are illustrative.</p>
+</div>
+
+<!-- ============================================================ P03 ============================================================ -->
+<div id="shot3" class="shot">
+  <div class="shot-head">
+    <span class="shot-index">03</span>
+    <div><h2>The blanks get filled in the same breath</h2><p>&ldquo;turn the volume up&rdquo; carries two questions in one envelope</p></div>
+  </div>
+  <div class="scene">
+    <div class="p3-center">
+      <div class="card tint-orange" style="width:280px;text-align:center;">
+        <span class="tag">You say</span>
+        <span class="sub">&ldquo;turn the volume up&rdquo;</span>
+      </div>
+    </div>
+    <div class="p3-center" style="margin:8px 0;">
+      <svg viewBox="0 0 20 24" width="20" height="24"><defs><marker id="p3-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#1a52e0"/></marker></defs><path d="M10 2 V18" stroke="#1a52e0" stroke-width="1.8" marker-end="url(#p3-blue)"/></svg>
+    </div>
+    <div class="dashed-box">
+      <span class="box-label mono-caption">one envelope to Jev &middot; both questions travel together</span>
+      <div class="p3-envelope-row">
+        <div class="p3-q-card">
+          <span class="p3-q-title">Which button?</span>
+          <div class="p3-opt"><span class="p3-opt-label">Set the volume</span><div class="p3-opt-bar"><div style="width:90%;"></div></div></div>
+          <div class="p3-opt"><span class="p3-opt-label">Open an app</span><div class="p3-opt-bar"><div style="width:18%;"></div></div></div>
+        </div>
+        <div class="p3-q-card">
+          <span class="p3-q-title">Louder or quieter?</span>
+          <div class="p3-opt"><span class="p3-opt-label">louder</span><div class="p3-opt-bar"><div style="width:88%;"></div></div></div>
+          <div class="p3-opt"><span class="p3-opt-label">quieter</span><div class="p3-opt-bar"><div style="width:20%;"></div></div></div>
+          <div class="p3-opt"><span class="p3-opt-label">mute</span><div class="p3-opt-bar"><div style="width:8%;"></div></div></div>
+        </div>
+        <div class="card gray" style="flex:1 1 0;">
+          <span class="label" style="font-size:13px;">Which app?</span>
+          <span class="sub">asked for another button &middot; answer thrown away</span>
+        </div>
+      </div>
+    </div>
+    <div class="p3-center" style="margin:8px 0;">
+      <svg viewBox="0 0 20 24" width="20" height="24"><path d="M10 2 V18" stroke="#1a52e0" stroke-width="1.8" marker-end="url(#p3-blue)"/></svg>
+    </div>
+    <div class="p3-center">
+      <div class="card solid" style="width:320px;text-align:center;">
+        <span class="label">Set the volume &middot; louder</span>
+      </div>
+    </div>
+
+    <div class="dashed-box tint-orange" style="border-color:var(--orange);background:var(--orange-tint);margin-top:26px;">
+      <span class="box-label mono-caption orange">when the blank is free text</span>
+      <div class="mb-row" style="align-items:stretch;">
+        <div class="card tint-orange" style="width:210px;">
+          <span class="tag">You say</span>
+          <span class="sub">&ldquo;open github dot com&rdquo;</span>
+        </div>
+        <svg viewBox="0 0 34 20" width="34" height="20"><defs><marker id="p3-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#d66b2f"/></marker></defs><path d="M2 10 H26" stroke="#d66b2f" stroke-width="1.7" stroke-dasharray="4 4" fill="none" marker-end="url(#p3-orange)"/></svg>
+        <div class="card mb-grow">
+          <span class="label" style="font-size:13px;">Jev points at the words that are the answer</span>
+          <span class="sub">open <span class="p3-highlight">github dot com</span></span>
+        </div>
+        <svg viewBox="0 0 34 20" width="34" height="20"><path d="M2 10 H26" stroke="#d66b2f" stroke-width="1.7" stroke-dasharray="4 4" fill="none" marker-end="url(#p3-orange)"/></svg>
+        <div class="card solid" style="width:180px;text-align:center;">
+          <span class="label">github.com</span>
+          <span class="sub">the code cleans &ldquo;dot&rdquo; into &ldquo;.&rdquo;</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="callout">
+    <strong>Every blank is asked at once. Jev points, it never types.</strong>
+    <p>One round trip for the button and its settings; a second only when a blank is free text.</p>
+  </div>
+  <p class="footnote">code: route() adds an arg::&lt;tool&gt;::&lt;arg&gt; Choice per enum arg to the same system_one call; _fill_text_args selects a span (router.py).</p>
+</div>
+
+<!-- ============================================================ P04 ============================================================ -->
+<div id="shot4" class="shot">
+  <div class="shot-head">
+    <span class="shot-index">04</span>
+    <div><h2>When nothing on the menu fits, it writes a new button</h2><p>&ldquo;make my screen grayscale&rdquo; &mdash; no button for that. Yet.</p></div>
+  </div>
+  <div class="scene">
+    <div class="p4-wrap">
+      <div class="row" style="justify-content:center;">
+        <div class="card tint-orange dashed" style="width:360px;text-align:center;">
+          <span class="label">A regular language model writes a script</span>
+        </div>
+      </div>
+      <div class="row" style="justify-content:center;margin:2px 0;">
+        <svg viewBox="0 0 20 26" width="20" height="26"><defs><marker id="p4-blue-top" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#1a52e0"/></marker></defs><path d="M10 2 V18" stroke="#1a52e0" stroke-width="1.8" marker-end="url(#p4-blue-top)"/></svg>
+      </div>
+      <div class="p4-gauntlet">
+        <div class="p4-gates">
+          <span class="box-label mono-caption">six checks</span>
+          <div class="p4-gate-row">
+            <div class="card"><span class="label">Can I even read it?</span></div>
+            <span class="p4-exit">&#10005; garbled &rarr; try again</span>
+          </div>
+          <div class="p4-gate-row">
+            <div class="card"><span class="label">Is it possible on a Mac?</span></div>
+            <span class="p4-exit">&#10005; &ldquo;I can&rsquo;t do that with AppleScript.&rdquo;</span>
+          </div>
+          <div class="p4-gate-row">
+            <div class="card"><span class="label">Is it allowed?</span></div>
+            <span class="p4-exit">&#10005; &ldquo;That would change how this Mac is set up.&rdquo;</span>
+          </div>
+          <div class="p4-gate-row">
+            <div class="card"><span class="label">Does it compile?</span></div>
+            <span class="p4-exit">&#10005; compiler error &rarr; try again</span>
+          </div>
+          <div class="p4-gate-row">
+            <div class="card"><span class="label">Does it actually do anything?</span></div>
+            <span class="p4-exit">&#10005; &ldquo;compiles but has no effect&rdquo;</span>
+          </div>
+          <div class="p4-gate-row">
+            <div class="card"><span class="label">Would a judge say it does the job?</span><span class="sub">Jev answers yes/no with a number</span></div>
+            <span class="p4-exit">&nbsp;</span>
+          </div>
+        </div>
+        <div class="p4-side">
+          <div class="card solid"><span class="label">saved as a new button</span><span class="sub">next time it&rsquo;s on the menu, 150 ms</span></div>
+          <svg viewBox="0 0 20 22" width="20" height="22" style="align-self:center;"><defs><marker id="p4-blue-d" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#1a52e0"/></marker></defs><path d="M10 2 V16" stroke="#1a52e0" stroke-width="1.6" marker-end="url(#p4-blue-d)"/></svg>
+          <div class="card tint-orange dashed"><span class="sub">&ldquo;I wrote a new action to make the screen grayscale. Should I run it?&rdquo;</span><span class="sub" style="margin-top:4px;">waits for your yes</span></div>
+        </div>
+      </div>
+      <svg class="p4-repair-svg" viewBox="0 0 960 606" preserveAspectRatio="none">
+        <defs><marker id="p4-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#d66b2f"/></marker></defs>
+        <path d="M694 424 C 726 424, 726 40, 650 42" stroke="#d66b2f" stroke-width="1.6" stroke-dasharray="5 5" fill="none" marker-end="url(#p4-orange)"/>
+      </svg>
+      <div class="p4-repair-label">try again &middot; up to 3 drafts</div>
+    </div>
+  </div>
+  <div class="callout">
+    <strong>The slow model only ever runs once per new idea.</strong>
+    <p>After the first time, the same request is just another button.</p>
+  </div>
+  <p class="footnote">code: ToolGenerator.generate(), MAX_ATTEMPTS 3, VERIFY_THRESHOLD 0.4, tools/learned.json.</p>
+</div>
+
+<!-- ============================================================ P05 ============================================================ -->
+<div id="shot5" class="shot">
+  <div class="shot-head">
+    <span class="shot-index">05</span>
+    <div><h2>In the browser it&rsquo;s the same trick, one step at a time</h2><p>&ldquo;add the best vacuum cleaner to my Amazon cart&rdquo; &mdash; 4 steps, 11 s on the author&rsquo;s machine</p></div>
+  </div>
+  <div class="scene">
+    <div class="row" style="justify-content:flex-start;margin-bottom:14px;">
+      <div class="card tint-orange" style="width:360px;">
+        <span class="tag">You say</span>
+        <span class="sub">&ldquo;add the best vacuum cleaner to my Amazon cart&rdquo;</span>
+      </div>
+    </div>
+    <div class="p5-side-row">
+      <svg class="p5-connectors" viewBox="0 0 960 120" preserveAspectRatio="none">
+        <defs>
+          <marker id="p5-orange-far" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#d66b2f"/></marker>
+          <marker id="p5-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#1a52e0"/></marker>
+        </defs>
+        <path d="M700 81 C 560 20, 420 20, 312 76" stroke="#d66b2f" stroke-width="1.6" stroke-dasharray="5 5" fill="none" marker-end="url(#p5-orange-far)"/>
+        <path d="M260 110 H 274" stroke="#1a52e0" stroke-width="1.8" fill="none" marker-end="url(#p5-blue)"/>
+      </svg>
+      <div class="p5-panel">
+        <div class="card gray">
+          <span class="label" style="font-size:13.5px;">Anything missing?</span>
+          <span class="sub">dates? destination? product? &mdash; if yes, it asks before starting</span>
+        </div>
+      </div>
+      <div class="mb-grow">
+        <div class="p5-cycle-wrap">
+          <svg class="p5-return-arc" viewBox="0 0 100 34" preserveAspectRatio="none"><defs><marker id="p5-blue-ret" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#1a52e0"/></marker></defs><path d="M94 30 C 94 4, 6 4, 6 30" stroke="#1a52e0" stroke-width="1.7" fill="none" marker-end="url(#p5-blue-ret)"/></svg>
+          <div class="p5-cycle">
+            <div class="p5-node"><div class="dot">look at the page</div></div>
+            <svg viewBox="0 0 40 20" width="40" height="20"><path d="M2 10 H32" stroke="#1a52e0" stroke-width="1.8" marker-end="url(#p5-blue)"/></svg>
+            <div class="p5-node"><div class="dot">number every clickable thing</div></div>
+            <svg viewBox="0 0 40 20" width="40" height="20"><path d="M2 10 H32" stroke="#1a52e0" stroke-width="1.8" marker-end="url(#p5-blue)"/></svg>
+            <div class="p5-node"><div class="dot">Jev picks a number</div></div>
+            <svg viewBox="0 0 40 20" width="40" height="20"><path d="M2 10 H32" stroke="#1a52e0" stroke-width="1.8" marker-end="url(#p5-blue)"/></svg>
+            <div class="p5-node"><div class="dot">click it</div></div>
+          </div>
+        </div>
+        <div class="p5-steps">one Jev question per step &middot; 1 2 3 4 &hellip;</div>
+        <div class="p5-budget-label">90-second clock</div>
+        <div class="p5-budget-wrap">
+          <svg viewBox="0 0 700 20" width="100%" height="20"><rect x="0" y="4" width="660" height="10" fill="#1a52e0"/><rect x="660" y="4" width="40" height="10" fill="#e6e6e6"/><text x="685" y="14" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="13" fill="#b33">&times;</text></svg>
+        </div>
+        <div class="p5-budget-note">&ldquo;I ran out of time after N steps.&rdquo;</div>
+        <div class="row" style="justify-content:space-between;margin:6px 0 0;">
+          <svg viewBox="0 0 20 22" width="20" height="22"><defs><marker id="p5-blue-down" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#1a52e0"/></marker></defs><path d="M10 2 V16" stroke="#1a52e0" stroke-width="1.6" marker-end="url(#p5-blue-down)"/></svg>
+          <svg viewBox="0 0 20 22" width="20" height="22"><path d="M10 2 V16" stroke="#1a52e0" stroke-width="1.6" marker-end="url(#p5-blue-down)"/></svg>
+        </div>
+        <div class="p5-results">
+          <div class="card solid mb-grow"><span class="sub">&ldquo;Done in 4 steps.&rdquo;</span></div>
+          <div class="card gray mb-grow"><span class="sub">&ldquo;I got stuck after N steps. Take a look.&rdquo;</span></div>
+        </div>
+      </div>
+      <div class="p5-panel">
+        <div class="dashed-box" style="padding:28px 14px 14px;">
+          <span class="box-label mono-caption">follow-up</span>
+          <span class="sub">&ldquo;the return date should be November 4th&rdquo;</span>
+          <span class="sub" style="margin-top:6px;">same tab, same task &mdash; Jev says &ldquo;yes, this is a follow-up&rdquo;</span>
+        </div>
+        <div class="card" style="margin-top:10px;"><span class="sub">runs in your Chrome, your logins &middot; profile pinned by email</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="callout">
+    <strong>No screenshots. Jev only ever picks a number off a list the code made.</strong>
+    <p>The model never writes a selector or code; it can only choose something the code already saw.</p>
+  </div>
+  <p class="footnote">code: browser_task.run_task_sync &rarr; jev_ultrafast.Agent(url, goal), WALL_CLOCK_S 90, browser_followup Noul &ge; 0.5, BROWSER_MEMORY_S 900. Latency from the README, not re-measured. Step set (click, type, select, scroll, wait, done) lives upstream in jev-ultrafast.</p>
+</div>
+
+<!-- ============================================================ P06 ============================================================ -->
+<div id="shot6" class="shot">
+  <div class="shot-head">
+    <span class="shot-index">06</span>
+    <div><h2>The bouncer checks three times</h2><p>one blocklist, read at the door, at the workshop, and at the stage</p></div>
+  </div>
+  <div class="scene">
+    <div class="p6-top-row">
+      <div class="card tint-orange dashed" style="width:420px;">
+        <span class="sub">bouncer off &rarr; the Mac says so out loud: &ldquo;Warning: the safety policy is off.&rdquo;</span>
+      </div>
+    </div>
+    <div class="p6-doors-row">
+      <div class="card p6-door">
+        <span class="tag">At the door</span>
+        <span class="label" style="font-size:13.5px;">when the buttons load</span>
+        <span class="sub">a button that breaks a rule never makes the menu</span>
+        <span class="p6-stamp">same bouncer</span>
+      </div>
+      <svg class="p6-door-arrow" viewBox="0 0 40 20" width="40" height="20"><defs><marker id="p6-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#1a52e0"/></marker></defs><path d="M2 10 H32" stroke="#1a52e0" stroke-width="1.8" marker-end="url(#p6-blue)"/></svg>
+      <div class="card p6-door">
+        <span class="tag">At the workshop</span>
+        <span class="label" style="font-size:13.5px;">when a new button is written</span>
+        <span class="sub">thrown away, not saved</span>
+        <span class="p6-stamp">same bouncer</span>
+      </div>
+      <svg class="p6-door-arrow" viewBox="0 0 40 20" width="40" height="20"><path d="M2 10 H32" stroke="#1a52e0" stroke-width="1.8" marker-end="url(#p6-blue)"/></svg>
+      <div class="card p6-door">
+        <span class="tag">At the stage</span>
+        <span class="label" style="font-size:13.5px;">right before it runs</span>
+        <span class="sub">with your spoken words filled in</span>
+        <span class="p6-stamp">same bouncer</span>
+      </div>
+    </div>
+    <div class="dashed-box" style="margin-top:20px;padding:16px;">
+      <span class="mono-caption">the list</span>
+      <div class="sub" style="margin-top:8px;">apps: System Settings, Terminal, Keychain, 1Password</div>
+      <div class="sub" style="margin-top:4px;">commands: sudo, rm, mv, brew, git, ssh, curl</div>
+      <div class="sub" style="margin-top:4px;">places: ~/Library, /System, .ssh, .zshrc</div>
+      <div class="sub" style="margin-top:4px;">moves: admin rights, emptying the trash, deleting, moving files</div>
+    </div>
+    <div class="p6-examples-row">
+      <div class="p6-example">
+        <div class="card" style="width:100%;text-align:center;"><span class="sub">&ldquo;turn the volume up&rdquo;</span></div>
+        <svg viewBox="0 0 20 20" width="20" height="20"><path d="M10 2 V14" stroke="#1a52e0" stroke-width="1.8" marker-end="url(#p6-blue)"/></svg>
+        <div class="p6-example-outcome" style="color:var(--blue);">allowed</div>
+      </div>
+      <div class="p6-example">
+        <div class="card tint-orange dashed" style="width:100%;text-align:center;"><span class="sub">&ldquo;empty the trash&rdquo;</span></div>
+        <svg viewBox="0 0 20 20" width="20" height="20"><defs><marker id="p6-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#d66b2f"/></marker></defs><path d="M10 2 V14" stroke="#d66b2f" stroke-width="1.7" stroke-dasharray="4 4" marker-end="url(#p6-orange)"/></svg>
+        <div class="p6-example-outcome" style="color:var(--orange);">allowed, but dangerous &rarr; reads back, waits for yes</div>
+      </div>
+      <div class="p6-example">
+        <div class="card gray" style="width:100%;text-align:center;"><span class="badge-x">&times;</span><span class="sub">&ldquo;delete my ssh keys&rdquo;</span></div>
+        <svg viewBox="0 0 20 20" width="20" height="20"><defs><marker id="p6-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#999"/></marker></defs><path d="M10 2 V14" stroke="#999" stroke-width="1.6" stroke-dasharray="3 3" marker-end="url(#p6-gray)"/></svg>
+        <div class="p6-example-outcome" style="color:#767676;">never on the menu</div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:18px;">
+      <span class="label" style="font-size:13px;">In the browser</span>
+      <span class="sub">card number, password, 2FA, SSN, delete account &rarr; refused</span>
+      <span class="sub" style="margin-top:4px;">cart, order, subscribe, book &rarr; asks first</span>
+    </div>
+  </div>
+  <div class="callout">
+    <strong>Blocked at the door means Jev never even sees the option.</strong>
+    <p>The same check runs again at the stage, because your spoken words can change what a button does.</p>
+  </div>
+  <p class="footnote">code: policy.check() called from registry (Tool.blocked_by), generator, and _execute; BLOCKED_APPS / _SHELL_TOKENS / _PATHS / _APPLESCRIPT; check_browser_goal, browser_goal_needs_confirm; &ldquo;risky&rdquo; is a separate regex in registry.py.</p>
+</div>
+
+<!-- ============================================================ P07 ============================================================ -->
+<div id="shot7" class="shot">
+  <div class="shot-head">
+    <span class="shot-index">07</span>
+    <div><h2>Every question Jev gets is one of two kinds</h2><p>pick one from a list, or yes/no with a number &mdash; that&rsquo;s the whole toolkit</p></div>
+  </div>
+  <div class="scene">
+    <div class="p7-grid">
+      <div>
+        <div class="p7-col-head"><span class="mono-caption">pick one from a list</span></div>
+        <div class="mb-col" style="gap:9px;">
+          <div class="card tint-blue p7-card"><span class="sub">Which button?</span></div>
+          <div class="card tint-blue p7-card"><span class="sub">Louder or quieter? (any setting)</span></div>
+          <div class="card tint-blue p7-card"><span class="sub">Which words are the answer?</span></div>
+          <div class="card tint-blue p7-card"><span class="sub">What&rsquo;s still missing for this form?</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="p7-col-head"><span class="mono-caption orange">yes or no, how sure?</span></div>
+        <div class="mb-col" style="gap:9px;">
+          <div class="card tint-orange p7-card"><span class="sub">Is this a follow-up to the web task?</span></div>
+          <div class="card tint-orange p7-card"><span class="sub">Does the request have everything the site needs?</span></div>
+          <div class="card tint-orange p7-card"><span class="sub">Is this something we refuse?</span></div>
+          <div class="card tint-orange p7-card"><span class="sub">Did they say yes? Did they say no?</span></div>
+          <div class="card tint-orange p7-card"><span class="sub">Did the new script really do the job?</span></div>
+          <div class="card tint-orange p7-card"><span class="sub">Is this button a duplicate?</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-tile"><b>4</b><span>pick-one kinds</span></div>
+      <div class="stat-tile"><b>6</b><span>yes/no kinds</span></div>
+      <div class="stat-tile"><b>1</b><span>envelope for the button and all its settings</span></div>
+    </div>
+  </div>
+  <div class="callout">
+    <strong>Judgments, not chat.</strong>
+    <p>Every one of these is a few hundred milliseconds, and none of them writes a sentence.</p>
+  </div>
+  <p class="footnote">code: Choice and Noul via AsyncTypeSafeClient.system_one (router.py:18, 176); intent, arg::*, span, web_goal_missing; browser_followup, web_goal_complete/forbidden, is_confirmation/is_denial, works, duplicate.</p>
+</div>
+
+<!-- ============================================================ P08 ============================================================ -->
+<div id="shot8" class="shot">
+  <div class="shot-head">
+    <span class="shot-index">08</span>
+    <div><h2>Why it&rsquo;s fast: choose, don&rsquo;t generate</h2><p>the usual computer-use loop beside this one</p></div>
+  </div>
+  <div class="scene">
+    <div class="p8-split">
+      <div class="p8-col">
+        <div class="p8-col-head"><span class="mono-caption gray">the usual loop</span></div>
+        <div class="card"><span class="label">take a screenshot</span></div>
+        <svg viewBox="0 0 20 22" width="20" height="22" style="align-self:center;"><defs><marker id="p8-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#1a52e0"/></marker></defs><path d="M10 2 V16" stroke="#1a52e0" stroke-width="1.6" marker-end="url(#p8-blue)"/></svg>
+        <div class="card"><span class="label">a big model thinks</span></div>
+        <svg viewBox="0 0 20 22" width="20" height="22" style="align-self:center;"><path d="M10 2 V16" stroke="#1a52e0" stroke-width="1.6" marker-end="url(#p8-blue)"/></svg>
+        <div class="card"><span class="label">it writes out an action</span></div>
+        <svg viewBox="0 0 20 22" width="20" height="22" style="align-self:center;"><path d="M10 2 V16" stroke="#1a52e0" stroke-width="1.6" marker-end="url(#p8-blue)"/></svg>
+        <div class="card gray" style="text-align:center;"><span class="badge-x">&times;</span><span class="sub">the code has to parse that text</span></div>
+        <div class="p8-footer">seconds per turn</div>
+        <div class="p8-note">and it can invent a button that isn&rsquo;t there</div>
+      </div>
+      <div class="p8-divider"></div>
+      <div class="p8-col">
+        <div class="p8-col-head"><span class="mono-caption">this loop</span></div>
+        <div class="dashed-box p8-loop-box">
+          <span class="box-label mono-caption">the code owns the flow</span>
+          <div class="mb-col" style="gap:9px;">
+            <div class="card" style="width:calc(100% - 70px);"><span class="label">your sentence</span></div>
+            <svg viewBox="0 0 20 18" width="20" height="18" style="align-self:center;"><defs><marker id="p8-blue2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#1a52e0"/></marker></defs><path d="M10 2 V13" stroke="#1a52e0" stroke-width="1.6" marker-end="url(#p8-blue2)"/></svg>
+            <div class="card" style="width:calc(100% - 70px);"><span class="label">Jev: which button?</span></div>
+            <svg viewBox="0 0 20 18" width="20" height="18" style="align-self:center;"><path d="M10 2 V13" stroke="#1a52e0" stroke-width="1.6" marker-end="url(#p8-blue2)"/></svg>
+            <div class="card" style="width:calc(100% - 70px);"><span class="label">a score per button</span></div>
+            <svg viewBox="0 0 20 18" width="20" height="18" style="align-self:center;"><path d="M10 2 V13" stroke="#1a52e0" stroke-width="1.6" marker-end="url(#p8-blue2)"/></svg>
+            <div class="card solid" style="width:calc(100% - 70px);"><span class="label">press the winner</span></div>
+          </div>
+          <svg class="p8-return-svg" viewBox="0 0 60 230" preserveAspectRatio="none"><defs><marker id="p8-orange-ret" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#d66b2f"/></marker></defs><path d="M8 205 C 50 205, 50 22, 8 22" stroke="#d66b2f" stroke-width="1.7" stroke-dasharray="5 5" fill="none" marker-end="url(#p8-orange-ret)"/></svg>
+        </div>
+        <div class="p8-note" style="margin-top:8px;">orange return: unsure &rarr; asks you</div>
+        <div class="p8-footer">300 ms, and the score is a number the code can act on</div>
+      </div>
+    </div>
+    <div class="stat-row" style="grid-template-columns:repeat(4,1fr);">
+      <div class="stat-tile"><b>~300ms</b><span>route</span></div>
+      <div class="stat-tile"><b>1.6s</b><span>&ldquo;play the trailer&rdquo; &rarr; video</span></div>
+      <div class="stat-tile"><b>11s</b><span>vacuum to cart &middot; 4 steps</span></div>
+      <div class="stat-tile"><b>3.7s</b><span>follow-up &ldquo;return date Nov 4th&rdquo; &middot; 6 steps</span></div>
+    </div>
+  </div>
+  <div class="callout">
+    <strong>Nothing is generated except the text to type.</strong>
+    <p>The model&rsquo;s output never becomes a selector or code.</p>
+  </div>
+  <p class="footnote">latencies are the author&rsquo;s, measured on their machine (README); not re-measured here.</p>
+</div>
+
+</body>
+</html>

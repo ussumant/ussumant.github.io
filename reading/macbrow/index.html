@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Talk to your Mac in 300 ms: the code owns the menu, Jev picks from it — Sumant</title>
+  <meta name="description" content="Read the code of macbrow, a voice assistant for the Mac that never hands your sentence to a big model. Your words go to Jev as a multiple-choice question over a menu of about 30 buttons; the code presses the winner. Eight diagrams, plain words first, code names in the footnotes.">
+  <link rel="canonical" href="https://ussumant.github.io/reading/macbrow/">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A5%8A%3C/text%3E%3C/svg%3E">
+  <link rel="alternate" type="application/atom+xml" title="Sumant — recent work" href="/feed.xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    /* .reading-text-section p has margin:0 in styles.css, which suits the
+       one-paragraph-per-section pattern elsewhere on /reading/. This page
+       stacks two paragraphs per section, the same treatment as reading/jev/. */
+    .reading-text-section p + p { margin-top: 16px; }
+
+    /* the explainer diagrams are 1300px scenes; give them the body column,
+       same as reading/jev/index.html. */
+    .reading-body .detail-media.diagram { max-width: 1040px; margin: 0 0 46px; }
+    .reading-body .detail-media.diagram img { border-radius: 3px; box-shadow: 0 2px 10px rgba(0, 0, 0, .08); }
+
+    /* This post reuses reading-tldr and reading-story-section blocks from the
+       paper-note template (reading/generative-agents/) but without their
+       normal second column — reading-use-cases and the Smallville map have no
+       equivalent here — so both collapse to one column on this page only. */
+    .reading-orientation { grid-template-columns: minmax(0, 1fr); }
+    .reading-tldr { padding: 25px 0 28px; }
+    .reading-story-grid { grid-template-columns: minmax(0, 1fr); }
+
+    /* generative-agents' build-section heading comes from reading-subhead,
+       which expects a numbered-index sibling this post doesn't use. Style the
+       plain h2/p here instead, at the same size reading-subhead uses. */
+    .reading-build-section > h2 { margin: 0 0 11px; color: var(--ink); font-family: var(--pixel); font-size: 22px; font-weight: 400; line-height: 1.35; }
+    .reading-build-section > p { max-width: 820px; margin: 0 0 25px; color: #3f3f3f; font-size: 14px; line-height: 1.7; }
+
+    /* attribution line under the title, crediting the repo this post reads. */
+    .reading-attribution { max-width: 720px; margin: 0 0 14px; color: var(--muted); font-family: var(--mono); font-size: 11px; line-height: 1.65; }
+    .reading-attribution a { color: var(--blue); }
+
+    /* Pixelify Sans ships no fi/fl ligature glyphs; the browser substitutes
+       another face for the pair and a word can garble (reading/jev/index.html
+       hit this on "finish"). This page's headings use "filled" and "fits",
+       so the same fix is scoped here, plus the other Pixelify headings. */
+    .reading-entry-header h1,
+    .reading-story-hook,
+    .reading-tldr h2,
+    .reading-story-head h2,
+    .reading-build-section > h2,
+    .reading-build-list h3,
+    .reading-text-section h2 { font-variant-ligatures: none; font-feature-settings: "liga" 0, "clig" 0, "dlig" 0; }
+
+    @media (max-width: 720px) {
+      .reading-body .detail-media.diagram { max-width: 100%; }
+    }
+  </style>
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://ussumant.github.io/reading/macbrow/">
+  <meta property="og:title" content="Talk to your Mac in 300 ms: the code owns the menu, Jev picks from it — Sumant">
+  <meta property="og:description" content="Read the code of macbrow, a voice assistant for the Mac that never hands your sentence to a big model. Your words go to Jev as a multiple-choice question over a menu of about 30 buttons; the code presses the winner. Eight diagrams, plain words first, code names in the footnotes.">
+  <meta property="og:image" content="https://ussumant.github.io/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Talk to your Mac in 300 ms: the code owns the menu, Jev picks from it — Sumant">
+  <meta name="twitter:description" content="Read the code of macbrow, a voice assistant for the Mac that never hands your sentence to a big model. Your words go to Jev as a multiple-choice question over a menu of about 30 buttons; the code presses the winner. Eight diagrams, plain words first, code names in the footnotes.">
+  <meta name="twitter:image" content="https://ussumant.github.io/og.png">
+</head><body class="notes-page reading-page reading-detail-page"><a class="skip-link" href="#main">Skip to content</a><header class="plain-header"><p class="wordmark"><a href="/">sumant</a></p><a href="/">← home</a></header><main id="main" tabindex="-1"><article class="reading-entry"><header class="detail-header reading-entry-header">
+  <a class="breadcrumb" href="/reading/">← reading / 05</a>
+  <p class="detail-meta">notes · sep 2026 · timpratim/macbrow</p>
+  <h1>Talk to your Mac in 300 ms</h1>
+  <p class="reading-attribution">A read of <a href="https://github.com/timpratim/macbrow" rel="noopener">timpratim/macbrow</a> (github.com/timpratim/macbrow), an experimental prototype by Pratim Bhosale. Not my project; I read the code to learn how I’d build with Jev. Latencies are the author’s numbers from the README.</p>
+  <p class="reading-paper-title">the code owns the menu, Jev picks from it</p>
+  <p class="reading-story-hook">Nothing is generated except the text to type.</p>
+  <p class="detail-lead">Read the code of macbrow, a voice assistant for the Mac that never hands your sentence to a big model. Your words go to Jev as a multiple-choice question over a menu of about 30 buttons; the code presses the winner. Eight diagrams, plain words first, code names in the footnotes.</p>
+</header>
+<dl class="meta-list reading-meta-list">
+  <div><dt>written</dt><dd>22 September 2026</dd></div>
+  <div><dt>about</dt><dd>voice agents · Mac automation · tool routing</dd></div>
+  <div><dt>measured</dt><dd>by the author, on their machine: route ~300 ms · vacuum to cart 11 s · follow-up 3.7 s</dd></div>
+</dl>
+<div class="reading-body">
+
+<section class="reading-orientation" aria-labelledby="reading-orientation-title">
+  <div class="reading-tldr"><p class="reading-label">TL;DR</p><h2 id="reading-orientation-title">Your Mac has a menu. Jev only ever picks from it.</h2><p>Say “turn the volume up” and the program does not send that sentence to a chat model and wait. It asks Jev one multiple-choice question over the buttons it already knows how to press. Jev scores every button in about 300 ms. The code presses the winner. Everything else in the repo is plumbing around that one move.</p></div>
+</section>
+
+<section class="reading-story-section" aria-labelledby="reading-story-title">
+  <div class="reading-story-head"><p class="reading-label">START WITH THE FEELING</p><h2 id="reading-story-title">Follow one sentence.</h2><p>Six beats, from your mouth to the speaker. The times are a sketch; the author’s measured numbers are in 08.</p></div>
+  <div class="reading-story-grid">
+    <ol class="reading-scene-list"><li class="reading-scene"><div class="reading-scene-time">0.0 s</div><div class="reading-scene-marker" aria-hidden="true"><span></span></div><div class="reading-scene-copy"><h3>You speak</h3><p>“turn the volume up”</p><small>the mic</small></div></li><li class="reading-scene"><div class="reading-scene-time">0.1 s</div><div class="reading-scene-marker" aria-hidden="true"><span></span></div><div class="reading-scene-copy"><h3>The menu is built</h3><p>About 32 buttons the code knows, minus the ones for apps that aren’t open.</p><small>the code, not a model</small></div></li><li class="reading-scene"><div class="reading-scene-time">0.4 s</div><div class="reading-scene-marker" aria-hidden="true"><span></span></div><div class="reading-scene-copy"><h3>Jev scores every button at once</h3><p>“Set the volume” comes out on top. “Louder or quieter?” was asked in the same envelope.</p><small>one question</small></div></li><li class="reading-scene"><div class="reading-scene-time">0.4 s</div><div class="reading-scene-marker" aria-hidden="true"><span></span></div><div class="reading-scene-copy"><h3>The code decides what the score means</h3><p>High enough, and the button isn’t dangerous. So: run.</p><small>a number, not a sentence</small></div></li><li class="reading-scene"><div class="reading-scene-time">0.5 s</div><div class="reading-scene-marker" aria-hidden="true"><span></span></div><div class="reading-scene-copy"><h3>The button is pressed</h3><p>Three lines of AppleScript.</p><small>the Mac</small></div></li><li class="reading-scene"><div class="reading-scene-time">0.6 s</div><div class="reading-scene-marker" aria-hidden="true"><span></span></div><div class="reading-scene-copy"><h3>The Mac speaks</h3><p>“done”</p><small>the speaker</small></div></li></ol>
+  </div>
+</section>
+
+<section class="reading-text-section">
+<h2>You talk. The code picks a button. Jev scores the buttons.</h2>
+<p>Start with the picture. On the left, what you said. In the middle, a menu of buttons the code already knows: set the volume, open an app, make a note, open a website. Jev gives every button a score at the same time. The winner is pressed. A chat model is never called.</p>
+<p>The word for that menu in the code is a tool registry, and each button is a tool: a name, a one-line description, the blanks it needs, and a tiny script. Thirty-two of them ship in a JSON file. Jev is asked one question over that list. In the SDK that question is called a Choice.</p>
+</section>
+
+<figure class="detail-media diagram">
+  <img src="img/P01-you-talk-code-picks-a-button.png" alt="Diagram: an orange card reading YOU SAY, &quot;turn the volume up&quot;, feeds a solid blue circle labelled Jev, captioned one question, about 300 ms. Jev's arrows run to a dashed blue container labelled THE MENU, about 32 buttons the code already knows, holding six white cards each with a thin blue score bar: Set the volume, solid blue as the winner with its bar nearly full; shorter-barred cards for Open an app, Make a note and Open a website; and two grayed cards with near-empty bars for Just chat and Write a new button; captioned Jev gives every button a score, all at once. A dashed gray card marked with a red X reads a ChatGPT-style model is never called for this. The winner feeds a solid blue card reading THE CODE PRESSES IT, volume up, then an orange card reading MAC SAYS, &quot;done&quot;." loading="eager">
+  <figcaption>What happens in the 300 ms after you say “turn the volume up.”</figcaption>
+</figure>
+
+<section class="reading-text-section">
+<h2>Sure, unsure, dangerous.</h2>
+<p>The score is a number, and that is the point. Sure means the code just runs the button. Unsure means the top two are close, so the Mac asks “Did you want Notes or Reminders?” Dangerous means the button touches files, the trash, passwords, or the shell; the Mac reads the action back and waits for you to say yes.</p>
+<p>The code calls the unsure line a confidence threshold and the dangerous flag risky. There are only two states in the whole program: waiting for a command, and waiting for your yes.</p>
+</section>
+
+<figure class="detail-media diagram">
+  <img src="img/P02-sure-unsure-dangerous.png" alt="Diagram: three rows, each running YOU SAY through a score to what the code does to what the Mac says. Row one, solid blue: &quot;turn the volume up&quot; with a bar at 0.9 labelled sure, feeding a card reading runs it, then an orange card reading MAC SAYS &quot;done&quot;. Row two: &quot;open the thing I was writing&quot; with two close bars, 0.40 Notes and 0.35 Reminders, labelled unsure, feeding a card reading asks first, then MAC SAYS &quot;Did you want Notes or Reminders?&quot;, captioned unsure equals the top score is below the bar the code set. Row three, dashed orange: &quot;empty the trash&quot; with a bar at 0.9 labelled sure, but marked dangerous, feeding a card reading reads it back and waits, then MAC SAYS &quot;That will empty the trash. Should I go ahead?&quot;, with a dashed orange YOU &quot;yes&quot; card feeding back into a runs it card, captioned dangerous equals the button touches files, trash, passwords, or the shell." loading="lazy">
+  <figcaption>Three behaviours from one number. No LLM in any of them.</figcaption>
+</figure>
+
+<section class="reading-text-section">
+<h2>The blanks get filled in the same breath.</h2>
+<p>“Turn the volume up” carries two questions: which button, and louder or quieter. Both go to Jev in one envelope. Jev answers both. The code reads only the winner’s settings and throws the rest away. When a blank is free text, like “open github dot com”, Jev does not type the answer. It points at which words of your sentence are the answer, and the code cleans “dot” into a period.</p>
+<p>The code calls these speculative arguments: every setting of every candidate button is asked up front, so there is no second round trip. The free-text trick is span selection.</p>
+</section>
+
+<figure class="detail-media diagram">
+  <img src="img/P03-blanks-same-breath.png" alt="Diagram: an orange card reading YOU SAY, &quot;turn the volume up&quot;, feeds a dashed blue envelope labelled ONE ENVELOPE TO JEV, both questions travel together, holding three cards: Which button? with bars under Set the volume (long, winning) and Open an app (short); Louder or quieter? with bars under louder (long, winning), quieter and mute (short); and a gray card, Which app?, captioned asked for another button, answer thrown away. An arrow leads to a solid blue card reading Set the volume · louder. Below, a dashed orange panel labelled WHEN THE BLANK IS FREE TEXT shows a YOU SAY card &quot;open github dot com&quot; pointing to a card reading Jev points at the words that are the answer, with github dot com underlined in the sentence, pointing to a blue card reading github.com, the code cleans &quot;dot&quot; into &quot;.&quot;." loading="lazy">
+  <figcaption>Every blank is asked at once. Jev points, it never types.</figcaption>
+</figure>
+
+<section class="reading-text-section">
+<h2>When nothing on the menu fits, it writes a new button.</h2>
+<p>“Make my screen grayscale.” No button for that. Now, and only now, a normal language model is asked to write a small script. The script has to pass six checks: can it be read, is it possible on a Mac, is it allowed, does it compile, does it actually do anything, and would a judge say it does the job. That judge is Jev again, answering yes or no with a number. If it passes, it is saved as a new button and the Mac asks “I wrote a new action to make the screen grayscale. Should I run it?” Next time, the same request is just another button on the menu.</p>
+<p>The slow model runs once per new idea. Up to three drafts, then it gives up and says so.</p>
+</section>
+
+<figure class="detail-media diagram">
+  <img src="img/P04-writes-a-new-button.png" alt="Diagram: a dashed orange card at top reads a regular language model writes a script, feeding a dashed blue column labelled SIX CHECKS holding six white cards each with a gray exit line: Can I even read it? exits garbled, try again; Is it possible on a Mac? exits &quot;I can't do that with AppleScript&quot;; Is it allowed? exits &quot;That would change how this Mac is set up&quot;; Does it compile? exits compiler error, try again; Does it actually do anything? exits &quot;compiles but has no effect&quot;; and Would a judge say it does the job?, sub Jev answers yes/no with a number. Passing checks lead to a solid blue card reading saved as a new button, next time it's on the menu, 150 ms, then a dashed orange card reading &quot;I wrote a new action to make the screen grayscale. Should I run it?&quot;, waits for your yes. A dashed orange loop labelled try again, up to 3 drafts runs from the checks back to the top." loading="lazy">
+  <figcaption>The slow model only ever runs once per new idea.</figcaption>
+</figure>
+
+<section class="reading-text-section">
+<h2>In the browser it’s the same trick, one step at a time.</h2>
+<p>“Add the best vacuum cleaner to my Amazon cart.” The code opens your own Chrome, with your logins. Each step, it turns the page into a numbered list of clickable things, asks Jev which number, clicks it, and looks again. No screenshots. A 90-second clock stops runaway tasks. When it finishes it says “Done in 4 steps.” Say “the return date should be November 4th” afterward and Jev is asked one more yes/no question: is this a follow-up? If yes, same tab, same task.</p>
+<p>The browser part is a separate library, jev-ultrafast, driven from this code. The author measured 11 seconds for the vacuum and 3.7 seconds for the date change.</p>
+</section>
+
+<figure class="detail-media diagram">
+  <img src="img/P05-browser-same-trick.png" alt="Diagram: an orange card reads YOU SAY, &quot;add the best vacuum cleaner to my Amazon cart&quot;. A gray card asks Anything missing?, dates? destination? product? — if yes, it asks before starting. A loop of four blue circles reads look at the page, number every clickable thing, Jev picks a number, click it, with a solid blue return arc, captioned one Jev question per step · 1 2 3 4 …, and a blue bar reads 90-second clock ending in a red X with &quot;I ran out of time after N steps.&quot; below. Result cards show a solid blue &quot;Done in 4 steps.&quot; and a gray &quot;I got stuck after N steps. Take a look.&quot; A dashed blue panel with an orange dashed arrow back into look at the page is labelled FOLLOW-UP, showing &quot;the return date should be November 4th&quot;, same tab, same task — Jev says &quot;yes, this is a follow-up&quot;. A card below reads runs in your Chrome, your logins · profile pinned by email." loading="lazy">
+  <figcaption>No screenshots. Jev only ever picks a number off a list the code made.</figcaption>
+</figure>
+
+<section class="reading-text-section">
+<h2>The bouncer checks three times.</h2>
+<p>There is one blocklist: apps like System Settings and Terminal, commands like sudo and rm, places like your ssh keys, moves like emptying the trash or deleting files. The same check runs three times. At the door, when the buttons load, so a button that breaks a rule never even reaches the menu. At the workshop, when a new button is written, so it is thrown away instead of saved. And at the stage, right before a button runs, with your spoken words filled in, because your words can change what a button does. In the browser, anything about card numbers, passwords or deleting an account is refused outright; cart, order and subscribe ask first.</p>
+<p>Turn the bouncer off and the Mac announces it at startup. The author’s README says why the policy exists: an early version, asked to clean up the desktop, moved every file into a folder.</p>
+</section>
+
+<figure class="detail-media diagram">
+  <img src="img/P06-bouncer-three-times.png" alt="Diagram: a dashed orange card reads bouncer off → the Mac says so out loud: &quot;Warning: the safety policy is off.&quot; Below it, a blue path holds three door cards each captioned same bouncer: AT THE DOOR, when the buttons load, a button that breaks a rule never makes the menu; AT THE WORKSHOP, when a new button is written, thrown away, not saved; and AT THE STAGE, right before it runs, with your spoken words filled in. A dashed blue panel labelled THE LIST lists apps System Settings, Terminal, Keychain, 1Password; commands sudo, rm, mv, brew, git, ssh, curl; places ~/Library, /System, .ssh, .zshrc; and moves admin rights, emptying the trash, deleting, moving files. Three example cards sit below: a blue &quot;turn the volume up&quot; marked allowed; a dashed orange &quot;empty the trash&quot; marked allowed, but dangerous → reads back, waits for yes; and a gray &quot;delete my ssh keys&quot; marked with a red X, never on the menu. A card labelled In the browser reads card number, password, 2FA, SSN, delete account → refused; cart, order, subscribe, book → asks first." loading="lazy">
+  <figcaption>Blocked at the door means Jev never even sees the option.</figcaption>
+</figure>
+
+<section class="reading-text-section">
+<h2>Every question Jev gets is one of two kinds.</h2>
+<p>Pick one from a list, or yes/no with a number. That is the whole toolkit. Which button. Louder or quieter. Which words are the answer. Is this a follow-up. Did they say yes. Did the new script really do the job. Ten questions, two shapes, each a few hundred milliseconds, none of them writes a sentence.</p>
+<p>If you want to build with Jev, this is the checklist. In the SDK the two shapes are called Choice and Noul.</p>
+</section>
+
+<figure class="detail-media diagram">
+  <img src="img/P07-two-kinds-of-question.png" alt="Diagram: two columns of plain question cards. The left, blue-tinted column headed PICK ONE FROM A LIST holds cards for Which button?, Louder or quieter? (any setting), Which words are the answer?, and What's still missing for this form? The right, orange-tinted column headed YES OR NO, HOW SURE? holds cards for Is this a follow-up to the web task?, Does the request have everything the site needs?, Is this something we refuse?, Did they say yes? Did they say no?, Did the new script really do the job?, and Is this button a duplicate? Three stat tiles below read 4 pick-one kinds, 6 yes/no kinds, and 1 envelope for the button and all its settings." loading="lazy">
+  <figcaption>Judgments, not chat.</figcaption>
+</figure>
+
+<section class="reading-text-section">
+<h2>Why it’s fast: choose, don’t generate.</h2>
+<p>The usual computer-use loop takes a screenshot, lets a big model think, has it write out an action, and then parses that text. Seconds per turn, and the model can invent a button that is not there. This loop hands the model nothing to write. Your sentence goes in, a score per button comes out, the code presses the winner. Three hundred milliseconds, and the score is a number the code can act on.</p>
+<p>Nothing is generated except the text to type.</p>
+</section>
+
+<figure class="detail-media diagram">
+  <img src="img/P08-choose-dont-generate.png" alt="Diagram: a before-and-after. The left, gray column headed THE USUAL LOOP runs take a screenshot → a big model thinks → it writes out an action → a gray card marked with a red X reading the code has to parse that text, captioned seconds per turn, and it can invent a button that isn't there. The right, blue column headed THIS LOOP sits in a dashed container labelled THE CODE OWNS THE FLOW, running your sentence → Jev: which button? → a score per button → a solid blue card, press the winner, with an orange dashed return arrow from press the winner back up to your sentence, captioned orange return: unsure → asks you, and 300 ms, and the score is a number the code can act on. Four stat tiles below read ~300ms route, 1.6s &quot;play the trailer&quot; → video, 11s vacuum to cart · 4 steps, and 3.7s follow-up &quot;return date Nov 4th&quot; · 6 steps." loading="lazy">
+  <figcaption>The model’s output never becomes a selector or code.</figcaption>
+</figure>
+
+<section class="reading-build-section" aria-labelledby="reading-build-title">
+  <h2 id="reading-build-title">What I would take from it.</h2>
+  <p>Four moves, in the order I would copy them.</p>
+  <ol class="reading-build-list"><li><span class="reading-build-number">01</span><div><h3>Make the menu before the model</h3><p>Write the buttons as data: name, blanks, script, what to say after. Make sure a button runs with no model in the loop.</p></div></li><li><span class="reading-build-number">02</span><div><h3>Ask Jev one question over the menu</h3><p>Pick one. Read the scores. Decide in code what high, middle and dangerous mean for you.</p></div></li><li><span class="reading-build-number">03</span><div><h3>Ask for the blanks in the same envelope</h3><p>Every setting of every candidate, up front. For free text, have Jev point at words, never type them.</p></div></li><li><span class="reading-build-number">04</span><div><h3>Let the slow model in only through a gate</h3><p>When nothing fits, let it write a button, check it six ways, save it. It should run once per idea, not once per request.</p></div></li></ol>
+</section>
+
+<section class="reading-text-section">
+<h2>What this is not</h2>
+<p>An experimental prototype, by the author’s own warning, that runs scripts and clicks around a browser on your machine. The timings are theirs, on their machine. The browser step set lives in a separate library I did not read. I read the code to learn the shape, not to recommend running it.</p>
+</section>
+
+</div>
+<p class="next-work"><span>reading list:</span><br><a class="live" href="/reading/">← all notes</a></p></article></main><footer class="site-footer">
+  <p>Contact:<br><a href="https://github.com/ussumant" rel="me noopener">github</a> · <a href="https://x.com/sumant_us" rel="me noopener">x</a> · <a href="https://www.linkedin.com/in/sumantus/" rel="me noopener">linkedin</a> · <a href="/reading/">reading</a> · <a href="/feed.xml">rss</a></p>
+  <p class="copyright">© 2026 Sumant · Bengaluru · often elsewhere in Southeast Asia</p>
+</footer><script src="/scripts/site.js"></script></body></html>

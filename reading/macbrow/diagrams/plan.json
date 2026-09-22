@@ -1,0 +1,42 @@
+{
+  "_run": "from the repo root: node <explainer-diagrams>/shoot.mjs reading/macbrow/diagrams/plan.json",
+  "path": "reading/macbrow/diagrams/index.html",
+  "viewport": { "width": 1300, "height": 1000, "deviceScaleFactor": 2 },
+  "steps": [
+    { "type": "waitFor", "expr": "document.fonts.status === 'loaded'", "timeoutMs": 20000 },
+    { "type": "wait", "ms": 400 },
+    { "type": "eval", "expr": "document.fonts.check('1em \"Pixelify Sans\"')", "label": "pixelify-sans-loaded (must be true)" },
+
+    { "type": "eval", "expr": "(function(){var el=document.querySelector('#shot1'); el.scrollIntoView({block:'start'}); return el.getBoundingClientRect().height;})()", "label": "shot1-height" },
+    { "type": "wait", "ms": 150 },
+    { "type": "shot", "selector": "#shot1", "path": "reading/macbrow/img/P01-you-talk-code-picks-a-button.png" },
+
+    { "type": "eval", "expr": "(function(){var el=document.querySelector('#shot2'); el.scrollIntoView({block:'start'}); return el.getBoundingClientRect().height;})()", "label": "shot2-height" },
+    { "type": "wait", "ms": 150 },
+    { "type": "shot", "selector": "#shot2", "path": "reading/macbrow/img/P02-sure-unsure-dangerous.png" },
+
+    { "type": "eval", "expr": "(function(){var el=document.querySelector('#shot3'); el.scrollIntoView({block:'start'}); return el.getBoundingClientRect().height;})()", "label": "shot3-height" },
+    { "type": "wait", "ms": 150 },
+    { "type": "shot", "selector": "#shot3", "path": "reading/macbrow/img/P03-blanks-same-breath.png" },
+
+    { "type": "eval", "expr": "(function(){var el=document.querySelector('#shot4'); el.scrollIntoView({block:'start'}); return el.getBoundingClientRect().height;})()", "label": "shot4-height" },
+    { "type": "wait", "ms": 150 },
+    { "type": "shot", "selector": "#shot4", "path": "reading/macbrow/img/P04-writes-a-new-button.png" },
+
+    { "type": "eval", "expr": "(function(){var el=document.querySelector('#shot5'); el.scrollIntoView({block:'start'}); return el.getBoundingClientRect().height;})()", "label": "shot5-height" },
+    { "type": "wait", "ms": 150 },
+    { "type": "shot", "selector": "#shot5", "path": "reading/macbrow/img/P05-browser-same-trick.png" },
+
+    { "type": "eval", "expr": "(function(){var el=document.querySelector('#shot6'); el.scrollIntoView({block:'start'}); return el.getBoundingClientRect().height;})()", "label": "shot6-height" },
+    { "type": "wait", "ms": 150 },
+    { "type": "shot", "selector": "#shot6", "path": "reading/macbrow/img/P06-bouncer-three-times.png" },
+
+    { "type": "eval", "expr": "(function(){var el=document.querySelector('#shot7'); el.scrollIntoView({block:'start'}); return el.getBoundingClientRect().height;})()", "label": "shot7-height" },
+    { "type": "wait", "ms": 150 },
+    { "type": "shot", "selector": "#shot7", "path": "reading/macbrow/img/P07-two-kinds-of-question.png" },
+
+    { "type": "eval", "expr": "(function(){var el=document.querySelector('#shot8'); el.scrollIntoView({block:'start'}); return el.getBoundingClientRect().height;})()", "label": "shot8-height" },
+    { "type": "wait", "ms": 150 },
+    { "type": "shot", "selector": "#shot8", "path": "reading/macbrow/img/P08-choose-dont-generate.png" }
+  ]
+}

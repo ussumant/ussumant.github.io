@@ -142,13 +142,16 @@
       gv = window.WebMotionWild.gravity(scene, { items: '[data-ko]', tilt: true });
       // the hit: page lurches toward the glove, then drops
       var main = scene;
+      // the shake tilts the whole page; on a phone its corners would poke past the screen
+      // edge and widen the layout mid-punch. Clip sideways overflow until the page is back up.
+      document.documentElement.style.overflowX = 'hidden';
       g.timeline()
         .to(main, { x: -14, y: 6, rotation: -0.6, duration: 0.05, ease: 'power4.out' })
         .to(main, { x: 9, y: -4, rotation: 0.4, duration: 0.06 })
         .to(main, { x: 0, y: 0, rotation: 0, duration: 0.18, ease: 'elastic.out(1, 0.4)', clearProps: 'transform' })
         .add(function () {   // after clearProps: positions measured without main's transform
           gv.drop();
-          if (!gv.dropped) { unsplit(); dropUi(); state = 'up'; return; }   // nothing fell: never leave K.O. hanging
+          if (!gv.dropped) { unsplit(); dropUi(); document.documentElement.style.overflowX = ''; state = 'up'; return; }   // nothing fell: never leave K.O. hanging
           state = 'down'; startCount();
         });
       g.fromTo(ui.ko.querySelector('b'), { scale: 3.2, opacity: 0, rotation: -12 }, { scale: 1, opacity: 1, rotation: -4, duration: 0.55, ease: 'back.out(2.2)', delay: 0.1 });
@@ -178,6 +181,7 @@
       scene.removeEventListener('wild:gravity', onRestore);
       unsplit();
       dropUi();
+      document.documentElement.style.overflowX = '';
       state = 'up';
       glove.focus({ preventScroll: true });
     }

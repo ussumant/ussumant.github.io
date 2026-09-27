@@ -99,11 +99,11 @@ def render_reel() -> str:
 
 
 def side_quest_item() -> str:
-    """The Muay Thai game, kept as one quiet list line; its 🥊 is the knockout button."""
+    """The two-player Muay Thai game, one quiet list line; its 🥊 is the knockout button."""
     side = DATA["side_quest"]
     return (
         '<li><button class="ko-glove" type="button" aria-label="Punch the page" title="don\'t">🥊</button> '
-        '<a class="live" href="https://github.com/ussumant/muay-thai" rel="noopener">sofia vs sumant</a> '
+        f'<a class="live" href="{e(side["url"])}">{e(side["title"].lower())}</a> '
         f'— {e(side["body"][0].lower() + side["body"][1:].rstrip("."))}</li>'
     )
 

@@ -517,10 +517,11 @@
     }
   ],
   "side_quest": {
-    "title": "Muay Thai",
-    "body": "A two-player browser fighting game I made for the last slice of pizza.",
+    "title": "Fight your friend",
+    "body": "A two-player pixel Muay Thai game: two friends, one keyboard, best of 3.",
     "image": "/charm.gif?v=1",
-    "alt": "Sofia vs Sumant — pixel-art fighters trading jabs in a Muay Thai gym"
+    "alt": "Two pixel-art fighters trading jabs in a Muay Thai gym",
+    "url": "/muay-thai-demo.mp4"
   },
   "run_receipt": {
     "app_url": "https://run-receipt-production.up.railway.app/",

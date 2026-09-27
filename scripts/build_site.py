@@ -111,18 +111,19 @@ def side_quest_item() -> str:
 def render_run_receipt() -> str:
     """The newest Run Receipt, drawn as a paper receipt (data: scripts/refresh_run_receipt.py)."""
     r = DATA["run_receipt"]
-    return f'''<figure class="charm receipt-card">
-  <a class="receipt" href="{e(r['url'])}" rel="noopener" aria-label="Run receipt: {e(r['name'])}, {e(r['km'])} km on {e(r['date'])}">
+    feed = f' data-feed="{e(r["feed_url"])}"' if r.get("feed_url") else ""
+    return f'''<figure class="charm receipt-card"{feed}>
+  <a class="receipt" href="{e(r['app_url'])}" rel="noopener" aria-label="Run receipt: {e(r['name'])}, {e(r['km'])} km on {e(r['date'])}">
     <span class="rc-logo" aria-hidden="true">SS</span>
     <span class="rc-co">FORREST GUMP RUNNING CO.</span>
-    <span class="rc-row"><span>ORDER #{e(r['order'])}</span><span>{e(r['date'])}</span></span>
+    <span class="rc-row"><span class="rc-order">ORDER #{e(r['order'])}</span><span class="rc-date">{e(r['date'])}</span></span>
     <span class="rc-item">1× {e(r['name'].upper())}</span>
     <img class="rc-photo" src="{e(r['photo'])}" alt="" width="656" height="380" loading="lazy">
     <span class="rc-total"><span>TOTAL</span><span><strong>{e(r['km'])}</strong> KM</span></span>
     <span class="rc-foot">{e(r['pace'])} · ★ PAID IN FULL</span>
     <span class="rc-bar" aria-hidden="true"></span>
   </a>
-  <figcaption>🧾 <a href="{e(r['wall_url'])}" rel="noopener">run receipt</a> — every strava run prints itself</figcaption>
+  <figcaption>🧾 <a href="{e(r['app_url'])}" rel="noopener">run receipt</a> — every strava run prints itself</figcaption>
   <p class="copyright">© 2026 Sumant</p>
 </figure>'''
 
@@ -167,7 +168,7 @@ def render_home() -> str:
   <h2 id="about-title">about</h2>
   <div class="about-copy">{about}</div>
 </section>''',
-        '</main><script src="/scripts/site.js"></script><script src="/scripts/knockout.js" defer></script></body></html>\n',
+        '</main><script src="/scripts/site.js"></script><script src="/scripts/knockout.js" defer></script><script src="/scripts/run-receipt.js" defer></script></body></html>\n',
     ])
 
 

@@ -566,3 +566,6 @@ body.reading-page { max-width: 1120px; margin: 0 auto; }
 .rc-foot { display: block; text-align: center; color: #7a756a; font-size: 9px; margin-top: 7px; }
 .rc-bar { display: block; width: 62%; height: 14px; margin: 6px auto 0; background: repeating-linear-gradient(90deg, #1a1a1a 0 2px, transparent 2px 3px, #1a1a1a 3px 4px, transparent 4px 6px, #1a1a1a 6px 9px, transparent 9px 10px, #1a1a1a 10px 11px, transparent 11px 13px); }
 .receipt-card figcaption { margin-top: 14px; white-space: normal; max-width: 345px; }
+.receipt-card.rc-nophoto .rc-total { margin-top: 2px; }
+.receipt-card.rc-nophoto .rc-item::after { content: "ON FOOT"; display: block; margin-top: 8px; padding: 14px 0; border-top: 1px dashed #d9d4c7; border-bottom: 1px dashed #d9d4c7; text-align: center; color: #7a756a; letter-spacing: 4px; font-weight: 400; }
+.receipt-card .rc-photo[hidden] { display: none; }

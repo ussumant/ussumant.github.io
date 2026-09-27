@@ -530,6 +530,8 @@
     "name": "Morning Run",
     "km": "5.01",
     "pace": "5:34/km",
-    "photo": "/assets/run-receipt-latest.png"
+    "photo": "/assets/run-receipt-latest.png",
+    "app_url": "https://run-receipt-production.up.railway.app/",
+    "feed_url": ""
   }
 }

@@ -28,7 +28,8 @@ def main() -> None:
     latest = max(runs, key=lambda run: (run["date"], run["id"]))
     PHOTO.write_bytes(fetch(f"{WALL}/{latest['thumb']}"))
     data = json.loads(SITE.read_text(encoding="utf-8"))
-    data["run_receipt"] = {
+    keep = {k: data.get("run_receipt", {}).get(k, "") for k in ("app_url", "feed_url")}
+    data["run_receipt"] = {**keep,
         "wall_url": f"{WALL}/",
         "url": f"{WALL}/r/{latest['id']}.html",
         "order": str(latest["id"])[-4:],

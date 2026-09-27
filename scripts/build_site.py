@@ -131,7 +131,7 @@ def render_home() -> str:
         render_reel(),
         f'''<figure class="charm">
   <a class="gif-link" href="https://github.com/ussumant/muay-thai" rel="noopener"><img class="gifimg" src="{e(side['image'])}" alt="{e(side['alt'])}" width="460" height="252"></a>
-  <figcaption>🥊 <a href="https://github.com/ussumant/muay-thai" rel="noopener">sofia vs sumant</a> — best of 3</figcaption>
+  <figcaption><button class="ko-glove" type="button" aria-label="Punch the page" title="don't">🥊</button> <a href="https://github.com/ussumant/muay-thai" rel="noopener">sofia vs sumant</a> — best of 3</figcaption>
   <p class="copyright">© 2026 Sumant</p>
 </figure>''',
         '</section>',
@@ -144,7 +144,7 @@ def render_home() -> str:
   <h2 id="about-title">about</h2>
   <div class="about-copy">{about}</div>
 </section>''',
-        '</main><script src="/scripts/site.js"></script></body></html>\n',
+        '</main><script src="/scripts/site.js"></script><script src="/scripts/knockout.js" defer></script></body></html>\n',
     ])
 
 

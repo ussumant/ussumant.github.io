@@ -530,3 +530,17 @@ body.reading-page { max-width: 1120px; margin: 0 auto; }
   .reading-node-buttons { display: none; }
   .reading-subsection { break-inside: avoid; }
 }
+
+/* knockout: tap the glove, the page takes a punch (scripts/knockout.js) */
+.ko-glove { font: inherit; font-size: 15px; line-height: 1; padding: 0; margin: 0 2px 0 0; border: 0; background: none; cursor: pointer; display: inline-block; transition: transform .15s ease; }
+.ko-glove:hover { transform: rotate(-18deg) scale(1.25); }
+.ko-glove:active { transform: translateX(6px) scale(1.1); }
+.ko-glove:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 4px; }
+.ko-banner { position: fixed; left: 0; right: 0; top: 18vh; z-index: 9994; pointer-events: none; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.ko-banner b { font: 700 clamp(84px, 22vw, 220px)/.9 var(--pixel); color: #e0301e; letter-spacing: 2px; text-shadow: 6px 6px 0 #000; font-variant-ligatures: none; }
+.ko-count { font: 400 14px/1 var(--mono); color: var(--muted); min-height: 14px; display: inline-block; }
+.ko-banner.ko-still { animation: ko-fade 1.6s ease forwards; }
+@keyframes ko-fade { 0%, 60% { opacity: 1; } 100% { opacity: 0; } }
+.ko-up { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); z-index: 9995; font: 600 18px/1 var(--pixel); padding: 14px 22px; border: 2px solid #000; border-radius: 0; background: #fff; color: #000; box-shadow: 4px 4px 0 #000; cursor: pointer; }
+.ko-up:hover { background: #000; color: #fff; }
+.ko-up:focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; }

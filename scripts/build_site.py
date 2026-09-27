@@ -98,6 +98,35 @@ def render_reel() -> str:
 </div>"""
 
 
+def side_quest_item() -> str:
+    """The Muay Thai game, kept as one quiet list line; its 🥊 is the knockout button."""
+    side = DATA["side_quest"]
+    return (
+        '<li><button class="ko-glove" type="button" aria-label="Punch the page" title="don\'t">🥊</button> '
+        '<a class="live" href="https://github.com/ussumant/muay-thai" rel="noopener">sofia vs sumant</a> '
+        f'— {e(side["body"][0].lower() + side["body"][1:].rstrip("."))}</li>'
+    )
+
+
+def render_run_receipt() -> str:
+    """The newest Run Receipt, drawn as a paper receipt (data: scripts/refresh_run_receipt.py)."""
+    r = DATA["run_receipt"]
+    return f'''<figure class="charm receipt-card">
+  <a class="receipt" href="{e(r['url'])}" rel="noopener" aria-label="Run receipt: {e(r['name'])}, {e(r['km'])} km on {e(r['date'])}">
+    <span class="rc-logo" aria-hidden="true">SS</span>
+    <span class="rc-co">FORREST GUMP RUNNING CO.</span>
+    <span class="rc-row"><span>ORDER #{e(r['order'])}</span><span>{e(r['date'])}</span></span>
+    <span class="rc-item">1× {e(r['name'].upper())}</span>
+    <img class="rc-photo" src="{e(r['photo'])}" alt="" width="656" height="380" loading="lazy">
+    <span class="rc-total"><span>TOTAL</span><span><strong>{e(r['km'])}</strong> KM</span></span>
+    <span class="rc-foot">{e(r['pace'])} · ★ PAID IN FULL</span>
+    <span class="rc-bar" aria-hidden="true"></span>
+  </a>
+  <figcaption>🧾 <a href="{e(r['wall_url'])}" rel="noopener">run receipt</a> — every strava run prints itself</figcaption>
+  <p class="copyright">© 2026 Sumant</p>
+</figure>'''
+
+
 def render_home() -> str:
     current_slug = DATA["now"]["work_slug"]
     featured = "".join(
@@ -114,7 +143,6 @@ def render_home() -> str:
   <span class="update-links">{external}</span>
 </li>""")
     about = "".join(f"<p>{e(paragraph)}</p>" for paragraph in DATA["about"])
-    side = DATA["side_quest"]
     return "".join([
         head(SITE["title"], SITE["description"], "/", typing=True),
         '<body class="home-page"><a class="skip-link" href="#main">Skip to content</a>',
@@ -124,16 +152,11 @@ def render_home() -> str:
         f'<p class="intro">{e(DATA["hero"]["title"])}</p>',
         f'<p class="intro">Before this I co-founded CustomerGlu and built its gamification SDK from scratch — it reached 150M+ devices.</p>',
         f'<p class="now-line" id="now"><span class="live-dot" aria-hidden="true"></span><a class="live" href="/work/{e(DATA["now"]["work_slug"])}/">{e(DATA["now"]["label"].lower())}</a> — {e(DATA["now"]["title"])}. {e(DATA["work"][0]["summary"])}</p>',
-        f'<ul class="project-list" id="work">{featured}</ul>',
+        f'<ul class="project-list" id="work">{featured}{side_quest_item()}</ul>',
         '<p class="small-link"><a class="live" href="/work/">all work →</a> · <a class="live" href="/reading/">reading →</a></p>',
         f'<p class="intro">{e(SITE["location"])}.</p>',
         '<p>Contact:<br><a class="live" href="https://github.com/ussumant" rel="me noopener">github</a> · <a class="live" href="https://x.com/sumant_us" rel="me noopener">x</a> · <a class="live" href="https://www.linkedin.com/in/sumantus/" rel="me noopener">linkedin</a></p>',
-        render_reel(),
-        f'''<figure class="charm">
-  <a class="gif-link" href="https://github.com/ussumant/muay-thai" rel="noopener"><img class="gifimg" src="{e(side['image'])}" alt="{e(side['alt'])}" width="460" height="252"></a>
-  <figcaption><button class="ko-glove" type="button" aria-label="Punch the page" title="don't">🥊</button> <a href="https://github.com/ussumant/muay-thai" rel="noopener">sofia vs sumant</a> — best of 3</figcaption>
-  <p class="copyright">© 2026 Sumant</p>
-</figure>''',
+        render_run_receipt(),
         '</section>',
         f'''<section class="home-section" id="updates" aria-labelledby="updates-title">
   <h2 id="updates-title">recently</h2>

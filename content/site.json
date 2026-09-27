@@ -521,5 +521,15 @@
     "body": "A two-player browser fighting game I made for the last slice of pizza.",
     "image": "/charm.gif?v=1",
     "alt": "Sofia vs Sumant — pixel-art fighters trading jabs in a Muay Thai gym"
+  },
+  "run_receipt": {
+    "wall_url": "https://forrest-gump-run-receipts.netlify.app/",
+    "url": "https://forrest-gump-run-receipts.netlify.app/r/19301403740.html",
+    "order": "3740",
+    "date": "2026-07-14",
+    "name": "Morning Run",
+    "km": "5.01",
+    "pace": "5:34/km",
+    "photo": "/assets/run-receipt-latest.png"
   }
 }

@@ -32,12 +32,13 @@
       ready = Promise.all([
         window.gsap ? null : load('/assets/vendor/gsap.min.js'),
         window.Matter ? null : load('/assets/vendor/matter.min.js')
-      ]).then(function () { return window.WebMotionWild && window.WebMotionWild.gravity ? null : load('/scripts/gravity.js'); });
+      ]).then(function () { return window.WebMotionWild && window.WebMotionWild.gravity ? null : load('/scripts/gravity.js'); })
+        .catch(function (err) { ready = null; throw err; });   // let a later punch retry
     }
     return ready;
   }
   // warm the cache when someone is about to punch (never under reduced motion)
-  function warm() { if (!isReduced()) libs(); }
+  function warm() { if (!isReduced()) libs().catch(function () {}); }
   glove.addEventListener('pointerenter', warm, { once: true });
   glove.addEventListener('focus', warm, { once: true });
 
@@ -77,7 +78,7 @@
     var vh = window.innerHeight;
     // whole objects fall as one piece — mark them first so their text isn't split too
     // (a word inside a falling object would move twice and sink through the floor)
-    [].forEach.call(scene.querySelectorAll('.wordmark, .reel-thumb, .charm .gifimg, .project-list li > span[aria-hidden], .live-dot, .ko-glove'), function (el) { el.setAttribute('data-ko', ''); });
+    [].forEach.call(scene.querySelectorAll('.wordmark, .reel-thumb, .charm .gifimg, .charm .receipt, .project-list li > span[aria-hidden], .live-dot, .ko-glove'), function (el) { el.setAttribute('data-ko', ''); });
     [].forEach.call(scene.querySelectorAll(TEXT), function (el) {
       var r = el.getBoundingClientRect();
       if (r.bottom < 0 || r.top > vh) return;            // off screen: leave it alone
@@ -125,34 +126,35 @@
     if (state !== 'up') return;
     thud();
     if (isReduced()) {
+      state = 'flash';
       buildUi();
       ui.up.remove();
       ui.ko.classList.add('ko-still');
-      setTimeout(dropUi, 1600);
+      setTimeout(function () { dropUi(); state = 'up'; }, 1600);
       return;
     }
     state = 'loading';
     libs().then(function () {
       var g = window.gsap;
+      if (isReduced()) { state = 'up'; return; }   // setting flipped while loading
       splitWords();
       buildUi();
       gv = window.WebMotionWild.gravity(scene, { items: '[data-ko]', tilt: true });
-      if (isReduced()) { unsplit(); state = 'up'; return; }   // setting flipped while loading
       // the hit: page lurches toward the glove, then drops
       var main = scene;
       g.timeline()
         .to(main, { x: -14, y: 6, rotation: -0.6, duration: 0.05, ease: 'power4.out' })
         .to(main, { x: 9, y: -4, rotation: 0.4, duration: 0.06 })
         .to(main, { x: 0, y: 0, rotation: 0, duration: 0.18, ease: 'elastic.out(1, 0.4)', clearProps: 'transform' })
-        .add(function () {
+        .add(function () {   // after clearProps: positions measured without main's transform
           gv.drop();
           if (!gv.dropped) { unsplit(); dropUi(); state = 'up'; return; }   // nothing fell: never leave K.O. hanging
           state = 'down'; startCount();
-        }, 0.12);
+        });
       g.fromTo(ui.ko.querySelector('b'), { scale: 3.2, opacity: 0, rotation: -12 }, { scale: 1, opacity: 1, rotation: -4, duration: 0.55, ease: 'back.out(2.2)', delay: 0.1 });
       g.fromTo(ui.up, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, delay: 0.9, ease: 'power3.out' });
       ui.up.focus({ preventScroll: true });
-    }).catch(function () { state = 'up'; });
+    }).catch(function () { state = 'up'; dropUi(); });
   }
 
   function startCount() {

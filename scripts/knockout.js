@@ -78,7 +78,7 @@
     var vh = window.innerHeight;
     // whole objects fall as one piece — mark them first so their text isn't split too
     // (a word inside a falling object would move twice and sink through the floor)
-    [].forEach.call(scene.querySelectorAll('.wordmark, .reel-thumb, .charm .gifimg, .charm .receipt, .project-list li > span[aria-hidden], .live-dot, .ko-glove'), function (el) { el.setAttribute('data-ko', ''); });
+    [].forEach.call(scene.querySelectorAll('.wordmark, .reel-thumb, .charm .gifimg, .charm .printer, .project-list li > span[aria-hidden], .live-dot, .ko-glove'), function (el) { el.setAttribute('data-ko', ''); });
     [].forEach.call(scene.querySelectorAll(TEXT), function (el) {
       var r = el.getBoundingClientRect();
       if (r.bottom < 0 || r.top > vh) return;            // off screen: leave it alone

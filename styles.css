@@ -544,28 +544,21 @@ body.reading-page { max-width: 1120px; margin: 0 auto; }
 .ko-up:hover { background: #000; color: #fff; }
 .ko-up:focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; }
 
-/* run receipt: the newest Strava run, printed (scripts/refresh_run_receipt.py) */
-.charm.receipt-card { top: max(300px, calc(100vh - 430px)); }
-.receipt {
-  display: block; width: 214px; padding: 16px 16px 14px;
-  background: #faf8f2; color: #1a1a1a; text-decoration: none;
-  font: 400 10px/1.4 var(--mono); letter-spacing: .02em;
-  box-shadow: 0 1px 0 rgba(26, 23, 20, .06), 0 12px 26px -10px rgba(26, 23, 20, .3);
-  transform: rotate(-2deg); transform-origin: top left;
-  transition: transform .45s cubic-bezier(.22, 1, .36, 1), box-shadow .45s ease;
+/* run receipt: the printer, a strip of paper in its slot (links to the Railway app) */
+.charm.printer-card { top: max(330px, calc(100vh - 330px)); }
+.printer { position: relative; display: block; width: 200px; padding-top: 40px; text-decoration: none; }
+.printer:hover { text-decoration: none; }
+.printer:focus-visible { outline: 2px solid var(--blue); outline-offset: 6px; border-radius: 6px; }
+.rp-device { display: block; width: 100%; height: auto; filter: drop-shadow(0 10px 14px rgba(26, 23, 20, .22)); }
+/* paper stands in the slot: bottom edge on the slot line (y=110 of 469), width = inner slot (364 of 527) */
+.rp-paper {
+  position: absolute; z-index: 1; left: 15.7%; width: 69.1%; bottom: calc(100% - 40px - 110 / 469 * (100% - 40px) - 2px);
+  height: 30px; overflow: hidden; background: #faf8f2;
+  box-shadow: inset 0 -6px 6px -4px rgba(26, 23, 20, .35), 0 -1px 0 rgba(26, 23, 20, .06);
+  display: flex; flex-direction: column; align-items: center; gap: 5px; padding-top: 7px;
+  font: 700 7px/1 var(--mono); letter-spacing: .06em; color: #1a1a1a;
+  transition: height .6s steps(6, end);   /* machines step, humans ease */
 }
-.receipt:hover { text-decoration: none; transform: rotate(-.5deg) translateY(-4px) scale(1.03); box-shadow: 0 18px 36px -12px rgba(26, 23, 20, .38); }
-.receipt:focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; }
-.rc-logo { display: grid; place-items: center; width: 30px; height: 30px; margin: 0 auto 6px; border: 1.5px solid #1a1a1a; border-radius: 50%; font-weight: 700; }
-.rc-co { display: block; text-align: center; font-weight: 700; font-size: 10.5px; padding-bottom: 6px; margin-bottom: 6px; border-bottom: 1.5px solid #1a1a1a; }
-.rc-row { display: flex; justify-content: space-between; color: #7a756a; font-size: 9px; }
-.rc-item { display: block; font-weight: 700; margin: 4px 0 7px; }
-.rc-photo { display: block; width: 100%; height: auto; border: 1px solid #1a1a1a; }
-.rc-total { display: flex; justify-content: space-between; align-items: baseline; margin-top: 9px; padding: 6px 0; border-top: 1.5px solid #1a1a1a; border-bottom: 1.5px solid #1a1a1a; font-weight: 700; }
-.rc-total strong { font-size: 22px; letter-spacing: -.5px; }
-.rc-foot { display: block; text-align: center; color: #7a756a; font-size: 9px; margin-top: 7px; }
-.rc-bar { display: block; width: 62%; height: 14px; margin: 6px auto 0; background: repeating-linear-gradient(90deg, #1a1a1a 0 2px, transparent 2px 3px, #1a1a1a 3px 4px, transparent 4px 6px, #1a1a1a 6px 9px, transparent 9px 10px, #1a1a1a 10px 11px, transparent 11px 13px); }
-.receipt-card figcaption { margin-top: 14px; white-space: normal; max-width: 345px; }
-.receipt-card.rc-nophoto .rc-total { margin-top: 2px; }
-.receipt-card.rc-nophoto .rc-item::after { content: "ON FOOT"; display: block; margin-top: 8px; padding: 14px 0; border-top: 1px dashed #d9d4c7; border-bottom: 1px dashed #d9d4c7; text-align: center; color: #7a756a; letter-spacing: 4px; font-weight: 400; }
-.receipt-card .rc-photo[hidden] { display: none; }
+.rp-paper span:last-child { font-weight: 400; color: #7a756a; border-top: 1px dotted #d9d4c7; padding-top: 5px; }
+.printer:hover .rp-paper, .printer:focus-visible .rp-paper { height: 44px; }
+@media (prefers-reduced-motion: reduce) { .rp-paper { transition: none; } }

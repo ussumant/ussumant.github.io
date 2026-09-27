@@ -562,3 +562,5 @@ body.reading-page { max-width: 1120px; margin: 0 auto; }
 .rp-paper span:last-child { font-weight: 400; color: #7a756a; border-top: 1px dotted #d9d4c7; padding-top: 5px; }
 .printer:hover .rp-paper, .printer:focus-visible .rp-paper { height: 44px; }
 @media (prefers-reduced-motion: reduce) { .rp-paper { transition: none; } }
+/* the printer caption is longer than the old one: let it wrap on narrow phones (codex P2) */
+.printer-card figcaption { white-space: normal; max-width: min(345px, calc(100vw - 48px)); }

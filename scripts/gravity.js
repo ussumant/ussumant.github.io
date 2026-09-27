@@ -17,7 +17,8 @@
   'use strict';
   var g = root.gsap, M = root.Matter;
   if (!g || !M) { console.warn('[gravity] load gsap.min.js and matter.min.js first'); return; }
-  var reduced = !!(root.matchMedia && root.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  // read live: the setting can change after the page loads
+  function isReduced() { return !!(root.matchMedia && root.matchMedia('(prefers-reduced-motion: reduce)').matches); }
 
   function gravity(scope, o) {
     o = o || {};
@@ -26,7 +27,7 @@
     var engine, raf, overlay, items = [], prevOverflow, onTilt, busy = false;
 
     function drop() {
-      if (state.dropped || busy || reduced) return;
+      if (state.dropped || busy || isReduced()) return;
       var vw = root.innerWidth, vh = root.innerHeight;
       items = [].slice.call(scope.querySelectorAll(o.items || '[data-gravity-item]')).map(function (el) {
         if (getComputedStyle(el).display === 'inline') el.style.display = 'inline-block';
@@ -162,7 +163,7 @@
     var gv = gravity(document);
     root.WebMotionWild.page = gv;
     [].forEach.call(toggles, function (b) {
-      if (reduced) { b.setAttribute('aria-disabled', 'true'); b.title = 'Off because reduced motion is on'; return; }
+      if (isReduced()) { b.setAttribute('aria-disabled', 'true'); b.title = 'Off because reduced motion is on'; return; }
       b.addEventListener('click', function () { gv.toggle(); });
     });
   }

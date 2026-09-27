@@ -13,7 +13,8 @@
   var scene = document.getElementById('main');   // everything on screen can go down
   if (!glove || !scene) return;
 
-  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // read live: the setting can change after the page loads
+  function isReduced() { return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); }
   var state = 'up';           // up → loading → down → rising → up
   var gv, split = [], ui = {}, countTimer = null, audio = null;
 
@@ -36,10 +37,9 @@
     return ready;
   }
   // warm the cache when someone is about to punch (never under reduced motion)
-  if (!reduced) {
-    glove.addEventListener('pointerenter', libs, { once: true });
-    glove.addEventListener('focus', libs, { once: true });
-  }
+  function warm() { if (!isReduced()) libs(); }
+  glove.addEventListener('pointerenter', warm, { once: true });
+  glove.addEventListener('focus', warm, { once: true });
 
   // ------------------------------------------------------------------ sound
   function ctx() {
@@ -124,7 +124,7 @@
   function punch() {
     if (state !== 'up') return;
     thud();
-    if (reduced) {
+    if (isReduced()) {
       buildUi();
       ui.up.remove();
       ui.ko.classList.add('ko-still');
@@ -137,13 +137,18 @@
       splitWords();
       buildUi();
       gv = window.WebMotionWild.gravity(scene, { items: '[data-ko]', tilt: true });
+      if (isReduced()) { unsplit(); state = 'up'; return; }   // setting flipped while loading
       // the hit: page lurches toward the glove, then drops
       var main = scene;
       g.timeline()
         .to(main, { x: -14, y: 6, rotation: -0.6, duration: 0.05, ease: 'power4.out' })
         .to(main, { x: 9, y: -4, rotation: 0.4, duration: 0.06 })
         .to(main, { x: 0, y: 0, rotation: 0, duration: 0.18, ease: 'elastic.out(1, 0.4)', clearProps: 'transform' })
-        .add(function () { gv.drop(); state = 'down'; startCount(); }, 0.12);
+        .add(function () {
+          gv.drop();
+          if (!gv.dropped) { unsplit(); dropUi(); state = 'up'; return; }   // nothing fell: never leave K.O. hanging
+          state = 'down'; startCount();
+        }, 0.12);
       g.fromTo(ui.ko.querySelector('b'), { scale: 3.2, opacity: 0, rotation: -12 }, { scale: 1, opacity: 1, rotation: -4, duration: 0.55, ease: 'back.out(2.2)', delay: 0.1 });
       g.fromTo(ui.up, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, delay: 0.9, ease: 'power3.out' });
       ui.up.focus({ preventScroll: true });
@@ -179,6 +184,12 @@
     gv.restore();
   }
 
+  // from the punch until the page is back up, swallow every click except "get up"
+  // (a quick second tap must not follow a link that's about to fall)
+  document.addEventListener('click', function (e) {
+    if (state === 'up' || (e.target.closest && e.target.closest('.ko-up'))) return;
+    e.preventDefault(); e.stopPropagation();
+  }, true);
   glove.addEventListener('click', punch);
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && state === 'down') getUp(); });
 })();

@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The bugs arrived after the checks — Sumant</title>
+<meta name="description" content="We traced 76 code-review findings to the commit where each bug was born. Thirty-five were written by our own fixes, after every check had passed.">
+<link rel="canonical" href="https://ussumant.github.io/reading/bugs-after-checks/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A5%8A%3C/text%3E%3C/svg%3E">
+<link rel="alternate" type="application/atom+xml" title="Sumant — recent work" href="/feed.xml">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://ussumant.github.io/reading/bugs-after-checks/">
+<meta property="og:title" content="The bugs arrived after the checks">
+<meta property="og:description" content="We traced 76 code-review findings to the commit where each bug was born. Thirty-five were written by our own fixes, after every check had passed.">
+<style>
+  @font-face { font-family: Virgil; src: url(vendor/Virgil.woff2) format('woff2'); font-display: swap; }
+  @font-face { font-family: Cascadia; src: url(vendor/Cascadia.woff2) format('woff2'); font-display: swap; }
+  :root {
+    --ink: #1e1e1e; --muted: #5c5f66; --paper: #fdfcf8; --line: #e6e3da;
+    --blue: #1971c2; --red: #e03131; --green: #2f9e44; --orange: #e8590c; --violet: #6741d9;
+    --f-blue: #a5d8ff; --f-red: #ffc9c9; --f-green: #b2f2bb; --f-orange: #ffd8a8; --f-violet: #eebefa; --f-yellow: #ffec99; --f-gray: #e9ecef;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--paper); color: var(--ink);
+    font: 17px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, Arial, sans-serif; }
+  main { max-width: 720px; margin: 0 auto; padding: 40px 16px 96px; }
+  .hand { font-family: Virgil, "Comic Sans MS", cursive; }
+  .mono { font-family: Cascadia, ui-monospace, Menlo, monospace; font-size: .86em; }
+  .kicker { font-family: Cascadia, ui-monospace, monospace; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  h1 { font-family: Virgil, cursive; font-weight: 400; font-size: 46px; line-height: 1.08; margin: 10px 0 14px; }
+  h2 { font-family: Virgil, cursive; font-weight: 400; font-size: 30px; line-height: 1.2; margin: 60px 0 12px; }
+  h2 .n { color: var(--blue); margin-right: 8px; }
+  .dek { font-size: 20px; line-height: 1.5; color: #3b3d42; margin: 0 0 14px; }
+  .hook { font-family: Virgil, cursive; font-size: 24px; line-height: 1.35; margin: 4px 0 14px; }
+  .meta { display: grid; grid-template-columns: max-content 1fr; gap: 2px 14px; margin: 0 0 6px; font-family: Cascadia, ui-monospace, monospace; font-size: 13px; color: var(--muted); }
+  .meta dt { color: var(--ink); }
+  .meta dd { margin: 0; }
+  .byline { font-family: Cascadia, ui-monospace, monospace; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+  p { margin: 0 0 14px; }
+  strong { font-weight: 650; }
+  em { font-style: normal; background: linear-gradient(transparent 62%, var(--f-yellow) 62%); }
+  .fig { margin: 22px 0 26px; }
+  svg.sketch { width: 100%; height: auto; display: block; }
+  .cap { font-family: Virgil, cursive; font-size: 16px; color: var(--muted); text-align: center; margin-top: 4px; }
+
+  /* "why?" — long text one tap away */
+  details.why { margin: 4px 0 18px; border-left: 3px dashed var(--line); padding: 2px 0 2px 14px; }
+  details.why summary { cursor: pointer; font-family: Virgil, cursive; color: var(--blue); list-style: none; font-size: 17px; }
+  details.why summary::-webkit-details-marker { display: none; }
+  details.why summary::before { content: '＋ '; }
+  details.why[open] summary::before { content: '－ '; }
+  details.why > div { font-size: 15.5px; color: #3b3d42; padding-top: 6px; }
+
+  /* hand-drawn-ish HTML cards */
+  .card { background: #fff; border: 2px solid var(--ink); border-radius: 12px 16px 10px 14px / 14px 10px 16px 12px;
+    box-shadow: 3px 3px 0 var(--ink); padding: 14px 16px; }
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 20px 0 26px; }
+  .cards .card.wide { grid-column: 1 / -1; }
+  .pcard .top { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .pcard .top .lab { font-family: Virgil, cursive; font-size: 20px; line-height: 1.2; }
+  .pcard p { font-size: 15.5px; margin: 0; color: #3b3d42; }
+  .ic { flex: none; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; border: 2px solid var(--ink); }
+  .ic svg { width: 20px; height: 20px; }
+
+  /* stepper */
+  .steps { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 6px 0 4px; }
+  .chip { font-family: Virgil, cursive; font-size: 16px; padding: 6px 14px; min-height: 40px; background: #fff; color: var(--ink);
+    border: 2px solid var(--ink); border-radius: 18px 14px 16px 12px; cursor: pointer; }
+  .chip[aria-pressed="true"] { background: var(--f-blue); }
+  .chip:focus-visible, .opt:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+  .stepcap { font-family: Virgil, cursive; font-size: 19px; text-align: center; min-height: 58px; margin: 6px 4px 0; line-height: 1.35; }
+  .stepcap small { display: block; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 14.5px; color: var(--muted); margin-top: 2px; }
+
+  /* drill */
+  .drill { margin: 18px 0 28px; }
+  .drill .q { margin-bottom: 14px; }
+  .drill .q .t { display: flex; gap: 10px; align-items: flex-start; font-size: 16px; margin-bottom: 10px; }
+  .drill .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+  .opt { font-family: Virgil, cursive; font-size: 15px; min-height: 40px; padding: 6px 12px; background: #fff; color: var(--ink);
+    border: 2px solid var(--ink); border-radius: 14px 10px 14px 10px; cursor: pointer; }
+  .opt.right { background: var(--f-green); }
+  .opt.wrong { background: var(--f-red); animation: shake .3s; }
+  .opt:disabled { cursor: default; }
+  .opt:disabled:not(.right) { opacity: .45; }
+  .fb { font-size: 14.5px; color: var(--muted); margin-top: 8px; min-height: 0; }
+  .fb:empty { display: none; }
+  @keyframes shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+  .score { font-family: Virgil, cursive; font-size: 18px; text-align: center; color: var(--muted); }
+
+  /* stat tiles */
+  .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 20px 0 10px; }
+  .tile .big { font-family: Virgil, cursive; font-size: 34px; line-height: 1.1; }
+  .tile .big .from { color: var(--muted); }
+  .tile .big .to { color: var(--green); }
+  .tile .what { font-size: 15px; color: #3b3d42; margin-top: 6px; }
+
+  /* myths */
+  .myths { display: grid; grid-template-columns: 1fr; gap: 10px; margin: 18px 0 26px; }
+  .myth { text-align: left; font: inherit; color: var(--ink); cursor: pointer; display: flex; gap: 12px; align-items: flex-start; }
+  .myth .m { font-family: Virgil, cursive; font-size: 19px; }
+  .myth .a { display: none; font-size: 15px; color: #3b3d42; margin-top: 4px; }
+  .myth[aria-expanded="true"] { background: #f4fbf5; }
+  .myth[aria-expanded="true"] .a { display: block; }
+  .myth[aria-expanded="true"] .m { text-decoration: line-through; text-decoration-color: var(--red); }
+  .tapnote { font-family: Virgil, cursive; color: var(--muted); font-size: 15px; text-align: center; }
+
+  .steal { counter-reset: s; list-style: none; padding: 0; margin: 18px 0; }
+  .steal li { counter-increment: s; display: flex; gap: 14px; margin-bottom: 16px; }
+  .steal li::before { content: counter(s); font-family: Virgil, cursive; font-size: 26px; color: var(--blue); width: 40px; height: 40px; flex: none;
+    border: 2px solid var(--ink); border-radius: 50%; display: grid; place-items: center; background: var(--f-yellow); }
+  .closer { font-family: Virgil, cursive; font-size: 26px; text-align: center; margin: 40px 0 10px; }
+  .site-top { display: flex; justify-content: space-between; align-items: baseline; font-family: Cascadia, ui-monospace, monospace; font-size: 13px; margin-bottom: 26px; }
+  .site-top a, .site-foot a, .crumb { color: #1a52e0; text-decoration: none; }
+  .site-top a:hover, .site-foot a:hover, .crumb:hover { text-decoration: underline; }
+  .site-top .wm { color: #000; font-weight: 600; }
+  .crumb { display: inline-block; font-family: Cascadia, ui-monospace, monospace; font-size: 13px; margin-bottom: 14px; }
+  .site-foot { font-family: Cascadia, ui-monospace, monospace; font-size: 13px; color: var(--muted); margin-top: 34px; line-height: 1.8; }
+  .foot { font-size: 14px; color: var(--muted); border-top: 2px dashed var(--line); margin-top: 40px; padding-top: 14px; }
+
+  @media (max-width: 620px) {
+    h1 { font-size: 36px; }
+    h2 { font-size: 26px; margin-top: 48px; }
+    .dek { font-size: 18px; }
+    .cards, .tiles { grid-template-columns: 1fr; }
+    .tile .big { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header class="site-top"><a class="wm" href="/">sumant</a><a href="/">← home</a></header>
+  <a class="crumb" href="/reading/">← reading / 06</a>
+  <div class="kicker">notes · oct 2026 · engineering</div>
+  <h1>The bugs arrived after the checks</h1>
+  <p class="dek">Where 76 code-review findings were born, and what we changed once we knew</p>
+  <p class="hook">76 findings. 35 of them written after every check had passed.</p>
+  <dl class="meta">
+    <dt>written</dt><dd>6 October 2026</dd>
+    <dt>about</dt><dd>engineering workflow · AI agents · code review</dd>
+    <dt>window</dt><dd>76 findings across five pull requests, August 2026</dd>
+  </dl>
+
+  <div class="fig" id="f-hero"></div>
+  <p class="cap">Our checks looked at the first commit. Almost half of what review found was written after it.</p>
+
+  <p>I am a Member of Technical Staff at an a16z-backed startup. We are two people shipping a command-line tool that gives founders a team of AI agents. Agents write most of the code. My co-founder reviews every pull request I open.</p>
+  <p>By August the agents were building fast, and our pull requests were still merging slowly. Across six merged pull requests, the median one needed 3.5 rounds of changes requested and 26 hours from open to merge. None of those rounds were nitpicks.</p>
+  <p>There are two easy reactions to that. Test more: rerun the full suite, add another review bot. Or test less: the checks are slow, so cut them and let review catch things. Both are arguments about how much to test. What explained our rounds was when we tested, and which commit the checks were looking at.</p>
+
+  <h2>Five diagnoses before this one</h2>
+  <div class="fig" id="f-diag"></div>
+  <p>This was our sixth diagnosis. The first five each found something true. Round one was doing requirements work after the build. My co-founder reviews every fix as if it were a new pull request. Fix commits were skipping our pre-review. Each diagnosis produced a rule, and the rounds kept coming.</p>
+  <p>None of them recorded the commit where each bug was born. Without that, a bug found in round three looks like something the first two rounds missed. Often round three had found a bug that round two's fix had just written.</p>
+
+  <h2>Where the bugs were born</h2>
+  <p>So we went back through every finding in five pull requests, 76 in all. For each one we found the first commit where the bug existed, and put it in one of three bins.</p>
+  <div class="fig" id="f-bars"></div>
+  <p class="cap">Red is what our own fixes wrote.</p>
+  <p>Thirty-five of the 76, or 46%, did not exist when our pre-review ran. Twenty-two were the same rule breaking again in a new place after a point fix. Thirteen were new bugs the fix itself created.</p>
+  <p>Twenty-nine, or 38%, were behaviour the original change never handled. Twelve, or 16%, were hygiene, like a test claim that did not match the code or a stale base branch.</p>
+  <p>Every check we had pointed at the first commit, and half the problem arrived after it. Fix commits got the least scrutiny of anything we shipped. On one pull request, 8 of the 11 blockers in round three came from fix commits that never went through pre-review.</p>
+  <details class="why"><summary>why pre-open checks cannot see this</summary><div>
+    <p>Even a perfect review of the first commit could have named about 42% of what review eventually found. That is the 10 findings provable at that commit, plus 22 whose shape was already visible there.</p>
+    <p>The 46% born in fix waves did not exist yet. Testing the first commit harder does not find a bug nobody has written.</p>
+    <p>Fifteen of the 76 were false-green tests, which passed without testing the thing they were named for. Ten of those fifteen were written during fix waves.</p>
+  </div></details>
+
+  <div class="drill card" id="drill">
+    <div class="hand" style="font-size:22px;margin-bottom:10px">Try it: where was this bug born?</div>
+  </div>
+
+  <h2>One rule, four rounds</h2>
+  <p>Our tool asks founders to approve steps that cost money, and they approve by pressing Enter. The rule is that Enter must never approve something the founder cannot see.</p>
+  <div class="fig" id="f-moved"></div>
+  <div class="steps" id="moved-steps" role="group" aria-label="Walk through the rounds"></div>
+  <div class="stepcap" id="moved-cap" aria-live="polite"></div>
+  <p>Every fix was correct for the case named in the review, and every fix was mine. Each one left the rule broken one caller over, so my co-founder kept finding the same bug at the next door.</p>
+  <p>After round four we wrote the rule down, listed every screen where Enter can approve, and put one guard on the path they all share. Round five was an approval.</p>
+
+  <h2>Five rules we build by</h2>
+  <p>Each rule exists because one kind of round kept happening.</p>
+  <div class="cards" id="principles">
+    <div class="card pcard"><div class="top"><span class="ic" style="background:var(--f-blue)"><i data-lucide="crosshair"></i></span><span class="lab">Check the commit under review</span></div>
+      <p>A pre-review of an older commit is a review of a different pull request. Every check is bound to the exact commit my co-founder opens.</p></div>
+    <div class="card pcard"><div class="top"><span class="ic" style="background:var(--f-orange)"><i data-lucide="refresh-cw"></i></span><span class="lab">Every fix is a new pull request</span></div>
+      <p>Review goes after the fix's own new mechanism, so we go there first. The fix's diff gets its own pre-review, and its new tests get broken on purpose to see if they fail.</p></div>
+    <div class="card pcard"><div class="top"><span class="ic" style="background:var(--f-yellow)"><i data-lucide="scale"></i></span><span class="lab">Fix the class, not the leaf</span></div>
+      <p>When a bug comes back, stop patching the spot. Write the rule down, list every caller, and fix where they meet.</p></div>
+    <div class="card pcard"><div class="top"><span class="ic" style="background:var(--f-green)"><i data-lucide="lock"></i></span><span class="lab">Enforce, do not check-then-act</span></div>
+      <p>Checking that a file is ours and then deleting it leaves a gap between the two steps. A rename that cannot overwrite, or a compare-and-swap, has no gap.</p></div>
+    <div class="card pcard wide"><div class="top"><span class="ic" style="background:var(--f-violet)"><i data-lucide="package"></i></span><span class="lab">One mechanism per pull request</span></div>
+      <p>In August, every pull request approved in round one was small and did one thing. A money rule riding inside a cosmetic change cost a four-blocker first round.</p></div>
+  </div>
+  <details class="why"><summary>the check-then-act story</summary><div>
+    <p>A cleanup step checked that a file belonged to us, then deleted it. Between the check and the delete, another process could put its own file in the same place, and the cleanup would delete that one.</p>
+    <p>The first fix added a better check. The gap was still there, and review found it again. The next fix moved the file with a rename that could overwrite, which left a smaller gap. That arc took three rounds.</p>
+    <p>The next arc with the same shape went straight to an operation that cannot overwrite, and closed in one round.</p>
+  </div></details>
+
+  <h2>The loop</h2>
+  <p>This is how a change moves now. Tap through it one step at a time.</p>
+  <div class="fig" id="f-loop"></div>
+  <div class="steps" id="loop-steps" role="group" aria-label="Walk through the loop"></div>
+  <div class="stepcap" id="loop-cap" aria-live="polite"></div>
+  <p>Two parts carry most of the weight. Pre-review runs again on every fix, as well as on the first commit. And a guard refuses to request review unless the pre-review ran on the commit at the head of the branch, with CI green.</p>
+
+  <h2>The finding log</h2>
+  <p>The loop gets better because of one small file with one row per review finding.</p>
+  <div class="cards">
+    <div class="card pcard"><div class="top"><span class="ic" style="background:var(--f-yellow)"><i data-lucide="sprout"></i></span><span class="lab">Start</span></div>
+      <p>76 findings, sorted by hand. Each row has the round, the severity, the commit where the bug was born, and whether our pre-review named it.</p></div>
+    <div class="card pcard"><div class="top"><span class="ic" style="background:var(--f-blue)"><i data-lucide="plus-circle"></i></span><span class="lab">After every merge</span></div>
+      <p>One new row per finding. A short script turns the log into a rounds table, so the next retro starts from a query.</p></div>
+    <div class="card pcard wide"><div class="top"><span class="ic" style="background:var(--f-green)"><i data-lucide="glasses"></i></span><span class="lab">Before the next pull request</span></div>
+      <p>Every miss becomes a question on the pre-review checklist. The first pass added four. List every screen the founder sees. Ask what happens if two things happen in the other order. Break the code and check that the new test fails. Check that the pull request description still matches the code.</p></div>
+  </div>
+
+  <h2>What changed</h2>
+  <div class="tiles">
+    <div class="card tile"><div class="big"><span class="from">1/5</span> → <span class="to">5/6</span></div>
+      <div class="what">reviewed commits that had a pre-review of that exact commit, before the guard and on the day it landed</div></div>
+    <div class="card tile"><div class="big"><span class="from">26%</span> → <span class="to">58%</span></div>
+      <div class="what">of my co-founder's findings that our Codex pre-review had already named</div></div>
+    <div class="card tile"><div class="big"><span class="to">4 / 4</span></div>
+      <div class="what">pre-reviews on the final commit of our longest pull requests came back not ready. All four were fixed before review opened.</div></div>
+    <div class="card tile"><div class="big"><span class="to">~35 min</span></div>
+      <div class="what">for each of those pre-reviews, against about half a day for a review round</div></div>
+  </div>
+  <p class="cap">The 58% comes from one day and 24 findings. I would read it as a direction.</p>
+  <details class="why"><summary>why 26%, and not 13%</summary><div>
+    <p>Across all 61 findings in the earlier sample, Codex had named 13%. One pull request in that sample was never pre-reviewed at the right commit. Leave it out and the figure is 26%. I used the cautious number.</p>
+  </div></details>
+
+  <h2>What it still misses</h2>
+  <div class="cards">
+    <div class="card pcard"><div class="top"><span class="ic" style="background:var(--f-red)"><i data-lucide="monitor-smartphone"></i></span><span class="lab">Screens and timing</span></div>
+      <p>Bugs on screens the founder sees, and bugs that depend on what happens first, still get through. Those need the code running, and pre-review only reads it.</p></div>
+    <div class="card pcard"><div class="top"><span class="ic" style="background:var(--f-red)"><i data-lucide="git-fork"></i></span><span class="lab">Long seams</span></div>
+      <p>Some pull requests still ran 7 to 11 rounds. The worst kept returning to the same seam with no written list of what the pull request covered and what it left out.</p></div>
+    <div class="card pcard wide"><div class="top"><span class="ic" style="background:var(--f-red)"><i data-lucide="ruler"></i></span><span class="lab">Rounds are hard to count</span></div>
+      <p>Our round-counting script only saw formal GitHub reviews. Once verdicts started arriving as comments, a pull request with eight rounds showed up as zero. Check what your script counts before you trust its number.</p></div>
+  </div>
+
+  <h2>Explanations that did not survive the data</h2>
+  <p class="tapnote">tap each one</p>
+  <div class="myths" id="myths"></div>
+
+  <h2>What I would copy</h2>
+  <p>If you take one thing from this, add one column to wherever you track review findings: the commit where the bug was born. With that column, the next retro is a query.</p>
+  <p>Then point your checks at the commit your reviewer will open, and run them again on every fix after it. That is where 46% of our review findings came from.</p>
+
+  <div class="foot">Numbers come from our own review log: 76 findings across five pull requests, plus six merged pull requests for timing, August 2026. The sketches are drawn with rough.js.</div>
+  <div class="site-foot">
+    <p>reading list:<br><a href="/reading/">← all notes</a></p>
+    <p>Contact:<br><a href="https://github.com/ussumant" rel="me noopener">github</a> · <a href="https://x.com/sumant_us" rel="me noopener">x</a> · <a href="https://www.linkedin.com/in/sumantus/" rel="me noopener">linkedin</a> · <a href="/reading/">reading</a> · <a href="/feed.xml">rss</a></p>
+    <p>© 2026 Sumant · Bengaluru · often elsewhere in Southeast Asia</p>
+  </div>
+</main>
+
+<script src="vendor/rough.js"></script>
+<script src="vendor/lucide.min.js"></script>
+<script>
+(function () {
+  'use strict';
+  const NS = 'http://www.w3.org/2000/svg', INK = '#1e1e1e';
+  const FILL = { blue: '#a5d8ff', red: '#ffc9c9', green: '#b2f2bb', orange: '#ffd8a8', violet: '#eebefa', yellow: '#ffec99', gray: '#e9ecef', white: '#ffffff' };
+  const STROKE = { blue: '#1971c2', red: '#e03131', green: '#2f9e44', orange: '#e8590c', violet: '#6741d9', gray: '#868e96', ink: INK };
+  const pascal = (s) => s.split('-').map((p) => p[0].toUpperCase() + p.slice(1)).join('');
+  const col = (c, d) => STROKE[c] || c || d;
+
+  /* ---------- tiny rough.js sketch helper (Excalidraw look) ---------- */
+  function Sk(el, w, h, seed, label) {
+    el.innerHTML = '';
+    const svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    svg.setAttribute('class', 'sketch');
+    svg.setAttribute('role', 'img');
+    if (label) svg.setAttribute('aria-label', label);
+    el.appendChild(svg);
+    const rc = rough.svg(svg);
+    let n = 0;
+    const sb = (seed || 7) * 101;
+    const base = (o) => Object.assign({ roughness: 1.4, bowing: 1, stroke: INK, strokeWidth: 1.8, fillStyle: 'hachure',
+      hachureGap: 6.5, fillWeight: 1.1, hachureAngle: -41, seed: sb + (n++) * 17 + 3 }, o);
+    const add = (node, into) => { (into || svg).appendChild(node); return node; };
+    const api = {
+      svg,
+      g(into) { return add(document.createElementNS(NS, 'g'), into); },
+      box(x, y, bw, bh, o = {}, into) {
+        return add(rc.rectangle(x, y, bw, bh, base({ fill: o.fill ? (FILL[o.fill] || o.fill) : undefined, stroke: col(o.stroke, INK),
+          strokeWidth: o.sw || 1.8, strokeLineDash: o.dashed ? [8, 7] : undefined, fillStyle: o.solid ? 'solid' : (o.cross ? 'cross-hatch' : 'hachure'), roughness: o.r ?? 1.4 })), into);
+      },
+      line(x1, y1, x2, y2, o = {}, into) {
+        return add(rc.line(x1, y1, x2, y2, base({ stroke: col(o.stroke, INK), strokeWidth: o.sw || 1.8, strokeLineDash: o.dashed ? [8, 7] : undefined, roughness: o.r ?? 1.2 })), into);
+      },
+      arrow(x1, y1, x2, y2, o = {}, into) {
+        const grp = api.g(into);
+        const dx = x2 - x1, dy = y2 - y1, len = Math.hypot(dx, dy) || 1, bend = o.bend ?? 10;
+        let mx = (x1 + x2) / 2 - (dy / len) * bend, my = (y1 + y2) / 2 + (dx / len) * bend;
+        const st = col(o.color, INK), sw = o.sw || 1.9;
+        const pts = o.via ? [[x1, y1], ...o.via, [x2, y2]] : [[x1, y1], [mx, my], [x2, y2]];
+        if (o.via) [mx, my] = o.via[o.via.length - 1];
+        add(rc.curve(pts, base({ stroke: st, strokeWidth: sw, roughness: 1.1, strokeLineDash: o.dashed ? [8, 7] : undefined })), grp);
+        const ang = Math.atan2(y2 - my, x2 - mx), L = 13, A = 0.46;
+        add(rc.line(x2, y2, x2 - L * Math.cos(ang - A), y2 - L * Math.sin(ang - A), base({ stroke: st, strokeWidth: sw, roughness: 0.9 })), grp);
+        add(rc.line(x2, y2, x2 - L * Math.cos(ang + A), y2 - L * Math.sin(ang + A), base({ stroke: st, strokeWidth: sw, roughness: 0.9 })), grp);
+        if (o.label) api.text(o.lx ?? mx, o.ly ?? my - 8, o.label, { size: o.lsize || 18, color: st, anchor: 'middle', halo: true }, grp);
+        return grp;
+      },
+      text(x, y, str, o = {}, into) {
+        const t = document.createElementNS(NS, 'text');
+        const size = o.size || 20;
+        t.setAttribute('x', x); t.setAttribute('y', y);
+        t.setAttribute('font-family', o.mono ? 'Cascadia, ui-monospace, monospace' : 'Virgil, "Comic Sans MS", cursive');
+        t.setAttribute('font-size', size);
+        t.setAttribute('fill', col(o.color, INK));
+        t.setAttribute('text-anchor', o.anchor || 'start');
+        if (o.halo) { t.setAttribute('stroke', '#fdfcf8'); t.setAttribute('stroke-width', 6); t.setAttribute('paint-order', 'stroke'); t.setAttribute('stroke-linejoin', 'round'); }
+        String(str).split('\n').forEach((line, i) => {
+          const sp = document.createElementNS(NS, 'tspan');
+          sp.setAttribute('x', x); sp.setAttribute('dy', i === 0 ? 0 : size * 1.22); sp.textContent = line;
+          t.appendChild(sp);
+        });
+        return add(t, into);
+      },
+      icon(name, x, y, s, color, into) {
+        const node = window.lucide && window.lucide.icons && window.lucide.icons[pascal(name)];
+        if (!node) return null;
+        const el = window.lucide.createElement(node);
+        el.setAttribute('x', x); el.setAttribute('y', y); el.setAttribute('width', s); el.setAttribute('height', s);
+        el.setAttribute('stroke', col(color, INK)); el.setAttribute('stroke-width', 2.2);
+        return add(el, into);
+      },
+      fade(grp, on) { grp.setAttribute('opacity', on ? 1 : 0.42); },
+    };
+    return api;
+  }
+
+  /* ---------- responsive figure registry ---------- */
+  const FIGS = [];
+  function fig(id, draw) { const el = document.getElementById(id); if (el) FIGS.push({ el, draw, mode: null }); }
+  function renderAll(force) {
+    for (const f of FIGS) {
+      const narrow = f.el.clientWidth < 620;
+      if (!force && f.mode === narrow) continue;
+      f.mode = narrow;
+      try { f.draw(f.el, narrow); } catch (e) { console.error('[fig]', f.el.id, e); }
+    }
+  }
+  function redraw(id) { const f = FIGS.find((x) => x.el.id === id); if (f) f.draw(f.el, f.mode); }
+
+  /* ---------- hero: where findings were born ---------- */
+  fig('f-hero', (el, narrow) => {
+    const st = ['build', 'checks', 'open', 'review', 'fix', 'review', 'fix'];
+    const kind = ['', 'green', '', 'blue', 'orange', 'blue', 'orange'];
+    const icons = ['hammer', 'check-check', 'git-pull-request', 'eye', 'wrench', 'eye', 'wrench'];
+    if (!narrow) {
+      const s = Sk(el, 900, 330, 3, 'Timeline: checks run early; 46% of findings were born later, in fix waves');
+      s.text(450, 34, 'where review findings were born', { size: 26, anchor: 'middle' });
+      const bw = 104, gap = 22, y = 150;
+      st.forEach((t, i) => {
+        const x = 16 + i * (bw + gap);
+        s.box(x, y, bw, 58, { fill: kind[i] || undefined });
+        s.icon(icons[i], x + 8, y + 17, 22, 'ink');
+        s.text(x + 36, y + 36, t, { size: 19 });
+        if (i < st.length - 1) s.arrow(x + bw + 2, y + 29, x + bw + gap - 2, y + 29, { bend: 0, sw: 1.6 });
+      });
+      s.box(6, 130, 2 * bw + gap + 20, 100, { dashed: true, stroke: 'green', r: 1 });
+      s.text(6 + (2 * bw + gap + 20) / 2, 262, 'our checks look here', { size: 20, anchor: 'middle', color: 'green' });
+      const rx = 16 + 4 * (bw + gap) - 10;
+      s.box(rx, 130, 900 - rx - 6, 100, { dashed: true, stroke: 'red', r: 1 });
+      s.text(rx + (900 - rx - 6) / 2, 262, '46% were born here', { size: 22, anchor: 'middle', color: 'red' });
+      s.text(rx + (900 - rx - 6) / 2, 290, 'after every check passed', { size: 18, anchor: 'middle', color: 'red' });
+      // bugs
+      [[30, 'orange'], [70, 'orange']].forEach(([x, c]) => s.icon('bug', x, 82, 30, c));
+      s.text(16, 72, '38%: missing from day one', { size: 18, color: 'orange' });
+      [[rx + 30], [rx + 90], [rx + 200], [rx + 260], [rx + 300]].forEach(([x]) => s.icon('bug', x, 84, 30, 'red'));
+    } else {
+      const s = Sk(el, 440, 640, 3, 'Timeline: checks run early; 46% of findings were born later, in fix waves');
+      s.text(220, 32, 'where review findings were born', { size: 22, anchor: 'middle' });
+      const bx = 30, bw = 190, bh = 52, gap = 22;
+      st.forEach((t, i) => {
+        const y = 66 + i * (bh + gap);
+        s.box(bx, y, bw, bh, { fill: kind[i] || undefined });
+        s.icon(icons[i], bx + 12, y + 14, 24, 'ink');
+        s.text(bx + 48, y + 34, t, { size: 20 });
+        if (i < st.length - 1) s.arrow(bx + bw / 2, y + bh + 2, bx + bw / 2, y + bh + gap - 2, { bend: 0, sw: 1.6 });
+      });
+      s.box(16, 52, bw + 30, 2 * bh + gap + 28, { dashed: true, stroke: 'green', r: 1 });
+      s.text(258, 92, 'our checks\nlook here', { size: 19, color: 'green' });
+      s.icon('bug', 258, 140, 26, 'orange');
+      s.text(290, 160, '38%: missing\nfrom day one', { size: 17, color: 'orange' });
+      const ry = 66 + 4 * (bh + gap) - 14;
+      s.box(16, ry, bw + 30, 3 * bh + 2 * gap + 28, { dashed: true, stroke: 'red', r: 1 });
+      s.text(258, ry + 60, '46% were\nborn here', { size: 22, color: 'red' });
+      s.text(258, ry + 130, 'after every\ncheck passed', { size: 17, color: 'red' });
+      [[262, ry + 8], [318, ry + 10], [372, ry + 4]].forEach(([x, y]) => s.icon('bug', x, y, 28, 'red'));
+    }
+  });
+
+  /* ---------- six diagnoses ---------- */
+  fig('f-diag', (el, narrow) => {
+    const items = [
+      ['round 1 = requirements', 'clipboard-list'],
+      ['fixes = new pull requests', 'refresh-cw'],
+      ['self-attack each fix', 'swords'],
+      ['fixes skip pre-review', 'skip-forward'],
+      ['cut duplicate runs', 'scissors'],
+      ['where was each bug born?', 'map-pin'],
+    ];
+    if (!narrow) {
+      const s = Sk(el, 900, 250, 5, 'Six diagnoses; the sixth asked where each bug was born');
+      items.forEach(([t, ic], i) => {
+        const c = i % 3, r = Math.floor(i / 3), x = 14 + c * 296, y = 14 + r * 118, last = i === 5;
+        s.box(x, y, 278, 96, { fill: last ? 'yellow' : undefined, sw: last ? 2.6 : 1.6, stroke: last ? 'ink' : 'gray' });
+        s.text(x + 16, y + 30, (i + 1) + '', { size: 22, color: last ? 'ink' : 'gray' });
+        s.icon(ic, x + 230, y + 12, 28, last ? 'ink' : 'gray');
+        s.text(x + 16, y + 66, t, { size: 19, color: last ? 'ink' : '#5c5f66' });
+      });
+    } else {
+      const s = Sk(el, 440, 520, 5, 'Six diagnoses; the sixth asked where each bug was born');
+      items.forEach(([t, ic], i) => {
+        const y = 8 + i * 84, last = i === 5;
+        s.box(14, y, 412, 70, { fill: last ? 'yellow' : undefined, sw: last ? 2.6 : 1.6, stroke: last ? 'ink' : 'gray' });
+        s.text(32, y + 44, (i + 1) + '', { size: 22, color: last ? 'ink' : 'gray' });
+        s.text(64, y + 44, t, { size: 19, color: last ? 'ink' : '#5c5f66' });
+        s.icon(ic, 384, y + 22, 26, last ? 'ink' : 'gray');
+      });
+    }
+  });
+
+  /* ---------- the 76 split ---------- */
+  fig('f-bars', (el, narrow) => {
+    const rows = [
+      { lab: 'born in our fixes', n: 35, pct: '46%', fill: 'red', split: [[22, 'same rule, moved'], [13, 'new from the fix']] },
+      { lab: 'missing from day one', n: 29, pct: '38%', fill: 'orange' },
+      { lab: 'hygiene', n: 12, pct: '16%', fill: 'gray' },
+    ];
+    if (!narrow) {
+      const s = Sk(el, 900, 300, 9, '76 findings: 35 born in fixes, 29 missing from day one, 12 hygiene');
+      const x0 = 250, k = 15, bh = 50;
+      rows.forEach((r, i) => {
+        const y = 22 + i * 92;
+        s.text(x0 - 16, y + 33, r.lab, { size: 21, anchor: 'end' });
+        if (r.split) {
+          let x = x0;
+          r.split.forEach(([m, t], j) => {
+            s.box(x, y, m * k, bh, { fill: 'red', cross: j === 1 });
+            s.text(x + (m * k) / 2, y + bh + 26, `${m} ${t}`, { size: 18, anchor: 'middle', color: 'red' });
+            x += m * k;
+          });
+        } else s.box(x0, y, r.n * k, bh, { fill: r.fill });
+        s.text(x0 + r.n * k + 14, y + 34, `${r.n} · ${r.pct}`, { size: 22, color: r.fill === 'gray' ? 'gray' : r.fill });
+      });
+    } else {
+      const s = Sk(el, 440, 380, 9, '76 findings: 35 born in fixes, 29 missing from day one, 12 hygiene');
+      const x0 = 16, k = 9, bh = 44;
+      const Y = [40, 210, 316];
+      rows.forEach((r, i) => {
+        const yy = Y[i];
+        s.text(x0, yy - 10, r.lab, { size: 20 });
+        if (r.split) {
+          let x = x0;
+          r.split.forEach(([m, t], j) => {
+            s.box(x, yy, m * k, bh, { fill: 'red', cross: j === 1 });
+            s.text(x0, yy + bh + 30 + j * 26, `${m} ${t}`, { size: 17, color: 'red' });
+            x += m * k;
+          });
+        } else s.box(x0, yy, r.n * k, bh, { fill: r.fill });
+        s.text(x0 + r.n * k + 12, yy + 30, `${r.n} · ${r.pct}`, { size: 20, color: r.fill === 'gray' ? 'gray' : r.fill });
+      });
+    }
+  });
+
+  /* ---------- drill ---------- */
+  (function drill() {
+    const root = document.getElementById('drill');
+    const opts = ['missing from day one', 'same rule, moved', 'new from the fix'];
+    const Qs = [
+      { t: 'Round 1. A money confirmation is taller than the terminal. The bottom is hidden, and Enter still approves.', a: 0,
+        fb: 'Missing from day one. The original change never handled tall screens.' },
+      { t: 'Round 2. We added a size guard. A terminal too small to show the question still lets Enter approve.', a: 1,
+        fb: 'Same rule, moved. The fix covered one case. The rule broke one door over.' },
+      { t: 'Round 3. A round-2 fix changed how progress is shown. Now a stale progress file can keep a "working" spinner on screen for a job that has stopped.', a: 2,
+        fb: 'New from the fix. That code didn\'t exist until the round-2 fix.' },
+    ];
+    let right = 0;
+    const score = document.createElement('div'); score.className = 'score';
+    Qs.forEach((q, qi) => {
+      const box = document.createElement('div'); box.className = 'q';
+      box.innerHTML = `<div class="t"><span class="ic" style="background:var(--f-red);width:32px;height:32px"><i data-lucide="bug"></i></span><span>${q.t}</span></div>`;
+      const row = document.createElement('div'); row.className = 'opts';
+      const fb = document.createElement('div'); fb.className = 'fb'; fb.setAttribute('aria-live', 'polite');
+      opts.forEach((o, oi) => {
+        const b = document.createElement('button'); b.className = 'opt'; b.type = 'button'; b.textContent = o;
+        b.addEventListener('click', () => {
+          if (oi === q.a) {
+            b.classList.add('right'); fb.textContent = q.fb; right++;
+            row.querySelectorAll('button').forEach((x) => { x.disabled = true; x.classList.remove('wrong'); });
+            if (right === Qs.length) score.textContent = 'All three. The last bin is the one no pre-open check can see.';
+          } else {
+            b.classList.remove('wrong'); void b.offsetWidth; b.classList.add('wrong'); fb.textContent = 'Not quite. Did this code exist at the first commit?';
+          }
+        });
+        row.appendChild(b);
+      });
+      box.appendChild(row); box.appendChild(fb); root.appendChild(box);
+    });
+    root.appendChild(score);
+  })();
+
+  /* ---------- one rule, four rounds ---------- */
+  const MOVED = [
+    ['R1', 'Round 1: a tall confirm screen', 'The bottom of the screen is hidden, and Enter approves anyway.'],
+    ['R2', 'Round 2: a tiny terminal', 'We added a size guard. A window too small to show the question still approved.'],
+    ['R3', 'Round 3: any size but 80×24', 'The guard measured correctly at one terminal size. Every other size got through.'],
+    ['R4', 'Round 4: a different screen', 'The guard lived in one approval path. Another screen approved a question that was cut off.'],
+    ['fix', 'After round 4: one guard where they meet', 'Write the rule down, list every caller, guard the path they share. Round 5 was an approval.'],
+  ];
+  let movedStep = 0;
+  const doors = ['tall\nconfirm', 'tiny\nterminal', 'not\n80×24', 'other\nscreen'];
+  fig('f-moved', (el, narrow) => {
+    const W = narrow ? 440 : 900, H = narrow ? 470 : 340;
+    const s = Sk(el, W, H, 11, 'One rule, four places it broke, one round each');
+    const fixed = movedStep === 4;
+    // law banner
+    const bx = narrow ? 14 : 150, bw = narrow ? 412 : 600;
+    s.box(bx, 10, bw, 64, { fill: 'yellow', sw: 2.2 });
+    s.icon('keyboard', bx + 14, 28, 28, 'ink');
+    s.text(bx + 52, narrow ? 38 : 50, narrow ? 'Enter never approves\nwhat you can\'t see' : 'rule: Enter never approves what you can\'t see', { size: narrow ? 19 : 21 });
+    // shared guard (only in the fix step)
+    const gy = narrow ? 110 : 112;
+    if (fixed) {
+      const gx = narrow ? 100 : 330, gw = narrow ? 240 : 240;
+      s.box(gx, gy, gw, 50, { fill: 'green', sw: 2.4 });
+      s.icon('shield-check', gx + 12, gy + 12, 26, 'green');
+      s.text(gx + 48, gy + 33, 'one shared guard', { size: 20 });
+    }
+    if (!fixed) s.text(W / 2, narrow ? 150 : 156, '4 places Enter can approve', { size: narrow ? 19 : 21, anchor: 'middle', color: 'gray' });
+    const pos = narrow
+      ? [[22, 200], [232, 200], [22, 330], [232, 330]]
+      : [[30, 200], [252, 200], [474, 200], [696, 200]];
+    const dw = narrow ? 186 : 176, dh = 100;
+    pos.forEach(([x, y], i) => {
+      const grp = s.g();
+      const state = fixed ? 'ok' : i < movedStep ? 'patched' : i === movedStep ? 'bug' : 'wait';
+      const fill = state === 'bug' ? 'red' : state === 'patched' ? 'gray' : state === 'ok' ? 'green' : undefined;
+      s.box(x, y, dw, dh, { fill, sw: state === 'bug' ? 2.6 : 1.7, stroke: state === 'wait' ? 'gray' : 'ink' }, grp);
+      s.text(x + 14, y + 38, doors[i], { size: 19, color: state === 'wait' ? 'gray' : 'ink' }, grp);
+      if (state === 'bug') s.icon('bug', x + dw - 46, y + 12, 32, 'red', grp);
+      if (state === 'patched') { s.icon('bandage', x + dw - 44, y + 12, 28, 'gray', grp); s.text(x + 14, y + dh - 12, 'patched', { size: 16, color: 'gray' }, grp); }
+      if (state === 'ok') s.icon('check', x + dw - 44, y + 12, 30, 'green', grp);
+      if (state === 'wait') s.text(x + 14, y + dh - 12, 'not checked', { size: 16, color: 'gray' }, grp);
+      if (fixed) {
+        if (!narrow) s.arrow(450, gy + 52, x + dw / 2, y - 4, { bend: 0, color: 'green', sw: 1.6 });
+        else if (i < 2) s.arrow(220, gy + 52, x + dw / 2, y - 4, { bend: 0, color: 'green', sw: 1.6 });
+        else { const sx = i === 2 ? 8 : 432, gxe = i === 2 ? 100 : 340;
+          s.arrow(gxe, gy + 25, i === 2 ? 20 : 420, y + dh / 2, { via: [[sx, gy + 25], [sx, y + dh / 2]], color: 'green', sw: 1.6 }); }
+      }
+    });
+    if (!fixed && movedStep > 0) {
+      const [px, py] = pos[movedStep - 1], [nx, ny] = pos[movedStep];
+      if (narrow && movedStep === 2) s.arrow(px + dw / 2, py + dh + 4, nx + dw / 2, ny - 4, { bend: 0, color: 'red', label: 'moved', lx: 220, ly: 318 });
+      else s.arrow(px + dw - 10, py + dh + 10, nx + 10, ny + dh + 10, { bend: -26, color: 'red', label: 'moved', ly: (py + dh) + 52 });
+    }
+    if (!narrow) s.text(450, 334, fixed ? 'every caller covered at once' : 'patch one door, the bug walks to the next', { size: 19, anchor: 'middle', color: fixed ? 'green' : 'red' });
+    else s.text(220, 462, fixed ? 'every caller covered at once' : 'patch one door, bug moves on', { size: 18, anchor: 'middle', color: fixed ? 'green' : 'red' });
+  });
+  function stepper(stepsId, capId, list, get, set, figId) {
+    const wrap = document.getElementById(stepsId), cap = document.getElementById(capId);
+    list.forEach((it, i) => {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'chip'; b.textContent = it[0];
+      b.addEventListener('click', () => { set(i); paint(); redraw(figId); });
+      wrap.appendChild(b);
+    });
+    function paint() {
+      const i = get();
+      wrap.querySelectorAll('button').forEach((b, j) => b.setAttribute('aria-pressed', j === i ? 'true' : 'false'));
+      cap.innerHTML = `${list[i][1]}<small>${list[i][2]}</small>`;
+    }
+    paint();
+  }
+  stepper('moved-steps', 'moved-cap', MOVED, () => movedStep, (i) => { movedStep = i; }, 'f-moved');
+
+  /* ---------- the loop ---------- */
+  const LOOP = [
+    ['1 build', 'Agents write the code and its tests', 'Risky seams start with a written list of rules in the spec.'],
+    ['2 pre-review', 'Codex pre-reviews the exact commit', 'It reads the change against our checklist: every caller, every screen, every ordering.'],
+    ['3 guard', 'A guard runs before any review request', 'No request unless the pre-review commit is the branch head and CI is green.'],
+    ['4 review', 'My co-founder reviews and gives a verdict', 'Review time is the scarce part, so nothing gets there unchecked.'],
+    ['5 fix', 'Fix the class, then go back to step 2', 'The fix\'s diff gets its own pre-review, and its new tests get broken on purpose.'],
+    ['6 log', 'Merge, then log every finding', 'One row each, with the commit where it was born and whether pre-review named it. Misses become new checklist questions.'],
+  ];
+  let loopStep = 0;
+  fig('f-loop', (el, narrow) => {
+    const W = narrow ? 440 : 900, H = narrow ? 700 : 400;
+    const s = Sk(el, W, H, 13, 'The review loop: build, pre-review the exact commit, guard, review, fix back to pre-review, merge and log');
+    const B = narrow
+      ? { 0: [20, 70, 220, 64], 1: [20, 190, 220, 74], 2: [20, 320, 220, 64], 3: [20, 440, 220, 64], 4: [280, 440, 146, 64], 5: [20, 590, 220, 64], L: [280, 190, 146, 74] }
+      : { 0: [10, 160, 136, 70], 1: [184, 150, 222, 90], 2: [440, 160, 128, 70], 3: [600, 160, 130, 70], 4: [600, 304, 130, 66], 5: [764, 160, 126, 70], L: [200, 14, 190, 70] };
+    const lab = narrow
+      ? ['build', 'pre-review\n@ exact commit', 'ready guard', 'reviewer', 'fix wave', 'merge + log', 'checklist']
+      : ['build', 'pre-review\n@ exact commit', 'ready\nguard', 'reviewer', 'fix wave', 'merge\n+ log', 'checklist'];
+    const ics = ['hammer', 'bot', 'shield', 'eye', 'wrench', 'database', 'glasses'];
+    const fills = ['blue', 'violet', 'green', 'yellow', 'orange', 'blue', 'gray'];
+    const keys = [0, 1, 2, 3, 4, 5, 'L'];
+    // lanes (wide only): where it runs
+    if (!narrow) {
+      s.text(10, 286, 'agents', { size: 17, color: 'gray' });
+      s.text(184, 286, 'model call', { size: 17, color: 'violet' });
+      s.text(440, 286, 'CI + guard', { size: 17, color: 'gray' });
+      s.text(600, 136, 'human', { size: 17, color: 'gray' });
+    }
+    const active = (k) => k === loopStep || (k === 'L' && loopStep === 5);
+    keys.forEach((k, i) => {
+      const [x, y, bw, bh] = B[k];
+      const grp = s.g();
+      s.box(x, y, bw, bh, { fill: fills[i], sw: active(k) ? 3 : 1.7 }, grp);
+      s.icon(ics[i], x + 10, y + 10, 24, i === 1 ? 'violet' : 'ink', grp);
+      const lines = lab[i].split('\n').length;
+      s.text(x + 42, y + (lines > 1 ? 30 : 40), lab[i], { size: narrow ? 19 : 19 }, grp);
+      s.fade(grp, active(k));
+    });
+    const c = (k, side) => { const [x, y, bw, bh] = B[k]; return { l: [x, y + bh / 2], r: [x + bw, y + bh / 2], t: [x + bw / 2, y], b: [x + bw / 2, y + bh] }[side]; };
+    const A = (a, b, o = {}) => s.arrow(a[0], a[1], b[0], b[1], Object.assign({ bend: 0, sw: 1.7 }, o));
+    if (!narrow) {
+      A(c(0, 'r'), c(1, 'l')); A(c(1, 'r'), c(2, 'l')); A(c(2, 'r'), c(3, 'l')); A(c(3, 'r'), c(5, 'l'), { label: 'approved', ly: 150 });
+      A(c(3, 'b'), c(4, 't'), { label: 'changes', lx: 690, ly: 278 });
+      s.arrow(600, 337, 295, 244, { via: [[295, 337]], color: 'orange', label: 'the fix\'s diff', lx: 450, ly: 328 });
+      s.arrow(827, 158, 392, 50, { via: [[827, 50]], color: 'gray', label: 'misses → new questions', lx: 610, ly: 40 });
+      A(c('L', 'b'), c(1, 't'), { color: 'gray' });
+    } else {
+      A(c(0, 'b'), c(1, 't')); A(c(1, 'b'), c(2, 't')); A(c(2, 'b'), c(3, 't')); A(c(3, 'b'), c(5, 't'), { label: 'approved', lx: 180, ly: 556 });
+      A(c(3, 'r'), c(4, 'l'));
+      s.arrow(353, 438, 242, 250, { via: [[353, 300]], color: 'orange', label: 'fix diff', lx: 380, ly: 300 });
+      s.arrow(242, 640, 353, 266, { via: [[420, 600], [420, 300]], color: 'gray', label: 'new questions', lx: 368, ly: 580 });
+      A(c('L', 'l'), c(1, 'r'), { color: 'gray' });
+      s.text(20, 40, 'where it runs: blue agents · purple model · yellow human', { size: 15, color: 'gray' });
+    }
+  });
+  stepper('loop-steps', 'loop-cap', LOOP, () => loopStep, (i) => { loopStep = i; }, 'f-loop');
+
+  /* ---------- myths ---------- */
+  const MYTHS = [
+    ['"The review is nitpicking."', 'Zero findings about style or naming. Every round that blocked a merge had at least one blocker or major finding.'],
+    ['"It is the review queue."', 'Median 45 minutes from the ready ping to review. Sleep stretched the calendar. It did not create rounds.'],
+    ['"Run the full suite more often."', 'The generic suite does not cover timing, terminal size, or code written after the pull request opened.'],
+    ['"Write better pull request descriptions."', 'The descriptions were already exact. What failed was a description that stopped matching the code after a fix.'],
+    ['"Stale base branches cause it."', 'One finding out of 76.'],
+  ];
+  const mroot = document.getElementById('myths');
+  MYTHS.forEach(([m, a]) => {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'card myth'; b.setAttribute('aria-expanded', 'false');
+    b.innerHTML = `<span class="ic" style="background:var(--f-gray)"><i data-lucide="message-circle-question"></i></span><span><span class="m">${m}</span><span class="a">${a}</span></span>`;
+    b.addEventListener('click', () => b.setAttribute('aria-expanded', b.getAttribute('aria-expanded') === 'true' ? 'false' : 'true'));
+    mroot.appendChild(b);
+  });
+
+  try { window.lucide.createIcons({ attrs: { 'stroke-width': 2 } }); } catch (e) { console.warn('[icons]', e); }
+  renderAll(true);
+  let t; window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(() => renderAll(false), 120); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => renderAll(true));
+})();
+</script>
+</body>
+</html>

@@ -544,6 +544,11 @@ def validate_data() -> None:
         raise ValueError(f"unsafe reading slug(s): {invalid_reading}")
     if len(reading_slugs) != len(set(reading_slugs)):
         raise ValueError("reading slugs must be unique")
+    # an update's href must be one of this site's own note pages, so home and the feed never link to a missing page
+    pages = {f"/work/{slug}/" for slug in slugs} | {f"/reading/{slug}/" for slug in reading_slugs}
+    bad_hrefs = sorted(item["href"] for item in DATA["updates"] if item.get("href") and item["href"] not in pages)
+    if bad_hrefs:
+        raise ValueError(f"update href(s) must be a /work/<slug>/ or /reading/<slug>/ page on this site: {bad_hrefs}")
 
 
 def main() -> None:

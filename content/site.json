@@ -29,10 +29,9 @@
   },
   "now": {
     "label": "Now · September 2026",
-    "title": "Building General Formation",
-    "body": "I am a founding engineer on an AI agent suite for one-person companies. We are exploring how far a coherent agent team can take a business—from a thin idea to grounded strategy, identity, software, and launch material.",
-    "question": "Current question: how much of a small company can an agent team operate without hiding the consequential decisions from its founder?",
-    "work_slug": "general-formation"
+    "title": "Building an AI agent suite for one-person companies",
+    "body": "I am building an AI agent suite for one-person companies. We are exploring how far a coherent agent team can take a business—from a thin idea to grounded strategy, identity, software, and launch material.",
+    "question": "Current question: how much of a small company can an agent team operate without hiding the consequential decisions from its founder?"
   },
   "about": [
     "I have spent years studying motivation, behavioral design, and engagement, then applying those ideas to real products. I co-founded CustomerGlu and built its gamification SDK from scratch; it eventually reached more than 150 million devices.",
@@ -41,49 +40,8 @@
   ],
   "work": [
     {
-      "slug": "general-formation",
-      "title": "General Formation",
-      "display": "general formation",
-      "emoji": "🧩",
-      "order": "01",
-      "period": "2026—",
-      "stage": "Building",
-      "featured": true,
-      "summary": "An AI agent suite for one-person companies.",
-      "role": "Founding engineer",
-      "tags": [
-        "agent systems",
-        "product",
-        "engineering"
-      ],
-      "lead": "General Formation takes a founder's intent and coordinates specialist agents to turn it into inspectable business work—not just an answer in a chat window.",
-      "cover": {
-        "src": "/assets/general-formation-akar.png",
-        "alt": "Generated Akar concept statement: Akar is a mobile smoothie cart in Bali that puts island-native superfoods.",
-        "caption": "A statement card produced during a completed General Formation run. Akar is a generated business concept, not an operating company."
-      },
-      "sections": [
-        {
-          "title": "The question",
-          "body": "Can a small company gain real operating leverage from agents without giving up founder judgment, taste, or visibility into what happened?"
-        },
-        {
-          "title": "What I am building",
-          "body": "I work across the product experience and the underlying constellation: planning, specialist handoffs, evaluation gates, resumable runs, and a terminal cockpit where a founder can steer the work."
-        },
-        {
-          "title": "A working receipt",
-          "body": "One completed run turned the thin prompt “Build a business which creates green, healthy smoothies in Bali” into Akar: a grounded product wedge, brand system, social assets, and a rendered responsive site."
-        },
-        {
-          "title": "Truth boundary",
-          "body": "Akar is evidence of the system producing a coherent business concept and launch-ready collateral. It is not an operating smoothie company, and I do not present it as one."
-        }
-      ],
-      "links": []
-    },
-    {
       "slug": "customerglu",
+      "group": "earlier",
       "title": "CustomerGlu",
       "display": "customerglu",
       "emoji": "🎮",
@@ -123,6 +81,7 @@
     },
     {
       "slug": "fable-low-power",
+      "group": "for coding agents",
       "title": "Fable Low Power Mode",
       "display": "fable low power",
       "emoji": "🔋",
@@ -162,6 +121,7 @@
     },
     {
       "slug": "llm-wiki-compiler",
+      "group": "for coding agents",
       "title": "LLM Wiki Compiler",
       "display": "llm-wiki-compiler",
       "emoji": "📚",
@@ -201,6 +161,7 @@
     },
     {
       "slug": "cache-audit",
+      "group": "for coding agents",
       "title": "Cache Audit",
       "display": "cache-audit",
       "emoji": "⚡",
@@ -235,6 +196,7 @@
     },
     {
       "slug": "stoicism-daily",
+      "group": "apps",
       "title": "Stoicism Daily",
       "display": "stoicism daily",
       "emoji": "🧘",
@@ -417,7 +379,7 @@
       "title": "A review round is a unit of time",
       "display": "a review round is a unit of time",
       "period": "Sep 2026",
-      "venue": "general formation",
+      "venue": "engineering",
       "status": "Notes",
       "summary": "One pull request took eight reviewer rounds and 26.5 hours. Four days later one in the same arc merged in 4.3 hours. What changed was the price of a round, not the findings.",
       "tags": [
@@ -433,9 +395,9 @@
       "title": "Jev replaces the decision, never the eyes or the pen",
       "display": "jev replaces the decision, never the eyes or the pen",
       "period": "Sep 2026",
-      "venue": "general formation",
+      "venue": "engineering",
       "status": "Notes",
-      "summary": "A classifier that never writes, only picks from a menu code already built. The same loop across a browser agent, a voice command, a day of my own screen text, and the one gate in Garage I would hand it next.",
+      "summary": "A classifier that never writes, only picks from a menu code already built. The same loop across a browser agent, a voice command, a day of my own screen text, and the one gate at work I would hand it next.",
       "tags": [
         "AI systems",
         "computer use",
@@ -483,17 +445,17 @@
       "stage": "Written · Diagrammed",
       "title": "Talk to your Mac in 300 ms: the code owns the menu, Jev picks from it",
       "body": "Read the code of macbrow, a voice assistant for the Mac that never hands your sentence to a big model. Your words go to Jev as a multiple-choice question over a menu of about 30 buttons; the code presses the winner. Eight diagrams, plain words first, code names in the footnotes.",
-      "work_slug": "general-formation",
-      "external_url": "https://ussumant.github.io/reading/macbrow/"
+      "external_url": "https://ussumant.github.io/reading/macbrow/",
+      "href": "/reading/macbrow/"
     },
     {
       "date": "2026-09-21",
       "date_label": "21 Sep 2026",
       "stage": "Written · Measured",
       "title": "Jev replaces the decision, never the eyes or the pen",
-      "body": "Wrote up the classifier I keep putting in front of actions: it never generates text, it only picks from a menu the code already built. Includes a live Calculator run that took six picks at 98 to 100 percent for $0.00021, and the one Garage gate I would hand it next. Five diagrams.",
-      "work_slug": "general-formation",
-      "external_url": "https://ussumant.github.io/reading/jev/"
+      "body": "Wrote up the classifier I keep putting in front of actions: it never generates text, it only picks from a menu the code already built. Includes a live Calculator run that took six picks at 98 to 100 percent for $0.00021, and the one gate at work I would hand it next. Five diagrams.",
+      "external_url": "https://ussumant.github.io/reading/jev/",
+      "href": "/reading/jev/"
     },
     {
       "date": "2026-09-21",
@@ -501,8 +463,8 @@
       "stage": "Written · Measured",
       "title": "A review round is a unit of time",
       "body": "Wrote up two weeks of merged pull requests with one human reviewer. Median merge time fell from 17.5 to 8.7 hours while rounds per PR stayed near three: the round got cheaper, not rarer. Five diagrams.",
-      "work_slug": "general-formation",
-      "external_url": "https://ussumant.github.io/reading/pr-round/"
+      "external_url": "https://ussumant.github.io/reading/pr-round/",
+      "href": "/reading/pr-round/"
     },
     {
       "date": "2026-08-12",
@@ -512,15 +474,6 @@
       "body": "Published the quota-aware skill I use to keep frontier-model time focused on judgment. For the same workflows, my allowance moved from roughly two days to at least five.",
       "work_slug": "fable-low-power",
       "external_url": "https://github.com/ussumant/useful-agent-skills/tree/main/skills/fable-low-power"
-    },
-    {
-      "date": "2026-08-09",
-      "date_label": "09 Aug 2026",
-      "stage": "Built",
-      "title": "Akar, a General Formation run",
-      "body": "A one-line smoothie-business prompt became a grounded product wedge, identity, social assets, and a responsive site. It is a system output—not a claim that the physical business launched.",
-      "work_slug": "general-formation",
-      "external_url": ""
     },
     {
       "date": "2026-07-22",

@@ -75,7 +75,8 @@ def footer(*, copyright: bool = True) -> str:
 
 def project_item(item: dict, *, include_meta: bool = False) -> str:
     meta = f' <span class="project-meta">({e(item["stage"].lower())} · {e(item["period"])})</span>' if include_meta else ""
-    summary = item["summary"] if include_meta else item.get("home_summary", item["summary"])
+    # the home list reads in one register: a short lowercase line, like the side quest's
+    summary = item["summary"] if include_meta else item.get("home_summary") or item["summary"][0].lower() + item["summary"][1:].rstrip(".")
     return (
         f'<li><span aria-hidden="true">{e(item["emoji"])}</span> '
         f'<a class="live" href="/work/{e(item["slug"])}/">{e(item["display"])}</a> '
@@ -121,19 +122,38 @@ def render_run_receipt() -> str:
 </figure>'''
 
 
+# Projects by kind: the company first, then what I built myself. Work notes carry their "group";
+# the printer, the game and the workshop are not notes, so they link straight to the thing.
+GROUPS = ["earlier", "for coding agents", "apps", "play"]
+VIEW_SWITCH = ('<nav class="view-switch" aria-label="Switch view"><span aria-current="page">site</span>'
+               '<a href="/workshop/">workshop</a></nav>')
+
+
+def grouped_projects(*, include_meta: bool = False) -> str:
+    r = DATA["run_receipt"]
+    extra = {
+        "apps": [f'<li><span aria-hidden="true">🧾</span> <a class="live" href="{e(r["app_url"])}" rel="noopener">run receipt</a> '
+                 '— every strava run prints itself</li>'],
+        "play": [side_quest_item(),
+                 '<li><span aria-hidden="true">💡</span> <a class="live" href="/workshop/">workshop</a> '
+                 '— my workshop in 3D; pull the cord</li>'],
+    }
+    list_class = "project-list archive-list" if include_meta else "project-list"
+    out = []
+    for group in GROUPS:
+        rows = [project_item(item, include_meta=include_meta) for item in WORK if item["group"] == group] + extra.get(group, [])
+        if rows:
+            out.append(f'<p class="project-group">{e(group)}</p><ul class="{list_class}">{"".join(rows)}</ul>')
+    return f'<div class="projects" id="work">{"".join(out)}</div>'
+
+
 def render_home() -> str:
-    current_slug = DATA["now"]["work_slug"]
-    featured = "".join(
-        project_item(item)
-        for item in WORK
-        if item["featured"] and item["slug"] != current_slug
-    )
     updates = []
     for item in DATA["updates"]:
         external = f' · <a href="{e(item["external_url"])}" rel="noopener">artifact ↗</a>' if item.get("external_url") else ""
         updates.append(f"""<li>
   <time datetime="{e(item['date'])}">{e(item['date_label'])}</time><br>
-  <a class="live" href="/work/{e(item['work_slug'])}/">{e(item['title'])}</a> — {e(item['body'])}
+  <a class="live" href="{e(update_href(item))}">{e(item['title'])}</a> — {e(item['body'])}
   <span class="update-links">{external}</span>
 </li>""")
     about = "".join(f"<p>{e(paragraph)}</p>" for paragraph in DATA["about"])
@@ -142,11 +162,12 @@ def render_home() -> str:
         '<body class="home-page"><a class="skip-link" href="#main">Skip to content</a>',
         '<main id="main" tabindex="-1">',
         '<section class="home-scene" aria-label="Introduction">',
+        VIEW_SWITCH,
         wordmark(heading=True),
         f'<p class="intro">{e(DATA["hero"]["title"])}</p>',
         f'<p class="intro">Before this I co-founded CustomerGlu and built its gamification SDK from scratch — it reached 150M+ devices.</p>',
-        f'<p class="now-line" id="now"><span class="live-dot" aria-hidden="true"></span><a class="live" href="/work/{e(DATA["now"]["work_slug"])}/">{e(DATA["now"]["label"].lower())}</a> — {e(DATA["now"]["title"])}. {e(DATA["work"][0]["summary"])}</p>',
-        f'<ul class="project-list" id="work">{featured}{side_quest_item()}</ul>',
+        f'<p class="now-line" id="now"><span class="live-dot" aria-hidden="true"></span>{e(DATA["now"]["label"].lower())} — {e(DATA["now"]["title"])}.</p>',
+        grouped_projects(),
         '<p class="small-link"><a class="live" href="/work/">all work →</a> · <a class="live" href="/reading/">reading →</a></p>',
         f'<p class="intro">{e(SITE["location"])}.</p>',
         '<p>Contact:<br><a class="live" href="https://github.com/ussumant" rel="me noopener">github</a> · <a class="live" href="https://x.com/sumant_us" rel="me noopener">x</a> · <a class="live" href="https://www.linkedin.com/in/sumantus/" rel="me noopener">linkedin</a></p>',
@@ -174,12 +195,11 @@ def plain_open(title: str, description: str, path: str, *, body_class: str = "no
 
 
 def render_archive() -> str:
-    rows = "".join(project_item(item, include_meta=True) for item in WORK)
     return "".join([
         plain_open("Work — Sumant", "Products, systems, and experiments built by Sumant.", "/work/"),
         '<main id="main" tabindex="-1">',
         '<header class="page-intro"><h1>work</h1><p>Proof, not a project inventory. Each note records what I built and the honest stage it reached.</p></header>',
-        f'<ul class="project-list archive-list">{rows}</ul>',
+        grouped_projects(include_meta=True),
         '</main>', footer(), '</body></html>\n',
     ])
 
@@ -459,10 +479,14 @@ def render_reading_detail(item: dict) -> str:
     ])
 
 
+def update_href(item: dict) -> str:
+    return item.get("href") or f"/work/{item['work_slug']}/"
+
+
 def render_feed() -> str:
     entries = []
     for item in DATA["updates"]:
-        url = absolute(f"/work/{item['work_slug']}/")
+        url = absolute(update_href(item))
         entries.append(f"""  <entry>
     <title>{xml_escape(item['title'])}</title>
     <id>{xml_escape(url)}#{xml_escape(item['date'])}</id>
@@ -501,8 +525,10 @@ def validate_data() -> None:
         raise ValueError(f"unsafe work slug(s): {invalid}")
     if len(slugs) != len(set(slugs)):
         raise ValueError("work slugs must be unique")
-    references = [DATA["now"]["work_slug"]]
-    references.extend(item["work_slug"] for item in DATA["updates"])
+    references = [item["work_slug"] for item in DATA["updates"] if not item.get("href")]
+    unknown_groups = sorted({item.get("group") for item in WORK} - set(GROUPS))
+    if unknown_groups:
+        raise ValueError(f"unknown work group(s): {unknown_groups}")
     missing = sorted(set(references) - set(slugs))
     if missing:
         raise ValueError(f"unknown work reference(s): {missing}")

@@ -8,22 +8,22 @@
   <author><name>Sumant</name></author>
   <entry>
     <title>Talk to your Mac in 300 ms: the code owns the menu, Jev picks from it</title>
-    <id>https://ussumant.github.io/work/general-formation/#2026-09-22</id>
-    <link href="https://ussumant.github.io/work/general-formation/"/>
+    <id>https://ussumant.github.io/reading/macbrow/#2026-09-22</id>
+    <link href="https://ussumant.github.io/reading/macbrow/"/>
     <updated>2026-09-22T00:00:00Z</updated>
     <summary>Read the code of macbrow, a voice assistant for the Mac that never hands your sentence to a big model. Your words go to Jev as a multiple-choice question over a menu of about 30 buttons; the code presses the winner. Eight diagrams, plain words first, code names in the footnotes.</summary>
   </entry>
   <entry>
     <title>Jev replaces the decision, never the eyes or the pen</title>
-    <id>https://ussumant.github.io/work/general-formation/#2026-09-21</id>
-    <link href="https://ussumant.github.io/work/general-formation/"/>
+    <id>https://ussumant.github.io/reading/jev/#2026-09-21</id>
+    <link href="https://ussumant.github.io/reading/jev/"/>
     <updated>2026-09-21T00:00:00Z</updated>
-    <summary>Wrote up the classifier I keep putting in front of actions: it never generates text, it only picks from a menu the code already built. Includes a live Calculator run that took six picks at 98 to 100 percent for $0.00021, and the one Garage gate I would hand it next. Five diagrams.</summary>
+    <summary>Wrote up the classifier I keep putting in front of actions: it never generates text, it only picks from a menu the code already built. Includes a live Calculator run that took six picks at 98 to 100 percent for $0.00021, and the one gate at work I would hand it next. Five diagrams.</summary>
   </entry>
   <entry>
     <title>A review round is a unit of time</title>
-    <id>https://ussumant.github.io/work/general-formation/#2026-09-21</id>
-    <link href="https://ussumant.github.io/work/general-formation/"/>
+    <id>https://ussumant.github.io/reading/pr-round/#2026-09-21</id>
+    <link href="https://ussumant.github.io/reading/pr-round/"/>
     <updated>2026-09-21T00:00:00Z</updated>
     <summary>Wrote up two weeks of merged pull requests with one human reviewer. Median merge time fell from 17.5 to 8.7 hours while rounds per PR stayed near three: the round got cheaper, not rarer. Five diagrams.</summary>
   </entry>
@@ -33,13 +33,6 @@
     <link href="https://ussumant.github.io/work/fable-low-power/"/>
     <updated>2026-08-12T00:00:00Z</updated>
     <summary>Published the quota-aware skill I use to keep frontier-model time focused on judgment. For the same workflows, my allowance moved from roughly two days to at least five.</summary>
-  </entry>
-  <entry>
-    <title>Akar, a General Formation run</title>
-    <id>https://ussumant.github.io/work/general-formation/#2026-08-09</id>
-    <link href="https://ussumant.github.io/work/general-formation/"/>
-    <updated>2026-08-09T00:00:00Z</updated>
-    <summary>A one-line smoothie-business prompt became a grounded product wedge, identity, social assets, and a responsive site. It is a system output—not a claim that the physical business launched.</summary>
   </entry>
   <entry>
     <title>Cache Audit</title>

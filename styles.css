@@ -86,6 +86,17 @@ main:focus { outline: none; }
 .project-list li > span:first-child { display: inline-block; width: 18px; }
 .project-meta { color: var(--muted); white-space: nowrap; }
 .small-link { margin-top: -15px; }
+.project-group { margin: 0 0 4px; color: var(--muted); font-size: 12px; }
+.projects ul { margin-bottom: 18px; }
+.projects + .small-link { margin-top: 8px; }
+
+/* site <-> workshop, as a radio: the filled dot is where you are (the same switch sits on /workshop/) */
+.view-switch { position: absolute; top: 4px; right: 0; z-index: 2; display: flex; gap: 14px; font-size: 12px; line-height: 1; }
+.view-switch a, .view-switch span { display: inline-flex; align-items: center; gap: 6px; min-height: 30px; white-space: nowrap; }
+.view-switch a::before, .view-switch span::before { content: ""; width: 9px; height: 9px; border: 1.5px solid currentColor; border-radius: 50%; }
+.view-switch span { color: var(--ink); }
+.view-switch span::before { background: currentColor; box-shadow: inset 0 0 0 2px var(--paper); }
+@media (pointer: coarse) { .view-switch a, .view-switch span { min-height: 40px; } }
 
 .home-section {
   max-width: 520px;
@@ -545,7 +556,7 @@ body.reading-page { max-width: 1120px; margin: 0 auto; }
 .ko-up:focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; }
 
 /* run receipt: the printer, a strip of paper in its slot (links to the Railway app) */
-.charm.printer-card { top: max(330px, calc(100vh - 330px)); }
+.charm.printer-card { top: max(330px, calc(100vh - 330px)); left: 456px; }   /* clear of the grouped project list */
 .printer { position: relative; display: block; width: 200px; padding-top: 40px; text-decoration: none; }
 .printer:hover { text-decoration: none; }
 .printer:focus-visible { outline: 2px solid var(--blue); outline-offset: 6px; border-radius: 6px; }

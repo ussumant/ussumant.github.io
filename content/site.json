@@ -35,9 +35,42 @@
   },
   "about": [
     "I have spent years studying motivation, behavioral design, and engagement, then applying those ideas to real products. I co-founded CustomerGlu and built its gamification SDK from scratch; it eventually reached more than 150 million devices.",
-    "After CustomerGlu, I took one deliberate exploratory chapter: product and growth work at Lingotune, the One Person Growth Team, Distill, and a series of AI-assisted product experiments. The common thread was learning how a small, high-agency team could research, build, grow, and learn faster.",
     "Today I prefer hands-on building to managing large teams. I work across product judgment, research, design, engineering, and the operating systems that let those disciplines compound."
   ],
+  "after_sale": {
+    "intro": "After selling CustomerGlu, I spent a deliberate chapter picking up problems and solving them, mostly by building:",
+    "items": [
+      {
+        "emoji": "🛠️",
+        "text": "went deep on building with Claude Code, which led to Lenny"
+      },
+      {
+        "emoji": "🌱",
+        "text": "contributed to open source for the first time — 500+ GitHub stars across my projects"
+      },
+      {
+        "emoji": "🧑‍💻",
+        "text": "ran a vibecoding community with AJ, who now has 430k+ followers"
+      },
+      {
+        "emoji": "🎙️",
+        "text": "recorded 20+ sessions of a growth podcast with Devashish"
+      },
+      {
+        "emoji": "📈",
+        "text": "consulted for two consumer apps as a one-person growth team built on Paperclip — analytics, user interviews, onboarding, and growth experiments to lift activation and retention"
+      },
+      {
+        "emoji": "🧪",
+        "text": "joined founders.inc's program to explore Distill, a Mac app"
+      },
+      {
+        "emoji": "🏃",
+        "text": "built Strava for vibecoding"
+      }
+    ],
+    "outro": "The common thread: find a real problem, then solve it end to end."
+  },
   "work": [
     {
       "slug": "customerglu",

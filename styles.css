@@ -575,3 +575,7 @@ body.reading-page { max-width: 1120px; margin: 0 auto; }
 @media (prefers-reduced-motion: reduce) { .rp-paper { transition: none; } }
 /* the printer caption is longer than the old one: let it wrap on narrow phones (codex P2) */
 .printer-card figcaption { white-space: normal; max-width: min(345px, calc(100vw - 48px)); }
+
+.after-sale-list { margin-bottom: 1em; }
+.after-sale-list li { padding-left: 22px; text-indent: -22px; margin-bottom: 4px; }
+.after-sale-list li > span:first-child { text-indent: 0; }

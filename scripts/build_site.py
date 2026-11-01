@@ -156,7 +156,15 @@ def render_home() -> str:
   <a class="live" href="{e(update_href(item))}">{e(item['title'])}</a> — {e(item['body'])}
   <span class="update-links">{external}</span>
 </li>""")
-    about = "".join(f"<p>{e(paragraph)}</p>" for paragraph in DATA["about"])
+    paragraphs = [f"<p>{e(paragraph)}</p>" for paragraph in DATA["about"]]
+    chapter = DATA.get("after_sale")
+    if chapter:
+        rows = "".join(f'<li><span aria-hidden="true">{e(item["emoji"])}</span> {e(item["text"])}</li>' for item in chapter["items"])
+        block = f'<p>{e(chapter["intro"])}</p><ul class="project-list after-sale-list">{rows}</ul>'
+        if chapter.get("outro"):
+            block += f'<p>{e(chapter["outro"])}</p>'
+        paragraphs.insert(1, block)
+    about = "".join(paragraphs)
     return "".join([
         head(SITE["title"], SITE["description"], "/", typing=True),
         '<body class="home-page"><a class="skip-link" href="#main">Skip to content</a>',

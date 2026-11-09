@@ -436,6 +436,22 @@
         "AI agents",
         "code review"
       ]
+    },
+    {
+      "slug": "lessons-loop",
+      "order": "07",
+      "handwritten": true,
+      "title": "432 lessons, and my agent kept making the same mistake",
+      "display": "432 lessons, and my agent kept making the same mistake",
+      "period": "Nov 2026",
+      "venue": "engineering",
+      "status": "Notes",
+      "summary": "I had my coding agent write down every mistake, 432 of them. One was written down 33 times, and almost none could be checked. What a verifier pass over the lessons found, and what changed on the first night after.",
+      "tags": [
+        "AI agents",
+        "memory",
+        "engineering workflow"
+      ]
     }
   ],
   "updates": [

@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>432 lessons, and my agent kept making the same mistake — Sumant</title>
+<meta name="description" content="I had my coding agent write down every mistake, 432 of them. One was written down 33 times. What a verifier pass over the lessons found, and what changed after.">
+<link rel="canonical" href="https://ussumant.github.io/reading/lessons-loop/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A5%8A%3C/text%3E%3C/svg%3E">
+<link rel="alternate" type="application/atom+xml" title="Sumant — recent work" href="/feed.xml">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://ussumant.github.io/reading/lessons-loop/">
+<meta property="og:title" content="432 lessons, and my agent kept making the same mistake">
+<meta property="og:description" content="I had my coding agent write down every mistake, 432 of them. One was written down 33 times. What a verifier pass over the lessons found, and what changed after.">
+<style>
+  @font-face { font-family: Virgil; src: url(vendor/Virgil.woff2) format('woff2'); font-display: swap; }
+  @font-face { font-family: Cascadia; src: url(vendor/Cascadia.woff2) format('woff2'); font-display: swap; }
+  :root {
+    --ink: #1e1e1e; --muted: #5c5f66; --paper: #fdfcf8; --line: #e6e3da;
+    --blue: #1971c2; --red: #e03131; --green: #2f9e44; --orange: #e8590c; --violet: #6741d9;
+    --f-blue: #a5d8ff; --f-red: #ffc9c9; --f-green: #b2f2bb; --f-orange: #ffd8a8; --f-violet: #eebefa; --f-yellow: #ffec99; --f-gray: #e9ecef;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--paper); color: var(--ink);
+    font: 17px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, Arial, sans-serif; }
+  main { max-width: 720px; margin: 0 auto; padding: 40px 16px 96px; }
+  .hand { font-family: Virgil, "Comic Sans MS", cursive; }
+  .mono { font-family: Cascadia, ui-monospace, Menlo, monospace; font-size: .86em; }
+  .kicker { font-family: Cascadia, ui-monospace, monospace; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  h1 { font-family: Virgil, cursive; font-weight: 400; font-size: 46px; line-height: 1.08; margin: 10px 0 14px; }
+  h2 { font-family: Virgil, cursive; font-weight: 400; font-size: 30px; line-height: 1.2; margin: 60px 0 12px; }
+  h2 .n { color: var(--blue); margin-right: 8px; }
+  .dek { font-size: 20px; line-height: 1.5; color: #3b3d42; margin: 0 0 14px; }
+  .hook { font-family: Virgil, cursive; font-size: 24px; line-height: 1.35; margin: 4px 0 14px; }
+  .meta { display: grid; grid-template-columns: max-content 1fr; gap: 2px 14px; margin: 0 0 6px; font-family: Cascadia, ui-monospace, monospace; font-size: 13px; color: var(--muted); }
+  .meta dt { color: var(--ink); }
+  .meta dd { margin: 0; }
+  .byline { font-family: Cascadia, ui-monospace, monospace; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+  p { margin: 0 0 14px; }
+  strong { font-weight: 650; }
+  em { font-style: normal; background: linear-gradient(transparent 62%, var(--f-yellow) 62%); }
+  .fig { margin: 22px 0 26px; }
+  svg.sketch { width: 100%; height: auto; display: block; }
+  .cap { font-family: Virgil, cursive; font-size: 16px; color: var(--muted); text-align: center; margin-top: 4px; }
+
+  /* "why?" — long text one tap away */
+  details.why { margin: 4px 0 18px; border-left: 3px dashed var(--line); padding: 2px 0 2px 14px; }
+  details.why summary { cursor: pointer; font-family: Virgil, cursive; color: var(--blue); list-style: none; font-size: 17px; }
+  details.why summary::-webkit-details-marker { display: none; }
+  details.why summary::before { content: '＋ '; }
+  details.why[open] summary::before { content: '－ '; }
+  details.why > div { font-size: 15.5px; color: #3b3d42; padding-top: 6px; }
+
+  /* hand-drawn-ish HTML cards */
+  .card { background: #fff; border: 2px solid var(--ink); border-radius: 12px 16px 10px 14px / 14px 10px 16px 12px;
+    box-shadow: 3px 3px 0 var(--ink); padding: 14px 16px; }
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 20px 0 26px; }
+  .cards .card.wide { grid-column: 1 / -1; }
+  .pcard .top { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .pcard .top .lab { font-family: Virgil, cursive; font-size: 20px; line-height: 1.2; }
+  .pcard p { font-size: 15.5px; margin: 0; color: #3b3d42; }
+  .ic { flex: none; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; border: 2px solid var(--ink); }
+  .ic svg { width: 20px; height: 20px; }
+
+  /* stepper */
+  .steps { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 6px 0 4px; }
+  .chip { font-family: Virgil, cursive; font-size: 16px; padding: 6px 14px; min-height: 40px; background: #fff; color: var(--ink);
+    border: 2px solid var(--ink); border-radius: 18px 14px 16px 12px; cursor: pointer; }
+  .chip[aria-pressed="true"] { background: var(--f-blue); }
+  .chip:focus-visible, .opt:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+  .stepcap { font-family: Virgil, cursive; font-size: 19px; text-align: center; min-height: 58px; margin: 6px 4px 0; line-height: 1.35; }
+  .stepcap small { display: block; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 14.5px; color: var(--muted); margin-top: 2px; }
+
+  /* drill */
+  .drill { margin: 18px 0 28px; }
+  .drill .q { margin-bottom: 14px; }
+  .drill .q .t { display: flex; gap: 10px; align-items: flex-start; font-size: 16px; margin-bottom: 10px; }
+  .drill .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+  .opt { font-family: Virgil, cursive; font-size: 15px; min-height: 40px; padding: 6px 12px; background: #fff; color: var(--ink);
+    border: 2px solid var(--ink); border-radius: 14px 10px 14px 10px; cursor: pointer; }
+  .opt.right { background: var(--f-green); }
+  .opt.wrong { background: var(--f-red); animation: shake .3s; }
+  .opt:disabled { cursor: default; }
+  .opt:disabled:not(.right) { opacity: .45; }
+  .fb { font-size: 14.5px; color: var(--muted); margin-top: 8px; min-height: 0; }
+  .fb:empty { display: none; }
+  @keyframes shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+  .score { font-family: Virgil, cursive; font-size: 18px; text-align: center; color: var(--muted); }
+
+  /* stat tiles */
+  .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 20px 0 10px; }
+  .tile .big { font-family: Virgil, cursive; font-size: 34px; line-height: 1.1; }
+  .tile .big .from { color: var(--muted); }
+  .tile .big .to { color: var(--green); }
+  .tile .what { font-size: 15px; color: #3b3d42; margin-top: 6px; }
+
+  /* myths */
+  .myths { display: grid; grid-template-columns: 1fr; gap: 10px; margin: 18px 0 26px; }
+  .myth { text-align: left; font: inherit; color: var(--ink); cursor: pointer; display: flex; gap: 12px; align-items: flex-start; }
+  .myth .m { font-family: Virgil, cursive; font-size: 19px; }
+  .myth .a { display: none; font-size: 15px; color: #3b3d42; margin-top: 4px; }
+  .myth[aria-expanded="true"] { background: #f4fbf5; }
+  .myth[aria-expanded="true"] .a { display: block; }
+  .myth[aria-expanded="true"] .m { text-decoration: line-through; text-decoration-color: var(--red); }
+  .tapnote { font-family: Virgil, cursive; color: var(--muted); font-size: 15px; text-align: center; }
+
+  .steal { counter-reset: s; list-style: none; padding: 0; margin: 18px 0; }
+  .steal li { counter-increment: s; display: flex; gap: 14px; margin-bottom: 16px; }
+  .steal li::before { content: counter(s); font-family: Virgil, cursive; font-size: 26px; color: var(--blue); width: 40px; height: 40px; flex: none;
+    border: 2px solid var(--ink); border-radius: 50%; display: grid; place-items: center; background: var(--f-yellow); }
+  .closer { font-family: Virgil, cursive; font-size: 26px; text-align: center; margin: 40px 0 10px; }
+  .site-top { display: flex; justify-content: space-between; align-items: baseline; font-family: Cascadia, ui-monospace, monospace; font-size: 13px; margin-bottom: 26px; }
+  .site-top a, .site-foot a, .crumb { color: #1a52e0; text-decoration: none; }
+  .site-top a:hover, .site-foot a:hover, .crumb:hover { text-decoration: underline; }
+  .site-top .wm { color: #000; font-weight: 600; }
+  .crumb { display: inline-block; font-family: Cascadia, ui-monospace, monospace; font-size: 13px; margin-bottom: 14px; }
+  .site-foot { font-family: Cascadia, ui-monospace, monospace; font-size: 13px; color: var(--muted); margin-top: 34px; line-height: 1.8; }
+  .foot { font-size: 14px; color: var(--muted); border-top: 2px dashed var(--line); margin-top: 40px; padding-top: 14px; }
+
+  @media (max-width: 620px) {
+    h1 { font-size: 36px; }
+    h2 { font-size: 26px; margin-top: 48px; }
+    .dek { font-size: 18px; }
+    .cards, .tiles { grid-template-columns: 1fr; }
+    .tile .big { font-size: 30px; }
+  }
+
+  /* this note: the loop row, a red figure, one-column tiles, links */
+  main p a, .foot a, details a { color: #1a52e0; }
+  .tile .big .bad { color: var(--red); }
+  .tiles.one { grid-template-columns: 1fr; }
+  .loop { display: grid; grid-template-columns: max-content 1fr; gap: 12px 14px; align-items: center; }
+  .loop .lbl { font-family: Virgil, cursive; font-size: 18px; color: var(--muted); }
+  .loop .row { display: flex; flex-wrap: wrap; gap: 5px; }
+  .st { font-family: Virgil, cursive; font-size: 14px; line-height: 1.2; padding: 5px 8px; background: #fff; white-space: nowrap;
+    border: 2px solid var(--ink); border-radius: 18px 14px 16px 12px; }
+  .st.on { background: var(--f-green); }
+  .st.off { border-style: dashed; border-color: var(--red); color: var(--red); background: transparent; }
+  @media (max-width: 620px) { .loop { grid-template-columns: 1fr; gap: 4px; } .loop .lbl { margin-top: 8px; } }
+</style>
+</head>
+<body>
+<main>
+  <header class="site-top"><a class="wm" href="/">sumant</a><a href="/">← home</a></header>
+  <a class="crumb" href="/reading/">← reading / 07</a>
+  <div class="kicker">notes · nov 2026 · engineering</div>
+  <h1>432 lessons, and my agent kept making the same mistake</h1>
+  <p class="dek">I had my coding agent write down every mistake. Then I checked whether it was using any of it.</p>
+  <p class="hook">One mistake, written down 33 times.</p>
+  <dl class="meta">
+    <dt>written</dt><dd>10 November 2026</dd>
+    <dt>about</dt><dd>AI agents · memory · engineering workflow</dd>
+    <dt>window</dt><dd>432 lessons, 29 October to 9 November 2026, and the first night after the changes</dd>
+  </dl>
+
+  <p>If you use coding agents, you need them to learn from usage. Otherwise you correct the same mistake every week.</p>
+  <p>So I had a lessons.md loop. Every time my agent got something wrong, it wrote a lesson in a file: what happened, why, what it cost me, and the rule it would follow from then on. I use Claude Code, and agents write most of my code.</p>
+  <p>I ran that loop for 432 lessons. I recently realised it had been useless.</p>
+
+  <div class="fig loop" role="img" aria-label="The seven steps of the loop, before and now. Before, the check, measure and retire steps did nothing. Now only retire does nothing.">
+    <div class="lbl">before</div>
+    <div class="row"><span class="st">notice</span><span class="st">write down</span><span class="st off">check</span><span class="st">make it a rule</span><span class="st">enforce</span><span class="st off">measure</span><span class="st off">retire</span></div>
+    <div class="lbl">now</div>
+    <div class="row"><span class="st">notice</span><span class="st on">write down</span><span class="st on">check</span><span class="st">make it a rule</span><span class="st on">enforce</span><span class="st on">measure</span><span class="st off">retire</span></div>
+  </div>
+  <p class="cap">Red is a step that did nothing. Green is what changed. Retire is still empty.</p>
+
+  <h2>Why it was useless</h2>
+  <p>The agent was good at writing lessons. It did not do a good job of using them.</p>
+  <p>Nothing loaded the file. The agent was meant to read the last twenty entries at the start of a session. In the session where I asked how the file gets used, it hadn't.</p>
+  <p>One mistake shows it. In the terminal, the agent moves to another folder with a bare <span class="mono">cd</span>. The session stays there, and a later command runs in the wrong place. The agent first wrote this down on 3 November, and made it a standing rule the same day. A week later, 33 lessons had the same mistake in the title.</p>
+  <p>The lessons were also wrong about themselves. On 9 November the agent wrote four lessons about this slip. They called it “the third time”, “the fifth time”, “the third time” and “a fourth time”. The file already held 26.</p>
+  <p>And nothing could check them. Of those 432 lessons, 2 said how the agent knew the lesson was true. None named the session it came from.</p>
+
+  <h2>What Anthropic measured</h2>
+  <p>On 6 November Anthropic published <a href="https://www.anthropic.com/research/components-of-agent-memory">The components of agent memory</a>. It tests the same idea: give an agent a place to keep notes between sessions, and see what makes those notes worth having.</p>
+  <div class="tiles">
+    <div class="card tile"><div class="big"><span class="from">0.564</span> → <span class="to">0.828</span></div>
+      <div class="what">Opus 5 on a database task, without memory and with a memory folder that lasts between sessions</div></div>
+    <div class="card tile"><div class="big"><span class="from">13%</span> → <span class="to">48%</span></div>
+      <div class="what">of graded criteria met on 25 questions, as the agents' wiki went from 2 sessions of dreaming to 128</div></div>
+    <div class="card tile"><div class="big"><span class="bad">−0.234</span></div>
+      <div class="what">what a rule to record only failures cost Opus 5, out of a gain of 0.264</div></div>
+    <div class="card tile"><div class="big"><span class="to">1,935</span></div>
+      <div class="what">the action at which a Pokémon run reached Cerulean City, after a dream pass fixed a wrong note. The run that kept the wrong note never got there.</div></div>
+  </div>
+  <p class="cap">These are Anthropic's numbers, on their tasks. Mine are further down.</p>
+  <p>Dreaming is the part I was missing. An agent writes its notes in a hurry, in the middle of a task. Later, when nobody is waiting, a model rereads each note next to the transcript it came from, and fixes what doesn't match. In Anthropic's words, dreaming “gives Claude a way to test its notes against the original transcripts”. It is like rereading last night's diary with your texts open beside you.</p>
+  <p>The same piece notes that most of Opus 5's entries on that database task paired a rule with the evidence for it. My 432 lessons had the rule and no proof.</p>
+
+  <h2>What I added</h2>
+  <div class="cards">
+    <div class="card pcard"><div class="top"><span class="ic" style="background:var(--f-violet)"><i data-lucide="search-check"></i></span><span class="lab">A verifier</span></div>
+      <p>A script takes one day's lessons, finds the session that wrote each one, and asks Opus 5.5 whether the lesson matches what happened. It also gets every earlier title, so it can count repeats. It writes a report and never edits the file.</p></div>
+    <div class="card pcard"><div class="top"><span class="ic" style="background:var(--f-blue)"><i data-lucide="file-check"></i></span><span class="lab">Proof on every lesson</span></div>
+      <p>A lesson now ends with how the agent knows, and the session it came from. A repeat count comes from searching the file.</p></div>
+    <div class="card pcard"><div class="top"><span class="ic" style="background:var(--f-green)"><i data-lucide="shield"></i></span><span class="lab">A guard for repeats</span></div>
+      <p>A mistake that survives a written rule gets a check that runs before every command and refuses the bad one. The first guard is for <span class="mono">cd</span>.</p></div>
+    <div class="card pcard"><div class="top"><span class="ic" style="background:var(--f-yellow)"><i data-lucide="scale"></i></span><span class="lab">My corrections, sorted</span></div>
+      <p>I can be wrong too. If I correct a fact, the agent checks the record before it agrees. If I correct taste, that call is mine, and the newest one wins.</p></div>
+    <div class="card pcard wide"><div class="top"><span class="ic" style="background:var(--f-orange)"><i data-lucide="thumbs-up"></i></span><span class="lab">The good stuff too</span></div>
+      <p>The agent logs what worked, as well as what went wrong. A file of failures tells it what to avoid. It doesn't tell it what to do again.</p></div>
+  </div>
+  <details class="why"><summary>why sort my corrections</summary><div>
+    <p>Many lessons start with me correcting the agent. Anthropic looked at about 38,000 real conversations this spring. Claude was sycophantic in 18% of the ones where the person pushed back, against 9% of the rest. The study is <a href="https://www.anthropic.com/research/claude-personal-guidance">How people ask Claude for personal guidance</a>.</p>
+    <p>If I push, the agent is more likely to agree with me. Then it writes my mistake down as its lesson.</p>
+  </div></details>
+
+  <h2>The first night</h2>
+  <p>The verifier checked the 28 lessons written on 9 November.</p>
+  <div class="tiles">
+    <div class="card tile"><div class="big"><span class="bad">10</span></div>
+      <div class="what">claims the record contradicted, out of 166 it looked at</div></div>
+    <div class="card tile"><div class="big"><span class="bad">9</span></div>
+      <div class="what">lessons that taught a rule an earlier lesson already taught</div></div>
+    <div class="card tile"><div class="big">4 of 28</div>
+      <div class="what">lessons held up in full. 21 were partly right, 1 was contradicted, and 2 could not be checked.</div></div>
+    <div class="card tile"><div class="big">56</div>
+      <div class="what">claims were outside the part of the transcript it was given. It said so and did not guess.</div></div>
+  </div>
+  <p>The contradicted claims were small. “He spent an hour on this” was about twenty minutes. “The third time” was closer to the thirtieth.</p>
+
+  <h2>What got better</h2>
+  <p>The new rules went in at 23:38 on 9 November. By three the next morning, the lessons were already a lot better.</p>
+  <div class="tiles">
+    <div class="card tile"><div class="big"><span class="from">2/432</span> → <span class="to">28/32</span></div>
+      <div class="what">lessons that say how the agent knows. The 28 came from six different sessions.</div></div>
+    <div class="card tile"><div class="big"><span class="from">0/432</span> → <span class="to">28/32</span></div>
+      <div class="what">lessons that name the session they came from, so the verifier can find the record</div></div>
+    <div class="card tile"><div class="big"><span class="from">32 slips</span> → <span class="to">refused</span></div>
+      <div class="what">The guard went in at 01:19. An hour later, in another session, the agent tried a bare <span class="mono">cd</span> again. The command did not run. That attempt is lesson number 33.</div></div>
+    <div class="card tile"><div class="big"><span class="from">0</span> → <span class="to">6</span></div>
+      <div class="what">lessons about something that worked</div></div>
+  </div>
+  <p class="cap">One night, on one person's setup. I would read it as a direction.</p>
+  <p>The lesson the agent wrote after the refused command says: “one denied call. Nothing ran in the wrong folder.” It counted its repeats from the file, marked its explanation as a guess, and named its session.</p>
+
+  <h2>A count the agent can't shrink</h2>
+  <p>I wanted one number that tells me whether any of this works. The count of lessons is a bad one, because the agent writes the lessons. It can fall because the agent wrote less.</p>
+  <p>So I count my corrections, from the transcripts. The first version matched phrases like “no,” and “that's wrong”. I checked it by hand, and it caught about one correction in nine.</p>
+  <p>The second version has a small model read every message I typed and label it. Over five weeks and 1,501 messages, it found 237 corrections. I checked 40 of its labels by hand, and 31 were clearly right.</p>
+  <div class="tiles one">
+    <div class="card tile"><div class="big">17%</div>
+      <div class="what">of what I type to my agent is me fixing something. It has been steady for three weeks. This is the before number.</div></div>
+  </div>
+
+  <h2>What it still misses</h2>
+  <div class="cards">
+    <div class="card pcard"><div class="top"><span class="ic" style="background:var(--f-red)"><i data-lucide="history"></i></span><span class="lab">The old lessons</span></div>
+      <p>Only one day has been through the verifier. The other 430 or so lessons are as unchecked as they were.</p></div>
+    <div class="card pcard"><div class="top"><span class="ic" style="background:var(--f-red)"><i data-lucide="coins"></i></span><span class="lab">It costs</span></div>
+      <p>The first pass read about 534,000 tokens for 28 lessons. The agent had told me 187,000.</p></div>
+    <div class="card pcard wide"><div class="top"><span class="ic" style="background:var(--f-red)"><i data-lucide="trash-2"></i></span><span class="lab">Nothing retires</span></div>
+      <p>No rule ever leaves the file. A wrong lesson gets a correction written after it, and the wrong one stays where a session can still read it.</p></div>
+  </div>
+
+  <h2>What I would copy</h2>
+  <p>If you keep a lessons file for a coding agent, add two lines to every lesson: how the agent knows, and which session it came from. Without them, nothing can check the lesson later.</p>
+  <p>Then check one day of lessons against the transcripts. Mine took an evening to build, and it found ten wrong claims on the first night.</p>
+  <p>And when the same lesson shows up a third time, build a guard for it. Mine had been written down 33 times.</p>
+
+  <div class="foot">Numbers come from my own lessons file and session transcripts, 29 October to 10 November 2026. The research figures are from Anthropic's <a href="https://www.anthropic.com/research/components-of-agent-memory">The components of agent memory</a> (6 November 2026) and <a href="https://www.anthropic.com/research/claude-personal-guidance">How people ask Claude for personal guidance</a> (April 2026).</div>
+  <div class="site-foot">
+    <p>reading list:<br><a href="/reading/">← all notes</a></p>
+    <p>Contact:<br><a href="https://github.com/ussumant" rel="me noopener">github</a> · <a href="https://x.com/sumant_us" rel="me noopener">x</a> · <a href="https://www.linkedin.com/in/sumantus/" rel="me noopener">linkedin</a> · <a href="/reading/">reading</a> · <a href="/feed.xml">rss</a></p>
+    <p>© 2026 Sumant · Bengaluru · often elsewhere in Southeast Asia</p>
+  </div>
+</main>
+
+<script src="vendor/lucide.min.js"></script>
+<script>
+  try { window.lucide.createIcons({ attrs: { 'stroke-width': 2 } }); } catch (e) { console.warn('[icons]', e); }
+</script>
+</body>
+</html>
